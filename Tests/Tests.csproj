@@ -58,5 +58,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KyoshinMonitorLib\KyoshinMonitorLib.csproj">
+      <Project>{CC14F41E-11A6-43D3-9A68-31F784E3C252}</Project>
+      <Name>KyoshinMonitorLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

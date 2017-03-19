@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KyoshinMonitorLib;
+using System;
 using Xunit;
 
 namespace Tests
 {
-	public class GeneralTests
+	public static class GeneralTests
 	{
-		[Fact(DisplayName = "Location")]
-		public static void LocationTest()
+		[Fact(DisplayName = "UrlGenerator Test")]
+		public static void Urlgenerator()
 		{
-
+			Assert.Equal(UrlGenerator.Generate(UrlType.EewJson,DateTime.Parse("2017/03/19 22:13:47")), "http://www.kmoni.bosai.go.jp/new/webservice/hypo/eew/20170319221347.json");
 		}
 	}
 }

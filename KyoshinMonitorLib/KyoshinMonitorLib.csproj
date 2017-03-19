@@ -48,11 +48,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorToShindoConverter.cs" />
+    <Compile Include="UrlType.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="ObservationPoint.cs" />
     <Compile Include="ObservationPointType.cs" />
     <Compile Include="Point2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RealTimeImgType.cs" />
+    <Compile Include="UrlGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
