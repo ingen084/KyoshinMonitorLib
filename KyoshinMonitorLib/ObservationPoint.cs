@@ -51,6 +51,11 @@ namespace KyoshinMonitorLib
 						};
 						if (!string.IsNullOrWhiteSpace(strings[7]) && !string.IsNullOrWhiteSpace(strings[8]))
 							point.Point = new Point2(int.Parse(strings[7]), int.Parse(strings[8]));
+						if (strings.Length >= 11)
+						{
+							point.ClassificationId = int.Parse(strings[9]);
+							point.PrefectureClassificationId = int.Parse(strings[10]);
+						}
 						points.Add(point);
 						addedCount++;
 					}
