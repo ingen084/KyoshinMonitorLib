@@ -18,7 +18,7 @@ namespace KyoshinMonitorLib
 		/// <param name="datetime">参照する日付</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
-		public static async Task<ImageAnalysisResult[]> CalculateIntensityFromParameter(this IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false)
+		public static async Task<ImageAnalysisResult[]> CalculateIntensityFromParameterAsync(this IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false)
 		{
 			using (var client = new HttpClient())
 			using (var bitmap = new Bitmap(await client.GetStreamAsync(UrlGenerator.Generate(UrlType.RealTimeImg, datetime, RealTimeImgType.Shindo, isBehole))))
