@@ -35,7 +35,7 @@ namespace KyoshinMonitorLib
 		}
 
 		/// <summary>
-		/// 観測点情報をcsvから読み込みます。ファイルが存在しないなどの場合は例外がスローされます。
+		/// 観測点情報をcsvから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
 		/// <param name="path">読み込むcsvファイルのパス</param>
 		/// <param name="encoding">読み込むファイル文字コード 何も指定していない場合はUTF8が使用されます。</param>
