@@ -4,10 +4,39 @@
 
 # リファレンス
 一部の解説のみ行います。各メソッドのパラメータはコメントを参照してください。
+
+## 一番知ってほしい機能
+簡単に強震モニタの震度を取得できる機能を提供します。
+### ParseIntensityFromParameterAsync
+```c#
+public static async Task<ImageAnalysisResult[]> ParseIntensityFromParameterAsync(this IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false);
+```
+与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を解析します。  
+asyncなのは画像取得部分のみなので注意してください。  
+ちなみに、画像が取得できないなどの場合は容赦なく例外を吐くので注意してください。
+
+#### サンプル
+```c#
+//観測点情報読み込み
+var points = ObservationPoint.LoadFromPbf("ShindoObsPoints.pbf");
+//時間計算(今回は適当にPC時間-5秒)
+var time = DateTime.Now.AddSeconds(-5);
+//画像を取得して結果を計算
+var result = await points.ParseIntensityFromParameterAsync(time, false);
+```
+
+### ParseIntensityFromBitmap
+```c#
+public static ImageAnalysisResult[] ParseIntensityFromImage(this IEnumerable<ObservationPoint> obsPoints, Bitmap bitmap);
+```
+与えられた画像から観測点情報を使用し震度を取得します。
+#### サンプル
+Bitmapを指定するだけでFromParameterAsyncと何ら変わりはないので省略
+
 ## ColorToIntensityConverter
 ### Convert
 ```c#
-public static float? Convert(System.Drawing.Color color)
+public static float? Convert(System.Drawing.Color color);
 ```
 
 色を震度に変換します。テーブルにない値を参照した場合nullが返されます。  
@@ -23,25 +52,25 @@ float? result = ColorToIntensityConverter.Convert(color); //0
 [KyoshinShindoPlaceEditor](https://github.com/ingen084/KyoshinShindoPlaceEditor)と互換があります。
 ### LoadFromPbf
 ```c#
-public static ObservationPoint[] LoadFromPbf(string path)
+public static ObservationPoint[] LoadFromPbf(string path);
 ```
 観測点情報をpbfから読み込みます。失敗した場合は例外がスローされます。
 
 ### LoadFromCsv
 ```c#
-public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(string path, Encoding encoding = null)
+public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(string path, Encoding encoding = null);
 ```
 観測点情報をcsvから読み込みます。失敗した場合は例外がスローされます。
 
 ### SaveToPbf/Csv
 ```c#
-public static void SaveToPbf(string path, IEnumerable<ObservationPoint> points)
-public static void SaveToCsv(string path, IEnumerable<ObservationPoint> points)
+public static void SaveToPbf(string path, IEnumerable<ObservationPoint> points);
+public static void SaveToCsv(string path, IEnumerable<ObservationPoint> points);
 ```
 拡張メソッド版
 ```c#
-public static void SaveToPbf(this IEnumerable<ObservationPoint> points, string path)
-public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path)
+public static void SaveToPbf(this IEnumerable<ObservationPoint> points, string path);
+public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path);
 ```
 観測点情報をpbf/csvに保存します。失敗した場合は例外がスローされます。
 
@@ -49,9 +78,9 @@ public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string p
 ### Generate
 ```c#
 public static string Generate(UrlType urlType, DateTime datetime,
-	RealTimeImgType realTimeShindoType = RealTimeImgType.Shindo, bool isBerehole = false)
+	RealTimeImgType realTimeShindoType = RealTimeImgType.Shindo, bool isBerehole = false);
 ```
-与えられた値を使用して強震モニタのURLを生成します。
+与えられた値を使用して**新**強震モニタのURLを生成します。
 #### サンプル
 ```c#
 DateTime time = DateTime.Parse("2017/03/19 22:13:47");
