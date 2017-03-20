@@ -119,6 +119,17 @@ namespace KyoshinMonitorLib
 		[ProtoMember(7)]
 		public Point2? Point { get; set; }
 
+		/// <summary>
+		/// 緊急地震速報や震度速報で用いる区域のID(EqWatchインポート用)
+		/// </summary>
+		[ProtoMember(8, IsRequired = false)]
+		public int? ClassificationId { get; set; }
+
+		/// <summary>
+		/// 緊急地震速報で用いる府県予報区のID(EqWatchインポート用)
+		/// </summary>
+		[ProtoMember(9, IsRequired = false)]
+		public int? PrefectureClassificationId { get; set; }
 		public int CompareTo(object obj)
 		{
 			if (!(obj is ObservationPoint ins))
