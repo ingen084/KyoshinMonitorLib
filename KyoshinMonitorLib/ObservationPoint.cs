@@ -6,13 +6,16 @@ using System.Text;
 
 namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// NIEDの観測点情報
+	/// </summary>
 	[ProtoContract]
 	public class ObservationPoint : IComparable
 	{
 		/// <summary>
 		/// 観測点情報をpbfから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
-		/// <param name="path">読み込むファイルのパス</param>
+		/// <param name="path">読み込むpbfファイルのパス</param>
 		/// <returns>読み込まれた観測点情報</returns>
 		public static ObservationPoint[] LoadFromPbf(string path)
 		{
@@ -21,9 +24,20 @@ namespace KyoshinMonitorLib
 		}
 
 		/// <summary>
+		/// 観測点情報をpbfに保存します。失敗した場合は例外がスローされます。
+		/// </summary>
+		/// <param name="path">書き込むpbfファイルのパス</param>
+		/// <param name="points">書き込む観測点情報の配列</param>
+		public static void SaveToPbf(string path, IEnumerable<ObservationPoint> points)
+		{
+			using (var stream = new FileStream(path, FileMode.Create))
+				Serializer.Serialize(stream, points);
+		}
+
+		/// <summary>
 		/// 観測点情報をcsvから読み込みます。ファイルが存在しないなどの場合は例外がスローされます。
 		/// </summary>
-		/// <param name="path">読み込むファイルのパス</param>
+		/// <param name="path">読み込むcsvファイルのパス</param>
 		/// <param name="encoding">読み込むファイル文字コード 何も指定していない場合はUTF8が使用されます。</param>
 		/// <returns>list:読み込まれた観測点情報 success:読み込みに成功した項目のカウント error:読み込みに失敗した項目のカウント</returns>
 		public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(string path, Encoding encoding = null)
@@ -65,6 +79,18 @@ namespace KyoshinMonitorLib
 					}
 
 			return (points.ToArray(), addedCount, errorCount);
+		}
+
+		/// <summary>
+		/// 観測点情報をcsvに保存します。失敗した場合は例外がスローされます。
+		/// </summary>
+		/// <param name="path">書き込むcsvファイルのパス</param>
+		/// <param name="points">書き込む観測点情報の配列</param>
+		public static void SaveToCsv(string path, IEnumerable<ObservationPoint> points)
+		{
+			using (var stream = new StreamWriter(path))
+				foreach (var point in points)
+					stream.WriteLine($"{(int)point.Type},{point.Code},{point.IsSuspended},{point.Name},{point.Region},{point.Location.Latitude},{point.Location.Longitude},{point.Point?.X.ToString() ?? ""},{point.Point?.Y.ToString() ?? ""},{point.ClassificationId?.ToString() ?? ""},{point.PrefectureClassificationId?.ToString() ?? ""}");
 		}
 
 		public ObservationPoint()
@@ -145,7 +171,7 @@ namespace KyoshinMonitorLib
 		public int CompareTo(object obj)
 		{
 			if (!(obj is ObservationPoint ins))
-				throw new ArgumentException("比較対象はObservationPointでなければなりません。");
+				throw new ArgumentException("比較対象はObservationPointにキャストできる型でなければなりません。");
 			return Code.CompareTo(ins.Code);
 		}
 	}

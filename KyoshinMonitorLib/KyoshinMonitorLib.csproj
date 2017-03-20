@@ -50,7 +50,7 @@
     <Compile Include="ColorToIntensityConverter.cs" />
     <Compile Include="FixedTimer.cs" />
     <Compile Include="ImageAnalysisResult.cs" />
-    <Compile Include="ObservationPointsExtension.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="UrlType.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="ObservationPoint.cs" />

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
 {
-	public static class ObservationPointsExtension
+	public static class Extensions
 	{
 		/// <summary>
 		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を解析します。
@@ -41,7 +41,7 @@ namespace KyoshinMonitorLib
 
 				try
 				{
-					var color = bitmap.GetPixel(point.Point.Value.X,point.Point.Value.Y);
+					var color = bitmap.GetPixel(point.Point.Value.X, point.Point.Value.Y);
 					point.AnalysisResult = ColorToIntensityConverter.Convert(color);
 				}
 				catch (Exception ex)
@@ -51,5 +51,20 @@ namespace KyoshinMonitorLib
 			}
 			return points;
 		}
+
+		/// <summary>
+		/// 観測点情報をcsvに保存します。失敗した場合は例外がスローされます。
+		/// </summary>
+		/// <param name="points">書き込む観測点情報の配列</param>
+		/// <param name="path">書き込むpbfファイルのパス</param>
+		public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path)
+			=> ObservationPoint.SaveToCsv(path, points);
+		/// <summary>
+		/// 観測点情報をpbfに保存します。失敗した場合は例外がスローされます。
+		/// </summary>
+		/// <param name="points">書き込む観測点情報の配列</param>
+		/// <param name="path">書き込むcsvファイルのパス</param>
+		public static void SaveToPbf(this IEnumerable<ObservationPoint> points, string path)
+			=> ObservationPoint.SaveToPbf(path, points);
 	}
 }
