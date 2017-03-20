@@ -23,8 +23,11 @@ var points = ObservationPoint.LoadFromPbf("ShindoObsPoints.pbf");
 //時間計算(今回は適当にPC時間-5秒)
 var time = DateTime.Now.AddSeconds(-5);
 //画像を取得して結果を計算
-var result = await points.ParseIntensityFromParameterAsync(time, false);
+ImageAnalysisResult[] result = await points.ParseIntensityFromParameterAsync(time, false);
 ```
+#### 注釈
+`ImageAnalysisResult`は`ObservationPoint`を継承したクラスになっていて、そのメンバの`AnalysisResult`に震度が入っています。  
+`IsSuspended`がtrueの場合や、震度に変換できなかった場合、ピクセル取得に例外が発生した場合はnullが代入されています。
 
 ### ParseIntensityFromBitmap
 ```c#
