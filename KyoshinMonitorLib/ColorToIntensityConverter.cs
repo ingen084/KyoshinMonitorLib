@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace KyoshinMonitorLib
 {
-	public static class ColorToShindoConverter
+	public static class ColorToIntensityConverter
 	{
 		//memo せっかくなのでコード内に定義
 		private static Dictionary<Color, float> _table = new Dictionary<Color, float>()

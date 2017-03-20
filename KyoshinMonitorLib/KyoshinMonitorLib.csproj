@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorToShindoConverter.cs" />
+    <Compile Include="ColorToIntensityConverter.cs" />
+    <Compile Include="ImageAnalysisResult.cs" />
+    <Compile Include="ObservationPointsExtension.cs" />
     <Compile Include="UrlType.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="ObservationPoint.cs" />

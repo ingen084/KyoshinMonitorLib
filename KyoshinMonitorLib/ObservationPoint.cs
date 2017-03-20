@@ -66,15 +66,22 @@ namespace KyoshinMonitorLib
 		{
 		}
 
-		public ObservationPoint(ObservationPointType type, string code, bool isSuspended, string name, string pref, Location location, Point2? point = null)
+		public ObservationPoint(ObservationPoint point) :
+			this(point.Type, point.Code, point.IsSuspended, point.Name, point.Region, point.Location, point.Point, point.ClassificationId, point.PrefectureClassificationId)
+		{
+		}
+
+		public ObservationPoint(ObservationPointType type, string code, bool isSuspended, string name, string region, Location location, Point2? point = null, int? classId = null, int? prefClassId = null)
 		{
 			Type = type;
 			Code = code;
 			IsSuspended = isSuspended;
 			Name = name;
-			Region = pref;
+			Region = region;
 			Location = location;
 			Point = point;
+			ClassificationId = classId;
+			PrefectureClassificationId = prefClassId;
 		}
 
 		/// <summary>
