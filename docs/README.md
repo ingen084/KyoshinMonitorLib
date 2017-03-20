@@ -15,7 +15,6 @@ public static float? Convert(System.Drawing.Color color)
 #### サンプル
 ```c#
 //using System.Drawing;
-//using KyoshinMonitorLib;
 Color color = Color.FromArgb(255, 63, 250, 54); //とりあえずサンプル色を作成
 float? result = ColorToIntensityConverter.Convert(color); //0
 ```
@@ -23,13 +22,13 @@ float? result = ColorToIntensityConverter.Convert(color); //0
 ## ObservationPoint
 [KyoshinShindoPlaceEditor](https://github.com/ingen084/KyoshinShindoPlaceEditor)と互換があります。
 ### LoadFromPbf
-```C#
+```c#
 public static ObservationPoint[] LoadFromPbf(string path)
 ```
 観測点情報をpbfから読み込みます。失敗した場合は例外がスローされます。
 
 ### LoadFromCsv
-```C#
+```c#
 public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(string path, Encoding encoding = null)
 ```
 観測点情報をcsvから読み込みます。失敗した場合は例外がスローされます。
