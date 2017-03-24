@@ -17,7 +17,8 @@ namespace Tests
 				return;
 
 			//観測点情報読み込み
-			var points = ObservationPoint.LoadFromPbf("ShindoObsPoints.pbf");
+			//var points = ObservationPoint.LoadFromPbf("ShindoObsPoints.pbf");
+			var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
 
 			//誤差が蓄積しないタイマーのインスタンスを作成(デフォルトは間隔1000ms+精度1ms↓)
 			var timer = new FixedTimer();

@@ -1,7 +1,10 @@
-﻿using ProtoBuf;
+﻿using MessagePack;
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 
 namespace KyoshinMonitorLib
@@ -9,7 +12,7 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// NIEDの観測点情報
 	/// </summary>
-	[ProtoContract]
+	[MessagePackObject, DataContract, ProtoContract]
 	public class ObservationPoint : IComparable
 	{
 		/// <summary>
@@ -33,6 +36,56 @@ namespace KyoshinMonitorLib
 			using (var stream = new FileStream(path, FileMode.Create))
 				Serializer.Serialize(stream, points);
 		}
+
+		/// <summary>
+		/// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
+		/// </summary>
+		/// <param name="path">読み込むmpkファイルのパス</param>
+		/// <param name="isUsingLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
+		/// <returns>読み込まれた観測点情報</returns>
+		public static ObservationPoint[] LoadFromMpk(string path, bool isUsingLz4 = false)
+		{
+			using (var stream = new FileStream(path, FileMode.Open))
+				return isUsingLz4 ? LZ4MessagePackSerializer.Deserialize<ObservationPoint[]>(stream) : MessagePackSerializer.Deserialize<ObservationPoint[]>(stream);
+		}
+
+		/// <summary>
+		/// 観測点情報をmpk形式で保存します。失敗した場合は例外がスローされます。
+		/// </summary>
+		/// <param name="path">書き込むmpkファイルのパス</param>
+		/// <param name="points">書き込む観測点情報の配列</param>
+		/// <param name="isUsingLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
+		public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool isUsingLz4 = false)
+		{
+			using (var stream = new FileStream(path, FileMode.Create))
+				if (isUsingLz4)
+					LZ4MessagePackSerializer.Serialize(stream, points);
+				else
+					MessagePackSerializer.Serialize(stream, points);
+		}
+
+		/// <summary>
+		/// 観測点情報をJsonから読み込みます。失敗した場合は例外がスローされます。
+		/// </summary>
+		/// <param name="path">読み込むJsonファイルのパス</param>
+		/// <returns>読み込まれた観測点情報</returns>
+		public static ObservationPoint[] LoadFromJson(string path)
+		{
+			using (var stream = new FileStream(path, FileMode.Open))
+				return new DataContractJsonSerializer(typeof(ObservationPoint[])).ReadObject(stream) as ObservationPoint[];
+		}
+
+		/// <summary>
+		/// 観測点情報をJson形式で保存します。失敗した場合は例外がスローされます。
+		/// </summary>
+		/// <param name="path">書き込むJsonファイルのパス</param>
+		/// <param name="points">書き込む観測点情報の配列</param>
+		public static void SaveToJson(string path, IEnumerable<ObservationPoint> points)
+		{
+			using (var stream = new FileStream(path, FileMode.Create))
+				new DataContractJsonSerializer(typeof(ObservationPoint[])).WriteObject(stream, points);
+		}
+
 
 		/// <summary>
 		/// 観測点情報をcsvから読み込みます。失敗した場合は例外がスローされます。
@@ -118,55 +171,55 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測地点のネットワークの種類
 		/// </summary>
-		[ProtoMember(1)]
+		[Key(0), DataMember(Order = 0), ProtoMember(1)]
 		public ObservationPointType Type { get; set; }
 
 		/// <summary>
 		/// 観測点コード
 		/// </summary>
-		[ProtoMember(2)]
+		[Key(1), DataMember(Order = 1), ProtoMember(2)]
 		public string Code { get; set; }
-
-		/// <summary>
-		/// 観測地点が休止状態(無効)かどうか
-		/// </summary>
-		[ProtoMember(3)]
-		public bool IsSuspended { get; set; }
 
 		/// <summary>
 		/// 観測点名
 		/// </summary>
-		[ProtoMember(4)]
+		[Key(2), DataMember(Order = 2), ProtoMember(4)]
 		public string Name { get; set; }
 
 		/// <summary>
 		/// 観測点広域名
 		/// </summary>
-		[ProtoMember(5)]
+		[Key(3), DataMember(Order = 3), ProtoMember(5)]
 		public string Region { get; set; }
+
+		/// <summary>
+		/// 観測地点が休止状態(無効)かどうか
+		/// </summary>
+		[Key(4), DataMember(Order = 4), ProtoMember(3)]
+		public bool IsSuspended { get; set; }
 
 		/// <summary>
 		/// 地理座標
 		/// </summary>
-		[ProtoMember(6)]
+		[Key(5), DataMember(Order = 5), ProtoMember(6)]
 		public Location Location { get; set; }
 
 		/// <summary>
 		/// 強震モニタ画像上での座標
 		/// </summary>
-		[ProtoMember(7)]
+		[Key(6), DataMember(Order = 6), ProtoMember(7)]
 		public Point2? Point { get; set; }
 
 		/// <summary>
 		/// 緊急地震速報や震度速報で用いる区域のID(EqWatchインポート用)
 		/// </summary>
-		[ProtoMember(8, IsRequired = false)]
+		[Key(7), DataMember(Order = 7), ProtoMember(8, IsRequired = false)]
 		public int? ClassificationId { get; set; }
 
 		/// <summary>
 		/// 緊急地震速報で用いる府県予報区のID(EqWatchインポート用)
 		/// </summary>
-		[ProtoMember(9, IsRequired = false)]
+		[Key(8), DataMember(Order = 8), ProtoMember(9, IsRequired = false)]
 		public int? PrefectureClassificationId { get; set; }
 		public int CompareTo(object obj)
 		{

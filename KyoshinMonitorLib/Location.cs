@@ -1,8 +1,10 @@
-﻿using ProtoBuf;
+﻿using MessagePack;
+using ProtoBuf;
+using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib
 {
-	[ProtoContract]
+	[MessagePackObject, DataContract, ProtoContract]
 	public class Location
 	{
 		public Location()
@@ -15,10 +17,10 @@ namespace KyoshinMonitorLib
 			Longitude = longitude;
 		}
 
-		[ProtoMember(1)]
+		[Key(0), DataMember(Order = 0), ProtoMember(1)]
 		public float Latitude { get; set; }
 
-		[ProtoMember(2)]
+		[Key(1), DataMember(Order = 1), ProtoMember(2)]
 		public float Longitude { get; set; }
 
 		public override string ToString()

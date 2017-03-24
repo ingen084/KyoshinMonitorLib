@@ -1,9 +1,11 @@
-﻿using ProtoBuf;
+﻿using MessagePack;
+using ProtoBuf;
 using System.Drawing;
+using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib
 {
-	[ProtoContract]
+	[MessagePackObject, DataContract, ProtoContract]
 	public struct Point2
 	{
 		public Point2(int x, int y)
@@ -12,10 +14,10 @@ namespace KyoshinMonitorLib
 			Y = y;
 		}
 
-		[ProtoMember(1)]
+		[Key(0), DataMember(Order = 0), ProtoMember(1)]
 		public int X { get; set; }
 
-		[ProtoMember(2)]
+		[Key(1), DataMember(Order = 1), ProtoMember(2)]
 		public int Y { get; set; }
 
 		public override string ToString()
