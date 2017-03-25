@@ -140,3 +140,33 @@ Console.ReadLine();
 //タイマーストップ
 timer.Stop();
 ```
+
+## NtpAssistance
+NTPから簡単に時刻取得をするクラスです。
+
+### GetNetworkTimeWithNtp
+```cs
+public static async Task<DateTime> GetNetworkTimeWithNtp(string hostName = "ntp.nict.jp", ushort port = 123, int timeout = 100);
+```
+Ntp通信を使用してネットワーク上から時刻を取得します。  
+プロトコル実装が適当なのでNICT以外のNTPサーバーでの挙動は保証しません。
+
+#### サンプル
+```cs
+//timeがもう時間
+ var time = await NtpAssistance.GetNetworkTimeWithNtp();
+```
+### GetNetworkTimeWhithHttpAsync
+```cs
+public static async Task<DateTime> GetNetworkTimeWhithHttpAsync(string url = "http://ntp-a1.nict.go.jp/cgi-bin/ntp", double timeout = 100);
+```
+Http通信を使用してネットワーク上から時刻を取得します。**未検証です。(ぉぃ)**  
+可能な限りNTPを使用することを推奨します。  
+NTPの時刻が生で返されるURLである必要があります。  
+**注意 NICTのサーバーはこのURLだけではありません。**
+
+#### サンプル
+```cs
+//timeがもう時間
+ var time = await NtpAssistance.GetNetworkTimeWhithHttpAsync();
+```
