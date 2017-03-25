@@ -19,11 +19,16 @@ namespace KyoshinMonitorLib
 
 		private long startCounter;
 
-		public void Start()
-		{
-			QueryPerformanceCounter(ref startCounter);
-		}
+		/// <summary>
+		/// ストップウォッチの値を初期化し、計測を開始します。
+		/// </summary>
+		/// <returns>PCが高精度タイマーに対応しているかどうか</returns>
+		public bool Start()
+			=> QueryPerformanceCounter(ref startCounter);
 
+		/// <summary>
+		/// 経過時間 Startする前に呼ぶと大変な時間が帰ってきます
+		/// </summary>
 		public TimeSpan Elapsed
 		{
 			get
