@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -8,12 +9,14 @@ using System.Threading.Tasks;
 namespace KyoshinMonitorLib
 {
 	/// <summary>
-	/// 誤差を蓄積させないようにするタイマー
+	/// 誤差を蓄積させないようにするタイマー ただし極微量のずれはあります
 	/// </summary>
 	public class FixedTimer
 	{
 		private Timer _timer;
-		private DateTime _lastTime;
+		private TimeSpan _lastTime;
+
+		private QueryPerformanceStopwatch _sw;
 
 		public TimeSpan _interval = TimeSpan.FromMilliseconds(1000);
 		/// <summary>
@@ -64,7 +67,7 @@ namespace KyoshinMonitorLib
 		{
 			_timer = new Timer(s =>
 			{
-				if (DateTime.Now - _lastTime >= Interval)
+				if (_sw.Elapsed - _lastTime >= Interval)
 				{
 					ThreadPool.QueueUserWorkItem(s2 => Elapsed?.Invoke());
 					_lastTime += Interval;
@@ -72,12 +75,14 @@ namespace KyoshinMonitorLib
 						_timer.Change(Timeout.Infinite, Timeout.Infinite);
 				}
 			}, null, Timeout.Infinite, Timeout.Infinite);
+			_sw = new QueryPerformanceStopwatch();
 		}
 
 		public void Start()
 		{
-			_lastTime = DateTime.Now;
+			_lastTime = TimeSpan.Zero;
 			_timer.Change(Accuracy, Accuracy);
+			_sw.Start();
 		}
 
 		public void Stop()

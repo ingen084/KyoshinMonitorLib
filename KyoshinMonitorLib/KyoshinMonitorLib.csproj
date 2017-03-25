@@ -58,6 +58,8 @@
     <Compile Include="FixedTimer.cs" />
     <Compile Include="ImageAnalysisResult.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="NtpAssistance.cs" />
+    <Compile Include="QueryPerformanceStopwatch.cs" />
     <Compile Include="UrlType.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="ObservationPoint.cs" />

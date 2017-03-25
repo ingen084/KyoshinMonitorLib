@@ -29,7 +29,7 @@ namespace Tests
 				//時間計算(今回は適当にPC時間-5秒)
 				var time = DateTime.Now.AddSeconds(-5);
 
-				Console.WriteLine($"\n**{time.ToLongTimeString()}");
+				Console.WriteLine($"\n**{time.ToString("HH:mm:ss.fff")}");
 
 				//画像を取得して結果を計算 (良い子のみんなはawaitを使おうね！)
 				var result = points.ParseIntensityFromParameterAsync(time, false).Result;
