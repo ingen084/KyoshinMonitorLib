@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
 {
@@ -18,7 +13,7 @@ namespace KyoshinMonitorLib
 
 		private QueryPerformanceStopwatch _sw;
 
-		public TimeSpan _interval = TimeSpan.FromMilliseconds(1000);
+		private TimeSpan _interval = TimeSpan.FromMilliseconds(1000);
 		/// <summary>
 		/// タイマーの間隔
 		/// </summary>
@@ -56,13 +51,22 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		public bool AutoReset { get; set; } = true;
 
+		/// <summary>
+		/// タイマーイベント
+		/// </summary>
 		public event Action Elapsed;
 
-
+		/// <summary>
+		/// FixedTimerを初期化します。
+		/// </summary>
+		/// <param name="interval">間隔</param>
 		public FixedTimer(TimeSpan interval) : this()
 		{
 			Interval = interval;
 		}
+		/// <summary>
+		/// FixedTimerを初期化します。
+		/// </summary>
 		public FixedTimer()
 		{
 			_timer = new Timer(s =>
@@ -78,6 +82,9 @@ namespace KyoshinMonitorLib
 			_sw = new QueryPerformanceStopwatch();
 		}
 
+		/// <summary>
+		/// タイマーを開始します。
+		/// </summary>
 		public void Start()
 		{
 			_lastTime = TimeSpan.Zero;
@@ -85,6 +92,9 @@ namespace KyoshinMonitorLib
 			_sw.Start();
 		}
 
+		/// <summary>
+		/// タイマーを停止します。
+		/// </summary>
 		public void Stop()
 			=> _timer.Change(Timeout.Infinite, Timeout.Infinite);
 	}

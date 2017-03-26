@@ -13,8 +13,8 @@ namespace Tests
 		public static void Main(string[] args)
 		{
 			//ファイルがなかったら帰る
-			if (!File.Exists("ShindoObsPoints.pbf"))
-				return;
+			//if (!File.Exists("ShindoObsPoints.pbf"))
+			// 	return;
 
 			//観測点情報読み込み
 			//var points = ObservationPoint.LoadFromPbf("ShindoObsPoints.pbf");

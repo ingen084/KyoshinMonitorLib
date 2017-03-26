@@ -1,5 +1,8 @@
 ﻿namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// 生成するURLの種類
+	/// </summary>
 	public enum UrlType
 	{
 		/// <summary>

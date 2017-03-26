@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\kmoni.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\kmoni.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MessagePack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -60,6 +62,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="NtpAssistance.cs" />
     <Compile Include="QueryPerformanceStopwatch.cs" />
+    <Compile Include="Shindo.cs" />
     <Compile Include="UrlType.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="ObservationPoint.cs" />

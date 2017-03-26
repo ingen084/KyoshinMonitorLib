@@ -2,6 +2,9 @@
 
 namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// 新強震モニタのURL生成器
+	/// </summary>
 	public static class UrlGenerator
 	{
 		/// <summary>

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// 拡張メソッドたち
+	/// </summary>
 	public static class Extensions
 	{
 		/// <summary>

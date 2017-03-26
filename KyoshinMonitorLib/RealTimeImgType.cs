@@ -1,5 +1,8 @@
 ﻿namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// リアルタイム画像の種類
+	/// </summary>
 	public enum RealTimeImgType
 	{
 		/// <summary>
@@ -44,6 +47,9 @@
 		Response_4Hz,
 	}
 
+	/// <summary>
+	/// RealTimeImgTypeの拡張メソッド
+	/// </summary>
 	public static class RealTimeImgTimeExtensions
 	{
 		/// <summary>

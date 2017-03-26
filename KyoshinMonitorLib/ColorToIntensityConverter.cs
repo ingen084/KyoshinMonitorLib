@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// 色を震度に変換する
+	/// </summary>
 	public static class ColorToIntensityConverter
 	{
 		//memo せっかくなのでコード内に定義
