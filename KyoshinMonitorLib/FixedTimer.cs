@@ -14,6 +14,7 @@ namespace KyoshinMonitorLib
 		private QueryPerformanceStopwatch _sw;
 
 		private TimeSpan _interval = TimeSpan.FromMilliseconds(1000);
+
 		/// <summary>
 		/// タイマーの間隔
 		/// </summary>
@@ -29,6 +30,7 @@ namespace KyoshinMonitorLib
 		}
 
 		private TimeSpan _accuracy = TimeSpan.FromMilliseconds(1);
+
 		/// <summary>
 		/// タイマーの精度 ただし精度を保証するものではありません。
 		/// <para>上限がある上、精度を高くするとその分重くなります。</para>
@@ -64,6 +66,7 @@ namespace KyoshinMonitorLib
 		{
 			Interval = interval;
 		}
+
 		/// <summary>
 		/// FixedTimerを初期化します。
 		/// </summary>

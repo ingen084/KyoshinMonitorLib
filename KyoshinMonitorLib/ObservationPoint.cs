@@ -86,7 +86,6 @@ namespace KyoshinMonitorLib
 				new DataContractJsonSerializer(typeof(ObservationPoint[])).WriteObject(stream, points);
 		}
 
-
 		/// <summary>
 		/// 観測点情報をcsvから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -152,6 +151,7 @@ namespace KyoshinMonitorLib
 		public ObservationPoint()
 		{
 		}
+
 		/// <summary>
 		/// ObservationPointの情報をコピーした上で初期化します。
 		/// </summary>
@@ -160,6 +160,7 @@ namespace KyoshinMonitorLib
 			this(point.Type, point.Code, point.IsSuspended, point.Name, point.Region, point.Location, point.Point, point.ClassificationId, point.PrefectureClassificationId)
 		{
 		}
+
 		/// <summary>
 		/// ObservationPointを初期化します。
 		/// </summary>

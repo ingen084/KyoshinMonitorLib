@@ -3,6 +3,11 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
+## 0.0.3.0
+### 追加
+- 気象庁震度階級を示す列挙型 `JmaIntensity` の追加(使用方法はリファレンス参照)
+- XMLドキュメントの追加
+
 ## 0.0.2.0
 ### 追加
 - NTP補助クラス
@@ -13,15 +18,15 @@
 
   のサポート
 ### 仕様変更
-- FixedTimerの仕様変更  
-  時間のベースにDateTime.Nowを使用していましたが、この度QueryPerformanceCounterに変更しました。  
+- FixedTimer  
+  時間のベースにDateTime.Nowを使用していたものをQueryPerformanceCounterに変更  
   そのためDateTime.Nowで確認すると精度が低下したようにみえるかもしれません。
 
 ## 0.0.1.0
 初版
 
 # リファレンス
-バージョン:`0.0.2.0`  
+バージョン:`0.0.3.0`  
 一部の解説のみ行います。各メソッドのパラメータはコメントを参照してください。
 
 ## 一番知ってほしい機能
@@ -169,4 +174,19 @@ NTPの時刻が生で返されるURLである必要があります。
 ```cs
 //timeがもう時間
  var time = await NtpAssistance.GetNetworkTimeWhithHttpAsync();
+```
+
+## JmaIntensity
+気象庁震度階級を示す列挙型(Enum)です。震度異常などを扱うために値が増やされています。
+
+### サンプル
+```cs
+JmaIntensity shindo = 1.0f.ToJmaIntensity(); //JmaIntensity.Int1
+Console.WriteLine(shindo.ToShortString()); //1
+Console.WriteLine(shondo.ToLongString()); //震度1
+
+Console.WriteLine("5+".ToJmaIntensity().ToLongString()); //文字からも解析できます。 出力:震度5強
+
+float? invalidIntensity = null;
+Console.WriteLine(invalidIntensity.ToJmaIntensity()); //nullableなfloatもできます。 出力:JmaIntensity.Unknown
 ```

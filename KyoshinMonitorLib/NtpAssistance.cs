@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
@@ -56,7 +53,6 @@ namespace KyoshinMonitorLib
 					var ipEndPoint = new IPEndPoint(addresses[0], port);
 					using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
 					{
-
 						socket.Connect(ipEndPoint);
 
 						//Stops code hang if NTP is blocked
@@ -67,7 +63,7 @@ namespace KyoshinMonitorLib
 						socket.Close();
 					}
 				}
-				catch(SocketException)
+				catch (SocketException)
 				{
 					ntpData = null;
 				}

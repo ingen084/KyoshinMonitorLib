@@ -62,6 +62,7 @@ namespace KyoshinMonitorLib
 		/// <param name="path">書き込むpbfファイルのパス</param>
 		public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToCsv(path, points);
+
 		/// <summary>
 		/// 観測点情報をpbfに保存します。失敗した場合は例外がスローされます。
 		/// </summary>

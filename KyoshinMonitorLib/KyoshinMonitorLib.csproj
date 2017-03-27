@@ -62,7 +62,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="NtpAssistance.cs" />
     <Compile Include="QueryPerformanceStopwatch.cs" />
-    <Compile Include="Shindo.cs" />
+    <Compile Include="JmaIntensity.cs" />
     <Compile Include="UrlType.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="ObservationPoint.cs" />

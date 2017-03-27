@@ -1,17 +1,17 @@
 ﻿using KyoshinMonitorLib;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests
 {
-	class Program
+	internal class Program
 	{
 		public static void Main(string[] args)
 		{
+			Console.WriteLine(1.0f.ToJmaIntensity());
+			Console.ReadLine();
+			Environment.Exit(0);
+
 			//ファイルがなかったら帰る
 			//if (!File.Exists("ShindoObsPoints.pbf"))
 			// 	return;
