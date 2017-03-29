@@ -80,7 +80,7 @@
 		{
 			if (intensity == null)
 				return JmaIntensity.Unknown;
-			return intensity.Value.ToShindo();
+			return intensity.Value.ToJmaIntensity();
 		}
 
 		/// <summary>
