@@ -1,6 +1,7 @@
 ﻿using KyoshinMonitorLib;
 using System;
 using System.Linq;
+using System.Net.Http;
 
 namespace Tests
 {
@@ -8,43 +9,43 @@ namespace Tests
 	{
 		public static void Main(string[] args)
 		{
-			Console.WriteLine(1.0f.ToJmaIntensity());
-			Console.ReadLine();
-			Environment.Exit(0);
 
-			//ファイルがなかったら帰る
-			//if (!File.Exists("ShindoObsPoints.pbf"))
-			// 	return;
-
-			//観測点情報読み込み
-			//var points = ObservationPoint.LoadFromPbf("ShindoObsPoints.pbf");
 			var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
 
 			//誤差が蓄積しないタイマーのインスタンスを作成(デフォルトは間隔1000ms+精度1ms↓)
-			var timer = new FixedTimer();
+			var timer = new NtpTimer()
+			{
+				Offset = TimeSpan.FromSeconds(1.1),
+			};
 
 			//適当にイベント設定
-			timer.Elapsed += () =>
+			timer.Elapsed += time =>
 			{
-				//時間計算(今回は適当にPC時間-5秒)
-				var time = DateTime.Now.AddSeconds(-5);
+				Console.WriteLine($"\nsys: {DateTime.Now.ToString("HH:mm:ss.fff")} ntp:{time.ToString("HH:mm:ss.fff")}");
+				try
+				{
+					//画像を取得して結果を計算 (良い子のみんなはawaitを使おうね！)
+					var result = points.ParseIntensityFromParameterAsync(time, false).Result;
 
-				Console.WriteLine($"\n**{time.ToString("HH:mm:ss.fff")}");
+					//適当に一つ目の観測地点の震度
+					Console.WriteLine($"FirstInt: raw:{result.First().AnalysisResult} jma:{result.First().AnalysisResult.ToJmaIntensity().ToLongString()}");
 
-				//画像を取得して結果を計算 (良い子のみんなはawaitを使おうね！)
-				var result = points.ParseIntensityFromParameterAsync(time, false).Result;
-
-				//適当に一つ目の観測地点の震度
-				Console.WriteLine("FirstInt: " + result.First().AnalysisResult);
-
-				//現在の最大震度
-				Console.WriteLine("MaxInt: " + result.Max(r => r.AnalysisResult));
+					//現在の最大震度
+					Console.WriteLine($"MaxInt: raw:{result.Max(r => r.AnalysisResult)} jma:{result.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
+				}
+				catch(AggregateException ex)
+				{
+					var ex2 = ex.InnerException;
+					if (!ex2.Message.Contains("404")) return;
+					timer.Offset += TimeSpan.FromMilliseconds(100);
+					Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
+				}
 			};
 
 			//タイマー開始
-			timer.Start();
+			timer.Start().Wait();
 
-			Console.WriteLine("Enterキー入力で終了します。");
+			Console.WriteLine("Enterキー入力で終了");
 
 			//改行入力待ち
 			Console.ReadLine();
