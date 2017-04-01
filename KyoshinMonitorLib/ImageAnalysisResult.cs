@@ -1,4 +1,6 @@
-﻿namespace KyoshinMonitorLib
+﻿using System.Drawing;
+
+namespace KyoshinMonitorLib
 {
 	/// <summary>
 	/// 画像解析結果
@@ -9,6 +11,11 @@
 		/// 解析された値
 		/// </summary>
 		public float? AnalysisResult { get; set; }
+
+		/// <summary>
+		/// 解析に使用した色
+		/// </summary>
+		public Color Color { get; set; }
 
 		/// <summary>
 		/// ObservationPointを元にImageAnalysisResultを初期化します。

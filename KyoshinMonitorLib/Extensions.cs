@@ -58,6 +58,7 @@ namespace KyoshinMonitorLib
 				try
 				{
 					var color = bitmap.GetPixel(point.Point.Value.X, point.Point.Value.Y);
+					point.Color = color;
 					point.AnalysisResult = ColorToIntensityConverter.Convert(color);
 				}
 				catch (Exception ex)
