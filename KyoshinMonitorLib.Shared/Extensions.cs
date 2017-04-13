@@ -77,6 +77,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToCsv(path, points);
 
+#if !NETFX_CORE
 		/// <summary>
 		/// 観測点情報をpbfに保存します。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -84,6 +85,7 @@ namespace KyoshinMonitorLib
 		/// <param name="path">書き込むcsvファイルのパス</param>
 		public static void SaveToPbf(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToPbf(path, points);
+#endif
 
 		/// <summary>
 		/// 観測点情報をmpk形式で保存します。失敗した場合は例外がスローされます。

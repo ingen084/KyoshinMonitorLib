@@ -95,13 +95,11 @@ namespace KyoshinMonitorLib
 		private async Task UpdateTime()
 		{
 			updating = true;
-			Console.WriteLine("Time Updating");
 			_lastUpdatedTime = await NtpAssistance.GetNetworkTimeWithNtp();
 			_currentTime = _lastUpdatedTime.AddMilliseconds(-_lastUpdatedTime.Millisecond);
 			_lastTime = _sw.Elapsed - TimeSpan.FromMilliseconds(_lastUpdatedTime.Millisecond);
 			_lastTime += Offset;
 			updating = false;
-			Console.WriteLine("Time Updated");
 		}
 
 		/// <summary>

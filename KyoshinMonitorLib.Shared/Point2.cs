@@ -1,5 +1,7 @@
 ﻿using MessagePack;
+#if !NETFX_CORE
 using ProtoBuf;
+#endif
 using System.Drawing;
 using System.Runtime.Serialization;
 
@@ -8,7 +10,11 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// シリアライズ+四則演算をできるようにしたPointクラス
 	/// </summary>
-	[MessagePackObject, DataContract, ProtoContract]
+	[MessagePackObject, DataContract
+#if !NETFX_CORE
+			, ProtoContract
+#endif
+			]
 	public struct Point2
 	{
 		/// <summary>
@@ -25,13 +31,21 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// X座標
 		/// </summary>
-		[Key(0), DataMember(Order = 0), ProtoMember(1)]
+		[Key(0), DataMember(Order = 0)
+#if !NETFX_CORE
+			, ProtoMember(1)
+#endif
+			]
 		public int X { get; set; }
 
 		/// <summary>
 		/// Y座標
 		/// </summary>
-		[Key(1), DataMember(Order = 1), ProtoMember(2)]
+		[Key(1), DataMember(Order = 1)
+#if !NETFX_CORE
+			, ProtoMember(2)
+#endif
+			]
 		public int Y { get; set; }
 
 		/// <summary>

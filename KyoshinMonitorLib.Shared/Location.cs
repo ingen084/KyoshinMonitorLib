@@ -1,5 +1,9 @@
 ﻿using MessagePack;
+
+#if !NETFX_CORE
 using ProtoBuf;
+#endif
+
 using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib
@@ -7,7 +11,11 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// 地理座標
 	/// </summary>
-	[MessagePackObject, DataContract, ProtoContract]
+	[MessagePackObject, DataContract
+#if !NETFX_CORE
+		, ProtoContract
+#endif
+		]
 	public class Location
 	{
 		/// <summary>
@@ -31,13 +39,21 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		[Key(0), DataMember(Order = 0), ProtoMember(1)]
+		[Key(0), DataMember(Order = 0)
+#if !NETFX_CORE
+			, ProtoMember(1)
+#endif
+			]
 		public float Latitude { get; set; }
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		[Key(1), DataMember(Order = 1), ProtoMember(2)]
+		[Key(1), DataMember(Order = 1)
+#if !NETFX_CORE
+			, ProtoMember(2)
+#endif
+			]
 		public float Longitude { get; set; }
 
 		/// <summary>

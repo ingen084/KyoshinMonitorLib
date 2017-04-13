@@ -1,5 +1,7 @@
 ﻿using MessagePack;
+#if !NETFX_CORE
 using ProtoBuf;
+#endif
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,9 +14,14 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// NIEDの観測点情報
 	/// </summary>
-	[MessagePackObject, DataContract, ProtoContract]
+	[MessagePackObject, DataContract
+#if !NETFX_CORE
+		, ProtoContract
+#endif
+		]
 	public class ObservationPoint : IComparable
 	{
+#if !NETFX_CORE
 		/// <summary>
 		/// 観測点情報をpbfから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -36,6 +43,7 @@ namespace KyoshinMonitorLib
 			using (var stream = new FileStream(path, FileMode.Create))
 				Serializer.Serialize(stream, points);
 		}
+#endif
 
 		/// <summary>
 		/// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
@@ -99,7 +107,8 @@ namespace KyoshinMonitorLib
 
 			var points = new List<ObservationPoint>();
 
-			using (var reader = new StreamReader(path))
+			using(var stream = File.OpenRead(path))
+			using (var reader = new StreamReader(stream))
 				while (reader.Peek() >= 0)
 					try
 					{
@@ -140,9 +149,10 @@ namespace KyoshinMonitorLib
 		/// <param name="points">書き込む観測点情報の配列</param>
 		public static void SaveToCsv(string path, IEnumerable<ObservationPoint> points)
 		{
-			using (var stream = new StreamWriter(path))
+			using (var stream = File.OpenWrite(path))
+			using (var writer = new StreamWriter(stream))
 				foreach (var point in points)
-					stream.WriteLine($"{(int)point.Type},{point.Code},{point.IsSuspended},{point.Name},{point.Region},{point.Location.Latitude},{point.Location.Longitude},{point.Point?.X.ToString() ?? ""},{point.Point?.Y.ToString() ?? ""},{point.ClassificationId?.ToString() ?? ""},{point.PrefectureClassificationId?.ToString() ?? ""}");
+					writer.WriteLine($"{(int)point.Type},{point.Code},{point.IsSuspended},{point.Name},{point.Region},{point.Location.Latitude},{point.Location.Longitude},{point.Point?.X.ToString() ?? ""},{point.Point?.Y.ToString() ?? ""},{point.ClassificationId?.ToString() ?? ""},{point.PrefectureClassificationId?.ToString() ?? ""}");
 		}
 
 		/// <summary>
@@ -189,55 +199,91 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測地点のネットワークの種類
 		/// </summary>
-		[Key(0), DataMember(Order = 0), ProtoMember(1)]
+		[Key(0), DataMember(Order = 0)
+#if !NETFX_CORE
+			, ProtoMember(1)
+#endif
+			]
 		public ObservationPointType Type { get; set; }
 
 		/// <summary>
 		/// 観測点コード
 		/// </summary>
-		[Key(1), DataMember(Order = 1), ProtoMember(2)]
+		[Key(1), DataMember(Order = 1)
+#if !NETFX_CORE
+			, ProtoMember(2)
+#endif
+]
 		public string Code { get; set; }
 
 		/// <summary>
 		/// 観測点名
 		/// </summary>
-		[Key(2), DataMember(Order = 2), ProtoMember(4)]
+		[Key(2), DataMember(Order = 2)
+#if !NETFX_CORE
+			, ProtoMember(4)
+#endif
+]
 		public string Name { get; set; }
 
 		/// <summary>
 		/// 観測点広域名
 		/// </summary>
-		[Key(3), DataMember(Order = 3), ProtoMember(5)]
+		[Key(3), DataMember(Order = 3)
+#if !NETFX_CORE
+			, ProtoMember(5)
+#endif
+]
 		public string Region { get; set; }
 
 		/// <summary>
 		/// 観測地点が休止状態(無効)かどうか
 		/// </summary>
-		[Key(4), DataMember(Order = 4), ProtoMember(3)]
+		[Key(4), DataMember(Order = 4)
+#if !NETFX_CORE
+			, ProtoMember(3)
+#endif
+]
 		public bool IsSuspended { get; set; }
 
 		/// <summary>
 		/// 地理座標
 		/// </summary>
-		[Key(5), DataMember(Order = 5), ProtoMember(6)]
+		[Key(5), DataMember(Order = 5)
+#if !NETFX_CORE
+			, ProtoMember(6)
+#endif
+]
 		public Location Location { get; set; }
 
 		/// <summary>
 		/// 強震モニタ画像上での座標
 		/// </summary>
-		[Key(6), DataMember(Order = 6), ProtoMember(7)]
+		[Key(6), DataMember(Order = 6)
+#if !NETFX_CORE
+			, ProtoMember(7)
+#endif
+]
 		public Point2? Point { get; set; }
 
 		/// <summary>
 		/// 緊急地震速報や震度速報で用いる区域のID(EqWatchインポート用)
 		/// </summary>
-		[Key(7), DataMember(Order = 7), ProtoMember(8, IsRequired = false)]
+		[Key(7), DataMember(Order = 7)
+#if !NETFX_CORE
+			, ProtoMember(8, IsRequired = false)
+#endif
+			]
 		public int? ClassificationId { get; set; }
 
 		/// <summary>
 		/// 緊急地震速報で用いる府県予報区のID(EqWatchインポート用)
 		/// </summary>
-		[Key(8), DataMember(Order = 8), ProtoMember(9, IsRequired = false)]
+		[Key(8), DataMember(Order = 8)
+#if !NETFX_CORE
+			, ProtoMember(9, IsRequired = false)
+#endif
+			]
 		public int? PrefectureClassificationId { get; set; }
 
 		/// <summary>

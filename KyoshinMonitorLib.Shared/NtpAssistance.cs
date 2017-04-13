@@ -45,11 +45,11 @@ namespace KyoshinMonitorLib
 			//特に使用しません
 			ntpData[0] = 0b00_100_011;//うるう秒指定子 = 0 (警告なし), バージョン = 4 (SNTP), Mode = 3 (クライアント)
 
-			await Task.Run(() =>
+			await Task.Run(async () =>
 			{
 				try
 				{
-					var addresses = Dns.GetHostEntry(hostName).AddressList;
+					var addresses = (await Dns.GetHostEntryAsync(hostName)).AddressList;
 					var ipEndPoint = new IPEndPoint(addresses[0], port);
 					using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
 					{
@@ -60,7 +60,6 @@ namespace KyoshinMonitorLib
 
 						socket.Send(ntpData);
 						socket.Receive(ntpData);
-						socket.Close();
 					}
 				}
 				catch (SocketException)
