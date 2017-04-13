@@ -3,6 +3,16 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
+## 0.0.4.0
+### 追加
+- UWP版の提供を開始しました。  
+  が、注意事項があります、下記参照してください。
+- `ImageAnalysisResult`に解析に使用した色を保存するプロパティ`Color`を追加しました。
+- `IEnumerable<ImageAnalysisResult>`の拡張メソッドを使用して一括で画像から震度に解析する際に新しくインスタンスを生成せずにインスタンスを使いまわすようにしました。  
+  これによって負荷・GC回数の軽減を期待しています。
+- NTPベースのタイマー`NtpTimer`を作成しました。
+
+
 ## 0.0.3.0
 ### 追加
 - 気象庁震度階級を示す列挙型 `JmaIntensity` の追加(使用方法はリファレンス参照)
@@ -25,8 +35,11 @@
 ## 0.0.1.0
 初版
 
+# UWP版について
+ProtoBufについては非対応です。
+
 # リファレンス
-バージョン:`0.0.3.0`  
+バージョン:`0.0.4.0`  
 一部の解説のみ行います。各メソッドのパラメータはコメントを参照してください。
 
 ## 一番知ってほしい機能
@@ -42,7 +55,7 @@ asyncなのは画像取得部分のみなので注意してください。
 #### サンプル
 ```cs
 //観測点情報読み込み
-var points = ObservationPoint.LoadFromPbf("ShindoObsPoints.pbf");
+var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
 //時間計算(今回は適当にPC時間-5秒)
 var time = DateTime.Now.AddSeconds(-5);
 //画像を取得して結果を計算
@@ -189,4 +202,17 @@ Console.WriteLine("5+".ToJmaIntensity().ToLongString()); //文字からも解析
 
 float? invalidIntensity = null;
 Console.WriteLine(invalidIntensity.ToJmaIntensity()); //nullableなfloatもできます。 出力:JmaIntensity.Unknown
+```
+
+## NtpTimer
+NTPからの時刻取得をベースにして動くタイマーです。  
+あんまり安定してないので使用は推奨しません。
+
+### サンプル
+```cs
+var timer = new NtpTimer()
+{
+	Offset = TimeSpan.FromSeconds(1.1),
+};
+timer.Elapsed += (s, e) => { ... };
 ```
