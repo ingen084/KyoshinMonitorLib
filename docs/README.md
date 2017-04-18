@@ -62,8 +62,7 @@ var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
 //時間計算(今回は適当にPC時間-5秒)
 var time = DateTime.Now.AddSeconds(-5);
 //画像を取得して結果を計算
-ImageAnalysisResult[] result = await points.ParseIntensityFromParameterAsync(time, false);
-
+IEnumerable<ImageAnalysisResult> result = await points.ParseIntensityFromParameterAsync(time, false);
 ```
 #### 注釈
 `ImageAnalysisResult`は`ObservationPoint`を継承したクラスになっていて、そのメンバの`AnalysisResult`に震度が入っています。  
@@ -71,7 +70,7 @@ ImageAnalysisResult[] result = await points.ParseIntensityFromParameterAsync(tim
 
 ### ParseIntensityFromBitmap
 ```cs
-public static ImageAnalysisResult[] ParseIntensityFromImage(this IEnumerable<ObservationPoint> obsPoints, Bitmap bitmap);
+public static IEnumerable<ImageAnalysisResult> ParseIntensityFromImage(this IEnumerable<ObservationPoint> obsPoints, Bitmap bitmap);
 ```
 与えられた画像から観測点情報を使用し震度を取得します。
 #### サンプル
