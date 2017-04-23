@@ -11,7 +11,7 @@
 		Unknown,
 
 		/// <summary>
-		/// 震度1以下
+		/// 震度1未満
 		/// </summary>
 		Int0,
 
