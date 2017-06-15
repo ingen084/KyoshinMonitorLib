@@ -11,6 +11,8 @@ namespace KyoshinMonitorLib
 		private Timer _timer;
 		private TimeSpan _lastTime;
 
+		private bool _isEventRunning;
+
 		private QueryPerformanceStopwatch _sw;
 
 		private TimeSpan _interval = TimeSpan.FromMilliseconds(1000);
@@ -54,6 +56,11 @@ namespace KyoshinMonitorLib
 		public bool AutoReset { get; set; } = true;
 
 		/// <summary>
+		/// イベント発生時にすでに他のイベントが実行中の場合新規イベントを実行させないようにするかどうか
+		/// </summary>
+		public bool BlockingMode { get; set; } = true;
+
+		/// <summary>
 		/// タイマーイベント
 		/// </summary>
 		public event Action Elapsed;
@@ -76,8 +83,23 @@ namespace KyoshinMonitorLib
 			{
 				if (_sw.Elapsed - _lastTime >= Interval)
 				{
-					Elapsed?.Invoke();
-					_lastTime += Interval;
+					if (!BlockingMode || !_isEventRunning)
+						ThreadPool.QueueUserWorkItem(s2 =>
+						{
+							_isEventRunning = true;
+							Elapsed?.Invoke();
+							_isEventRunning = false;
+						});
+
+					//かなり時間のズレが大きければその分修正する
+					if (_sw.Elapsed.Ticks - _lastTime.Ticks >= _interval.Ticks * 2)
+					{
+						var skipCount = ((_sw.Elapsed.Ticks - _lastTime.Ticks) / _interval.Ticks);
+						_lastTime += TimeSpan.FromTicks(_interval.Ticks * skipCount);
+					}
+					else //そうでなかったばあい普通に修正
+						_lastTime += _interval;
+
 					if (!AutoReset)
 						_timer.Change(Timeout.Infinite, Timeout.Infinite);
 				}
@@ -90,6 +112,7 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		public void Start()
 		{
+			_isEventRunning = false;
 			_lastTime = TimeSpan.Zero;
 			_timer.Change(Accuracy, Accuracy);
 			_sw.Start();

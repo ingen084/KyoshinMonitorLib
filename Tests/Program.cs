@@ -27,9 +27,6 @@ namespace Tests
 					//画像を取得して結果を計算 (良い子のみんなはawaitを使おうね！)
 					var result = points.ParseIntensityFromParameterAsync(time, false).Result;
 
-					//適当に一つ目の観測地点の震度
-					Console.WriteLine($"FirstInt: raw:{result.First().AnalysisResult} jma:{result.First().AnalysisResult.ToJmaIntensity().ToLongString()}");
-
 					//現在の最大震度
 					Console.WriteLine($"MaxInt: raw:{result.Max(r => r.AnalysisResult)} jma:{result.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
 				}
