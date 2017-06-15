@@ -81,7 +81,7 @@ namespace KyoshinMonitorLib
 				if (_sw.Elapsed - _lastTime >= _interval)
 				{
 					_currentTime = _currentTime.AddSeconds(Interval);
-					ThreadPool.QueueUserWorkItem(s2 => Elapsed?.Invoke(_currentTime));
+					Elapsed?.Invoke(_currentTime);
 					_lastTime += _interval;
 					if (!AutoReset)
 						_timer.Change(Timeout.Infinite, Timeout.Infinite);
