@@ -6,10 +6,12 @@
 ## 0.0.6.0
 ### 削除
 - `NtpTimer`を削除しました。
+
 ### 追加
 - `NtpTimer`に代わり、`SecondBasedTimer`を追加しました。  
   - 間隔が設定できなくなりました。常に毎秒イベントが発生します。
   - 時刻取得機能を廃止し、`UpdateTime`メソッドによる手動での時刻更新が利用できるようにしました。
+
 ### 変更
 - `NtpAssistance`の処理を変更し、通信遅延の考慮もするようにしました。
 
@@ -18,6 +20,7 @@
 - `FixedTimer`･`NtpTimer`にプロパティ`BlockingMode`を追加しました。  
   Trueにすると前回のイベントの実行中であれば新たにイベントが発行されなくなります。  
   初期値はTrueになっています。
+
 ### 修正
 - `FixedTimer`･`NtpTimer`の挙動を修正し、一度に大量のイベントが発生しないようにしました。
 
@@ -48,6 +51,7 @@
   - MessagePack+LZ4
 
   のサポート
+
 ### 仕様変更
 - FixedTimer  
   時間のベースにDateTime.Nowを使用していたものをQueryPerformanceCounterに変更  
