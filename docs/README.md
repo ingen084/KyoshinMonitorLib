@@ -250,16 +250,3 @@ Console.WriteLine("5+".ToJmaIntensity().ToLongString()); //文字からも解析
 float? invalidIntensity = null;
 Console.WriteLine(invalidIntensity.ToJmaIntensity()); //nullableなfloatもできます。 出力:JmaIntensity.Unknown
 ```
-
-## NtpTimer
-NTPからの時刻取得をベースにして動くタイマーです。  
-あんまり安定してないので使用は推奨しません。
-
-### サンプル
-```cs
-var timer = new NtpTimer()
-{
-	Offset = TimeSpan.FromSeconds(1.1),
-};
-timer.Elapsed += (s, e) => { ... };
-```
