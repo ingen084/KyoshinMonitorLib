@@ -5,6 +5,7 @@ using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -41,7 +42,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToPbf(string path, IEnumerable<ObservationPoint> points)
 		{
 			using (var stream = new FileStream(path, FileMode.Create))
-				Serializer.Serialize(stream, points);
+				Serializer.Serialize(stream, points.ToArray());
 		}
 #endif
 
@@ -67,9 +68,9 @@ namespace KyoshinMonitorLib
 		{
 			using (var stream = new FileStream(path, FileMode.Create))
 				if (usingLz4)
-					LZ4MessagePackSerializer.Serialize(stream, points);
+					LZ4MessagePackSerializer.Serialize(stream, points.ToArray());
 				else
-					MessagePackSerializer.Serialize(stream, points);
+					MessagePackSerializer.Serialize(stream, points.ToArray());
 		}
 
 		/// <summary>
@@ -91,7 +92,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToJson(string path, IEnumerable<ObservationPoint> points)
 		{
 			using (var stream = new FileStream(path, FileMode.Create))
-				new DataContractJsonSerializer(typeof(ObservationPoint[])).WriteObject(stream, points);
+				new DataContractJsonSerializer(typeof(ObservationPoint[])).WriteObject(stream, points.ToArray());
 		}
 
 		/// <summary>
