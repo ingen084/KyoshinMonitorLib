@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -45,6 +46,9 @@ namespace KyoshinMonitorLib
 			//特に使用しません
 			ntpData[0] = 0b00_100_011;//うるう秒指定子 = 0 (警告なし), バージョン = 4 (SNTP), Mode = 3 (クライアント)
 
+			DateTime sendedTime, recivedTime;
+			sendedTime = recivedTime = DateTime.Now;
+
 			await Task.Run(async () =>
 			{
 				try
@@ -59,7 +63,10 @@ namespace KyoshinMonitorLib
 						socket.ReceiveTimeout = timeout;
 
 						socket.Send(ntpData);
+						sendedTime = DateTime.Now;
+
 						socket.Receive(ntpData);
+						recivedTime = DateTime.Now;
 					}
 				}
 				catch (SocketException)
@@ -68,15 +75,20 @@ namespace KyoshinMonitorLib
 				}
 			});
 			if (ntpData == null) return DateTime.MinValue;
+			
+			//受信時刻=32 送信時刻=40
+			var serverReceivedTime = ToTime(ntpData, 32);
+			var serverSendedTime = ToTime(ntpData, 40);
 
-			//Transmit Timestamp(受信タイムスタンプ)までのオフセット
-			const int replyTimeOffset = 40;
+			var delta = TimeSpan.FromTicks(((recivedTime - sendedTime) - (serverReceivedTime - serverSendedTime)).Ticks / 2);
+			Debug.WriteLine("delta:" + delta);
+			return sendedTime - delta;
+		}
 
-			ulong intPart = BitConverter.ToUInt32(ntpData, replyTimeOffset);
-			ulong fractPart = BitConverter.ToUInt32(ntpData, replyTimeOffset + 4);
-
-			intPart = SwapEndianness(intPart);
-			fractPart = SwapEndianness(fractPart);
+		private static DateTime ToTime(byte[] bytes, ushort offset)
+		{
+			ulong intPart = SwapEndianness(BitConverter.ToUInt32(bytes, offset));
+			ulong fractPart = SwapEndianness(BitConverter.ToUInt32(bytes, offset + 4));
 
 			var milliseconds = (intPart * 1000) + ((fractPart * 1000) / 0x100000000L);
 

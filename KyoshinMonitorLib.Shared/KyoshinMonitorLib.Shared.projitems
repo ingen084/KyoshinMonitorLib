@@ -16,7 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)JmaIntensity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Location.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NtpAssistance.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NtpTimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SecondBasedTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObservationPoint.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObservationPointType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Point2.cs" />

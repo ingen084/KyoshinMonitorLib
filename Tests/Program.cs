@@ -9,38 +9,36 @@ namespace Tests
 	{
 		public static void Main(string[] args)
 		{
-
 			var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
 
 			//誤差が蓄積しないタイマーのインスタンスを作成(デフォルトは間隔1000ms+精度1ms↓)
-			var timer = new NtpTimer()
+			var timer = new SecondBasedTimer()
 			{
-				Offset = TimeSpan.FromSeconds(1.1),
+				Offset = TimeSpan.FromSeconds(2.5),
 			};
 
 			//適当にイベント設定
-			timer.Elapsed += time =>
+			timer.Elapsed += async time =>
 			{
 				Console.WriteLine($"\nsys: {DateTime.Now.ToString("HH:mm:ss.fff")} ntp:{time.ToString("HH:mm:ss.fff")}");
 				try
 				{
 					//画像を取得して結果を計算 (良い子のみんなはawaitを使おうね！)
-					var result = points.ParseIntensityFromParameterAsync(time, false).Result;
+					var result = await points.ParseIntensityFromParameterAsync(time, false);
 
 					//現在の最大震度
-					Console.WriteLine($"MaxInt: raw:{result.Max(r => r.AnalysisResult)} jma:{result.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
+					Console.WriteLine($"最大震度: 生:{result.Max(r => r.AnalysisResult)} jma:{result.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
 				}
-				catch(AggregateException ex)
+				catch (HttpRequestException ex)
 				{
-					var ex2 = ex.InnerException;
-					if (!ex2.Message.Contains("404")) return;
+					if (!ex.Message.Contains("404")) return;
 					timer.Offset += TimeSpan.FromMilliseconds(100);
 					Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
 				}
 			};
 
 			//タイマー開始
-			timer.Start().Wait();
+			timer.Start(NtpAssistance.GetNetworkTimeWithNtp().Result);
 
 			Console.WriteLine("Enterキー入力で終了");
 

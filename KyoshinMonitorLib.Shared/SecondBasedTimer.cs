@@ -8,15 +8,14 @@ using System.Threading.Tasks;
 namespace KyoshinMonitorLib
 {
 	/// <summary>
-	/// NTPアシスト機能付きタイマー 1時間毎に自動で再取得します。
+	/// 時刻補正機能付きタイマー
 	/// </summary>
-	public class NtpTimer
+	public class SecondBasedTimer
 	{
 		private Timer _timer;
 		private TimeSpan _lastTime;
 		private DateTime _currentTime;
 
-		private bool updating;
 		private bool _isEventRunning;
 
 		//最後にNTP更新された時刻
@@ -41,20 +40,6 @@ namespace KyoshinMonitorLib
 		}
 
 		/// <summary>
-		/// タイマーの間隔(秒) 1もしくは2しか指定できません。
-		/// </summary>
-		public int Interval
-		{
-			get => (int)_interval.TotalSeconds;
-			set
-			{
-				if (value != 1 && value != 2)
-					throw new ArgumentOutOfRangeException("Intervalは1もしくは2を指定してください。");
-				_interval = TimeSpan.FromSeconds(value);
-			}
-		}
-
-		/// <summary>
 		/// タイマーの精度 ただし精度を保証するものではありません。
 		/// <para>上限がある上、精度を高くするとその分重くなります。</para>
 		/// <para>この値より短い単位でイベントが発行されることはありません。</para>
@@ -63,7 +48,7 @@ namespace KyoshinMonitorLib
 		private TimeSpan Accuracy => TimeSpan.FromMilliseconds(1);
 
 		/// <summary>
-		/// タイマーが1度実行された後
+		/// falseにするとタイマーのイベントを1度しか発行しません
 		/// </summary>
 		public bool AutoReset { get; set; } = true;
 
@@ -80,9 +65,9 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// NtpTimerを初期化します。
 		/// </summary>
-		public NtpTimer()
+		public SecondBasedTimer()
 		{
-			_timer = new Timer(async s =>
+			_timer = new Timer(s =>
 			{
 				if (_sw.Elapsed - _lastTime >= _interval)
 				{
@@ -98,40 +83,41 @@ namespace KyoshinMonitorLib
 					{
 						var skipCount = ((_sw.Elapsed.Ticks - _lastTime.Ticks) / _interval.Ticks);
 						_lastTime += TimeSpan.FromTicks(_interval.Ticks * skipCount);
-						_currentTime = _currentTime.AddSeconds(Interval * skipCount);
+						_currentTime = _currentTime.AddSeconds(skipCount);
 					}
 					else //そうでなかったばあい普通に修正
 					{
 						_lastTime += _interval;
-						_currentTime = _currentTime.AddSeconds(Interval);
+						_currentTime = _currentTime.AddSeconds(1);
 					}
 					if (!AutoReset)
 						_timer.Change(Timeout.Infinite, Timeout.Infinite);
 				}
-				if (!updating && (_currentTime - _lastUpdatedTime).TotalHours >= 1)
-					await UpdateTime();
 			}, null, Timeout.Infinite, Timeout.Infinite);
 			_sw = new QueryPerformanceStopwatch();
 		}
 
-		private async Task UpdateTime()
+		/// <summary>
+		/// 時間を更新します。このメソッドが呼ばれたタイミングで
+		/// </summary>
+		/// <param name="time">書き込む時間</param>
+		public void UpdateTime(DateTime time)
 		{
-			updating = true;
-			_lastUpdatedTime = await NtpAssistance.GetNetworkTimeWithNtp();
-			_currentTime = _lastUpdatedTime.AddMilliseconds(-_lastUpdatedTime.Millisecond);
+			_lastUpdatedTime = time;
+			_currentTime = _lastUpdatedTime.AddMilliseconds(-_lastUpdatedTime.Millisecond).AddSeconds(-Math.Floor(Offset.TotalSeconds));
 			_lastTime = _sw.Elapsed - TimeSpan.FromMilliseconds(_lastUpdatedTime.Millisecond);
-			_lastTime += Offset;
-			updating = false;
+			_lastTime += (Offset - TimeSpan.FromSeconds(Offset.Seconds));
 		}
 
 		/// <summary>
 		/// タイマーを開始します。
 		/// </summary>
-		public async Task Start()
+		/// <param name="currentTime">現在時間</param>
+		public void Start(DateTime currentTime)
 		{
 			_isEventRunning = false;
 			_sw.Start();
-			await UpdateTime();
+			UpdateTime(currentTime);
 			_timer.Change(Accuracy, Accuracy);
 		}
 
