@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib", "KyoshinMonitorLib\KyoshinMonitorLib.csproj", "{CC14F41E-11A6-43D3-9A68-31F784E3C252}"
 EndProject
@@ -16,6 +16,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib.Uwp", "KyoshinMonitorLib.Uwp\KyoshinMonitorLib.Uwp.csproj", "{497C1E02-74FF-47F3-A974-C812F93EC2F6}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "KyoshinMonitorLib.Shared", "KyoshinMonitorLib.Shared\KyoshinMonitorLib.Shared.shproj", "{C69ECFB7-EBBA-4408-8E9D-0275CE64799D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F088323E-F76A-45F8-8442-E6926AEC3472}"
+	ProjectSection(SolutionItems) = preProject
+		docs\_config.yml = docs\_config.yml
+		docs\README.md = docs\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -85,5 +91,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8348AF1-267F-4EC5-B52D-DB37C403AAC9}
 	EndGlobalSection
 EndGlobal

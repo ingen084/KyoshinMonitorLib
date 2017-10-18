@@ -52,7 +52,7 @@ namespace KyoshinMonitorLib
 				case UrlType.RealTimeImg:
 					return string.Format(RealTimeBase, realTimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
 
-				case UrlType.RestShindo:
+				case UrlType.EstShindo:
 					return string.Format(EstShindoBase, datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
 
 				case UrlType.PSWave:
