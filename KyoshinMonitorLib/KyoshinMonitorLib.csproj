@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net47;netcoreapp2.0;net46</TargetFrameworks>
+		<AssemblyName>kmoni</AssemblyName>
 		<Version>0.0.7</Version>
 		<Copyright>Copyright © ingenWorkS 2017</Copyright>
 		<Company>ingenWorkS</Company>
