@@ -63,7 +63,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KyoshinMonitorLib\KyoshinMonitorLib.csproj">
+    <ProjectReference Include="..\src\KyoshinMonitorLib\KyoshinMonitorLib.csproj">
       <Project>{5a597781-7993-4cdb-8e50-539e93a6f705}</Project>
       <Name>KyoshinMonitorLib</Name>
     </ProjectReference>

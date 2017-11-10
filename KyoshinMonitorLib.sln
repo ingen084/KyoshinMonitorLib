@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F088323E-F
 		docs\README.md = docs\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib", "KyoshinMonitorLib\KyoshinMonitorLib.csproj", "{5A597781-7993-4CDB-8E50-539E93A6F705}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib", "src\KyoshinMonitorLib\KyoshinMonitorLib.csproj", "{5A597781-7993-4CDB-8E50-539E93A6F705}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
