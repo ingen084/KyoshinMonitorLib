@@ -3,6 +3,13 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
+## 0.0.8.0
+### 変更
+- **プロジェクトを再編しました。(その2)**  
+  これによりビルド構成によってはMessagePackやprotobuf-netを無効化しました。
+- `ParseIntensityFromParameterAsync`の強震モニタから画像を取得する際に失敗したときに`GetMonitorImageFailedException`が発生するようになりました。  
+   ちょっとステータスコードの取得が楽になったと思います。
+
 ## 0.0.7.0
 ### 変更
 - **プロジェクトを再編しました。**  
@@ -75,11 +82,9 @@
 ## 0.0.1.0
 初版
 
-# UWP版について
-ProtoBufについては非対応です。
 
 # リファレンス
-バージョン:`0.0.6.0`  
+バージョン:`0.0.8.0`  
 一部の解説のみ行います。各メソッドのパラメータはコメントを参照してください。
 
 ## 一番知ってほしい機能
@@ -90,10 +95,10 @@ public static async Task<ImageAnalysisResult[]> ParseIntensityFromParameterAsync
 ```
 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を解析します。  
 asyncなのは画像取得部分のみなので注意してください。  
-ちなみに、画像が取得できないなどの場合は容赦なく例外を吐くので注意してください。
+ちなみに、強震モニタのサーバーから画像が取得できない(ステータスコードが404等)場合は`GetMonitorImageFailedException`を、タイムアウトなどの場合は容赦なく例外を吐くので注意してください。
 
 #### サンプル
-```cs
+```c#
 //観測点情報読み込み
 var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
 //時間計算(今回は適当にPC時間-5秒)
@@ -106,7 +111,7 @@ IEnumerable<ImageAnalysisResult> result = await points.ParseIntensityFromParamet
 `IsSuspended`がtrueの場合や、震度に変換できなかった場合、ピクセル取得に例外が発生した場合はnullが代入されています。
 
 ### ParseIntensityFromBitmap
-```cs
+```c#
 public static IEnumerable<ImageAnalysisResult> ParseIntensityFromImage(this IEnumerable<ObservationPoint> obsPoints, Bitmap bitmap);
 ```
 与えられた画像から観測点情報を使用し震度を取得します。
@@ -115,14 +120,14 @@ Bitmapを指定するだけでFromParameterAsyncと何ら変わりはないの�
 
 ## ColorToIntensityConverter
 ### Convert
-```cs
+```c#
 public static float? Convert(System.Drawing.Color color);
 ```
 
 色を震度に変換します。テーブルにない値を参照した場合nullが返されます。  
 透明度も判定されるので十分気をつけてください。
 #### サンプル
-```cs
+```c#
 //using System.Drawing;
 Color color = Color.FromArgb(255, 63, 250, 54); //とりあえずサンプル色を作成
 float? result = ColorToIntensityConverter.Convert(color); //0
@@ -131,7 +136,7 @@ float? result = ColorToIntensityConverter.Convert(color); //0
 ## ObservationPoint
 [KyoshinShindoPlaceEditor](https://github.com/ingen084/KyoshinShindoPlaceEditor)と互換があります。
 ### LoadFromPbf/Mpk/Json
-```cs
+```c#
 public static ObservationPoint[] LoadFromPbf(string path);
 public static ObservationPoint[] LoadFromMpk(string path, bool usingLz4 = false);
 public static ObservationPoint[] LoadFromJson(string path);
@@ -140,20 +145,20 @@ public static ObservationPoint[] LoadFromJson(string path);
 **lz4圧縮済みのmpkを通常のmpkとして読み込まないように注意してください。**
 
 ### LoadFromCsv
-```cs
+```c#
 public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(string path, Encoding encoding = null);
 ```
 観測点情報をcsvから読み込みます。失敗した場合は例外がスローされます。
 
 ### SaveToPbf/Csv/Mpk/Json
-```cs
+```c#
 public static void SaveToPbf(string path, IEnumerable<ObservationPoint> points);
 public static void SaveToCsv(string path, IEnumerable<ObservationPoint> points);
 public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool usingLz4 = false);
 public static void SaveToJson(string path, IEnumerable<ObservationPoint> points);
 ```
 拡張メソッド版
-```cs
+```c#
 public static void SaveToPbf(this IEnumerable<ObservationPoint> points, string path);
 public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path);
 public static void SaveToMpk(this IEnumerable<ObservationPoint> points, string path, bool usingLz4 = false);
@@ -163,13 +168,13 @@ public static void SaveToJson(this IEnumerable<ObservationPoint> points, string 
 
 ## UrlGenerator
 ### Generate
-```cs
+```c#
 public static string Generate(UrlType urlType, DateTime datetime,
 	RealTimeImgType realTimeShindoType = RealTimeImgType.Shindo, bool isBerehole = false);
 ```
 与えられた値を使用して**新**強震モニタのURLを生成します。
 #### サンプル
-```cs
+```c#
 DateTime time = DateTime.Parse("2017/03/19 22:13:47");
 string url = UrlGenerator.Generate(UrlType.EewJson, time); //http://www.kmoni.bosai.go.jp/new/webservice/hypo/eew/20170319221347.json
 string url2 = UrlGenerator.Generate(UrlType.RealTimeImg, time, RealTimeImgType.Shindo, true); //http://www.kmoni.bosai.go.jp/new/data/map_img/RealTimeImg/jma_b/20170319/20170319221347.jma_b.gif
@@ -179,7 +184,7 @@ string url2 = UrlGenerator.Generate(UrlType.RealTimeImg, time, RealTimeImgType.S
 通常のタイマー(System.Timers.Timerなど。FormsのTimerは申し訳ないが論外)では、誤差が蓄積していきずれていきますが、それを対策したものです。
 
 ### サンプル
-```cs
+```c#
 //タイマーのインスタンスを作成(デフォルトは間隔1000ms+精度1ms↓)
 var timer = new FixedTimer()
 {
@@ -206,7 +211,7 @@ FixedTimerにNTPからの自動取得機能・オフセットの設定機能を�
 時間の更新(補正)は自動でされないため、別途タイマーなどで実行してください。
 
 ### サンプル
-```cs
+```c#
 //タイマーのインスタンスを作成(デフォルトは精度1ms↓)
 var timer = new SecondBasedTimer()
 {
@@ -229,19 +234,19 @@ timer.Stop();
 NTPから簡単に時刻取得をするクラスです。
 
 ### GetNetworkTimeWithNtp
-```cs
+```c#
 public static async Task<DateTime> GetNetworkTimeWithNtp(string hostName = "ntp.nict.jp", ushort port = 123, int timeout = 100);
 ```
 Ntp通信を使用してネットワーク上から時刻を取得します。  
 プロトコル実装が適当なのでNICT以外のNTPサーバーでの挙動は保証しません。
 
 #### サンプル
-```cs
+```c#
 //timeがもう時間
  var time = await NtpAssistance.GetNetworkTimeWithNtp();
 ```
 ### GetNetworkTimeWhithHttpAsync
-```cs
+```c#
 public static async Task<DateTime> GetNetworkTimeWhithHttpAsync(string url = "http://ntp-a1.nict.go.jp/cgi-bin/ntp", double timeout = 100);
 ```
 Http通信を使用してネットワーク上から時刻を取得します。**未検証です。(ぉぃ)**  
@@ -250,7 +255,7 @@ NTPの時刻が生で返されるURLである必要があります。
 **注意 NICTのサーバーはこのURLだけではありません。**
 
 #### サンプル
-```cs
+```c#
 //timeがもう時間
  var time = await NtpAssistance.GetNetworkTimeWhithHttpAsync();
 ```
@@ -259,7 +264,7 @@ NTPの時刻が生で返されるURLである必要があります。
 気象庁震度階級を示す列挙型(Enum)です。震度異常などを扱うために値が増やされています。
 
 ### サンプル
-```cs
+```c#
 JmaIntensity shindo = 1.0f.ToJmaIntensity(); //JmaIntensity.Int1
 Console.WriteLine(shindo.ToShortString()); //1
 Console.WriteLine(shondo.ToLongString()); //震度1
