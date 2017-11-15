@@ -6,7 +6,7 @@
 ## 0.0.8.0
 ### 変更
 - **プロジェクトを再編しました。(その2)**  
-  これによりビルド構成によってはMessagePackやprotobuf-netを無効化しました。
+  これによりビルド構成によってはMessagePackやprotobuf-netを無効化できるようにしました。
 - `ParseIntensityFromParameterAsync`の強震モニタから画像を取得する際に失敗したときに`GetMonitorImageFailedException`が発生するようになりました。  
    ちょっとステータスコードの取得が楽になったと思います。
 
