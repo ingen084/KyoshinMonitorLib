@@ -1,4 +1,4 @@
-﻿#if !NETFX_CORE
+﻿#if !WITHOUTPBF
 using ProtoBuf;
 #endif
 
@@ -7,7 +7,7 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// 観測点のタイプ
 	/// </summary>
-#if !NETFX_CORE
+#if !WITHOUTPBF
 	[ProtoContract]
 #endif
 	public enum ObservationPointType

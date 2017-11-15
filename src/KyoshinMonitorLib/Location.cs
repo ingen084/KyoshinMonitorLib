@@ -1,6 +1,7 @@
-﻿using MessagePack;
-
-#if !NETFX_CORE
+﻿#if !WITHOUTMPK
+using MessagePack;
+#endif
+#if !WITHOUTPBF
 using ProtoBuf;
 #endif
 
@@ -11,8 +12,12 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// 地理座標
 	/// </summary>
-	[MessagePackObject, DataContract
-#if !NETFX_CORE
+	[
+#if !WITHOUTMPK
+		MessagePackObject,
+#endif
+		DataContract
+#if !WITHOUTPBF
 		, ProtoContract
 #endif
 		]
@@ -39,8 +44,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		[Key(0), DataMember(Order = 0)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(0),
+#endif
+				 DataMember(Order = 0)
+#if !WITHOUTPBF
 			, ProtoMember(1)
 #endif
 			]
@@ -49,8 +58,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 経度
 		/// </summary>
-		[Key(1), DataMember(Order = 1)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(1),
+#endif
+				 DataMember(Order = 1)
+#if !WITHOUTPBF
 			, ProtoMember(2)
 #endif
 			]

@@ -1,5 +1,7 @@
-﻿using MessagePack;
-#if !NETFX_CORE
+﻿#if !WITHOUTMPK
+using MessagePack;
+#endif
+#if !WITHOUTPBF
 using ProtoBuf;
 #endif
 using System;
@@ -15,14 +17,18 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// NIEDの観測点情報
 	/// </summary>
-	[MessagePackObject, DataContract
-#if !NETFX_CORE
+	[
+#if !WITHOUTMPK
+		MessagePackObject,
+#endif
+		DataContract
+#if !WITHOUTPBF
 		, ProtoContract
 #endif
 		]
 	public class ObservationPoint : IComparable
 	{
-#if !NETFX_CORE
+#if !WITHOUTPBF
 		/// <summary>
 		/// 観測点情報をpbfから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -45,7 +51,7 @@ namespace KyoshinMonitorLib
 				Serializer.Serialize(stream, points.ToArray());
 		}
 #endif
-
+#if !WITHOUTMPK
 		/// <summary>
 		/// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -72,7 +78,7 @@ namespace KyoshinMonitorLib
 				else
 					MessagePackSerializer.Serialize(stream, points.ToArray());
 		}
-
+#endif
 		/// <summary>
 		/// 観測点情報をJsonから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -200,8 +206,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測地点のネットワークの種類
 		/// </summary>
-		[Key(0), DataMember(Order = 0)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(0),
+#endif
+			DataMember(Order = 0)
+#if !WITHOUTPBF
 			, ProtoMember(1)
 #endif
 			]
@@ -210,8 +220,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測点コード
 		/// </summary>
-		[Key(1), DataMember(Order = 1)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(1),
+#endif
+			DataMember(Order = 1)
+#if !WITHOUTPBF
 			, ProtoMember(2)
 #endif
 ]
@@ -220,8 +234,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測点名
 		/// </summary>
-		[Key(2), DataMember(Order = 2)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(2),
+#endif
+			DataMember(Order = 2)
+#if !WITHOUTPBF
 			, ProtoMember(4)
 #endif
 ]
@@ -230,8 +248,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測点広域名
 		/// </summary>
-		[Key(3), DataMember(Order = 3)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(3),
+#endif
+				 DataMember(Order = 3)
+#if !WITHOUTPBF
 			, ProtoMember(5)
 #endif
 ]
@@ -240,8 +262,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測地点が休止状態(無効)かどうか
 		/// </summary>
-		[Key(4), DataMember(Order = 4)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(4),
+#endif
+				 DataMember(Order = 4)
+#if !WITHOUTPBF
 			, ProtoMember(3)
 #endif
 ]
@@ -250,8 +276,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 地理座標
 		/// </summary>
-		[Key(5), DataMember(Order = 5)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(5),
+#endif
+				 DataMember(Order = 5)
+#if !WITHOUTPBF
 			, ProtoMember(6)
 #endif
 ]
@@ -260,8 +290,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 強震モニタ画像上での座標
 		/// </summary>
-		[Key(6), DataMember(Order = 6)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(6),
+#endif
+				 DataMember(Order = 6)
+#if !WITHOUTPBF
 			, ProtoMember(7)
 #endif
 ]
@@ -270,8 +304,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 緊急地震速報や震度速報で用いる区域のID(EqWatchインポート用)
 		/// </summary>
-		[Key(7), DataMember(Order = 7)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(7),
+#endif
+				 DataMember(Order = 7)
+#if !WITHOUTPBF
 			, ProtoMember(8, IsRequired = false)
 #endif
 			]
@@ -280,8 +318,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 緊急地震速報で用いる府県予報区のID(EqWatchインポート用)
 		/// </summary>
-		[Key(8), DataMember(Order = 8)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(8),
+#endif
+				 DataMember(Order = 8)
+#if !WITHOUTPBF
 			, ProtoMember(9, IsRequired = false)
 #endif
 			]

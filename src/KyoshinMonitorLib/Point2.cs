@@ -1,5 +1,7 @@
-﻿using MessagePack;
-#if !NETFX_CORE
+﻿#if !WITHOUTMPK
+using MessagePack;
+#endif
+#if !WITHOUTPBF
 using ProtoBuf;
 #endif
 using System.Drawing;
@@ -10,9 +12,13 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// シリアライズ+四則演算をできるようにしたPointクラス
 	/// </summary>
-	[MessagePackObject, DataContract
-#if !NETFX_CORE
-			, ProtoContract
+	[
+#if !WITHOUTMPK
+		MessagePackObject,
+#endif
+		DataContract
+#if !WITHOUTPBF
+		, ProtoContract
 #endif
 			]
 	public struct Point2
@@ -31,8 +37,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// X座標
 		/// </summary>
-		[Key(0), DataMember(Order = 0)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(0),
+#endif
+			DataMember(Order = 0)
+#if !WITHOUTPBF
 			, ProtoMember(1)
 #endif
 			]
@@ -41,8 +51,12 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// Y座標
 		/// </summary>
-		[Key(1), DataMember(Order = 1)
-#if !NETFX_CORE
+		[
+#if !WITHOUTMPK
+			Key(1),
+#endif
+			DataMember(Order = 1)
+#if !WITHOUTPBF
 			, ProtoMember(2)
 #endif
 			]

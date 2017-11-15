@@ -1,6 +1,7 @@
 ﻿using KyoshinMonitorLib;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 
 namespace Tests
@@ -14,7 +15,7 @@ namespace Tests
 			//誤差が蓄積しないタイマーのインスタンスを作成(デフォルトは間隔1000ms+精度1ms↓)
 			var timer = new SecondBasedTimer()
 			{
-				Offset = TimeSpan.FromSeconds(2.5),
+				Offset = TimeSpan.FromSeconds(2.2),
 			};
 
 			//適当にイベント設定
@@ -29,9 +30,10 @@ namespace Tests
 					//現在の最大震度
 					Console.WriteLine($"最大震度: 生:{result.Max(r => r.AnalysisResult)} jma:{result.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
 				}
-				catch (HttpRequestException ex)
+				catch (GetMonitorImageFailedException ex)
 				{
-					if (!ex.Message.Contains("404")) return;
+					Console.WriteLine($"HTTPエラー発生 {ex.StatusCode}({(int)ex.StatusCode})");
+					if (ex.StatusCode != HttpStatusCode.NotFound) return;
 					timer.Offset += TimeSpan.FromMilliseconds(100);
 					Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
 				}

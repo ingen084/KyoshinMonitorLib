@@ -35,8 +35,13 @@ namespace KyoshinMonitorLib
 		public static async Task<IEnumerable<ImageAnalysisResult>> ParseIntensityFromParameterAsync(this IEnumerable<ImageAnalysisResult> points, DateTime datetime, bool isBehole = false)
 		{
 			using (var client = new HttpClient())
-			using (var bitmap = new Bitmap(await client.GetStreamAsync(UrlGenerator.Generate(UrlType.RealTimeImg, datetime, RealTimeImgType.Shindo, isBehole))))
-				return points.ParseIntensityFromImage(bitmap);
+			{
+				var response = await client.GetAsync(UrlGenerator.Generate(UrlType.RealTimeImg, datetime, RealTimeImgType.Shindo, isBehole));
+				if (!response.IsSuccessStatusCode)
+					throw new GetMonitorImageFailedException(response.StatusCode);
+				using (var bitmap = new Bitmap(await response.Content.ReadAsStreamAsync()))
+					return points.ParseIntensityFromImage(bitmap);
+			}
 		}
 
 		/// <summary>
@@ -77,7 +82,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToCsv(path, points);
 
-#if !NETFX_CORE
+#if !WITHOUTPBF
 		/// <summary>
 		/// 観測点情報をpbfに保存します。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -86,7 +91,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToPbf(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToPbf(path, points);
 #endif
-
+#if !WITHOUTMPK
 		/// <summary>
 		/// 観測点情報をmpk形式で保存します。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -103,5 +108,6 @@ namespace KyoshinMonitorLib
 		/// <param name="points">書き込む観測点情報の配列</param>
 		public static void SaveToJson(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToJson(path, points);
+#endif
 	}
 }
