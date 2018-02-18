@@ -82,16 +82,6 @@ namespace KyoshinMonitorLib
 		public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToCsv(path, points);
 
-#if !WITHOUTPBF
-		/// <summary>
-		/// 観測点情報をpbfに保存します。失敗した場合は例外がスローされます。
-		/// </summary>
-		/// <param name="points">書き込む観測点情報の配列</param>
-		/// <param name="path">書き込むcsvファイルのパス</param>
-		public static void SaveToPbf(this IEnumerable<ObservationPoint> points, string path)
-			=> ObservationPoint.SaveToPbf(path, points);
-#endif
-#if !WITHOUTMPK
 		/// <summary>
 		/// 観測点情報をmpk形式で保存します。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -108,6 +98,5 @@ namespace KyoshinMonitorLib
 		/// <param name="points">書き込む観測点情報の配列</param>
 		public static void SaveToJson(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToJson(path, points);
-#endif
 	}
 }

@@ -1,57 +1,20 @@
-﻿#if !WITHOUTMPK
-using MessagePack;
-#endif
-#if !WITHOUTPBF
-using ProtoBuf;
-#endif
+﻿using MessagePack;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Text;
+using Utf8Json;
 
 namespace KyoshinMonitorLib
 {
 	/// <summary>
 	/// NIEDの観測点情報
 	/// </summary>
-	[
-#if !WITHOUTMPK
-		MessagePackObject,
-#endif
-		DataContract
-#if !WITHOUTPBF
-		, ProtoContract
-#endif
-		]
+	[MessagePackObject, DataContract]
 	public class ObservationPoint : IComparable
 	{
-#if !WITHOUTPBF
-		/// <summary>
-		/// 観測点情報をpbfから読み込みます。失敗した場合は例外がスローされます。
-		/// </summary>
-		/// <param name="path">読み込むpbfファイルのパス</param>
-		/// <returns>読み込まれた観測点情報</returns>
-		public static ObservationPoint[] LoadFromPbf(string path)
-		{
-			using (var stream = new FileStream(path, FileMode.Open))
-				return Serializer.Deserialize<ObservationPoint[]>(stream);
-		}
-
-		/// <summary>
-		/// 観測点情報をpbfに保存します。失敗した場合は例外がスローされます。
-		/// </summary>
-		/// <param name="path">書き込むpbfファイルのパス</param>
-		/// <param name="points">書き込む観測点情報の配列</param>
-		public static void SaveToPbf(string path, IEnumerable<ObservationPoint> points)
-		{
-			using (var stream = new FileStream(path, FileMode.Create))
-				Serializer.Serialize(stream, points.ToArray());
-		}
-#endif
-#if !WITHOUTMPK
 		/// <summary>
 		/// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -61,7 +24,9 @@ namespace KyoshinMonitorLib
 		public static ObservationPoint[] LoadFromMpk(string path, bool usingLz4 = false)
 		{
 			using (var stream = new FileStream(path, FileMode.Open))
-				return usingLz4 ? LZ4MessagePackSerializer.Deserialize<ObservationPoint[]>(stream) : MessagePackSerializer.Deserialize<ObservationPoint[]>(stream);
+				return usingLz4
+					? LZ4MessagePackSerializer.Deserialize<ObservationPoint[]>(stream)
+					: MessagePackSerializer.Deserialize<ObservationPoint[]>(stream);
 		}
 
 		/// <summary>
@@ -78,7 +43,7 @@ namespace KyoshinMonitorLib
 				else
 					MessagePackSerializer.Serialize(stream, points.ToArray());
 		}
-#endif
+
 		/// <summary>
 		/// 観測点情報をJsonから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -87,7 +52,7 @@ namespace KyoshinMonitorLib
 		public static ObservationPoint[] LoadFromJson(string path)
 		{
 			using (var stream = new FileStream(path, FileMode.Open))
-				return new DataContractJsonSerializer(typeof(ObservationPoint[])).ReadObject(stream) as ObservationPoint[];
+				return JsonSerializer.Deserialize<ObservationPoint[]>(stream);
 		}
 
 		/// <summary>
@@ -98,7 +63,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToJson(string path, IEnumerable<ObservationPoint> points)
 		{
 			using (var stream = new FileStream(path, FileMode.Create))
-				new DataContractJsonSerializer(typeof(ObservationPoint[])).WriteObject(stream, points.ToArray());
+				JsonSerializer.Serialize(stream, points.ToArray());
 		}
 
 		/// <summary>
@@ -114,7 +79,7 @@ namespace KyoshinMonitorLib
 
 			var points = new List<ObservationPoint>();
 
-			using(var stream = File.OpenRead(path))
+			using (var stream = File.OpenRead(path))
 			using (var reader = new StreamReader(stream))
 				while (reader.Peek() >= 0)
 					try
@@ -206,127 +171,55 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測地点のネットワークの種類
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(0),
-#endif
-			DataMember(Order = 0)
-#if !WITHOUTPBF
-			, ProtoMember(1)
-#endif
-			]
+		[Key(0), DataMember(Order = 0)]
 		public ObservationPointType Type { get; set; }
 
 		/// <summary>
 		/// 観測点コード
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(1),
-#endif
-			DataMember(Order = 1)
-#if !WITHOUTPBF
-			, ProtoMember(2)
-#endif
-]
+		[Key(1), DataMember(Order = 1)]
 		public string Code { get; set; }
 
 		/// <summary>
 		/// 観測点名
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(2),
-#endif
-			DataMember(Order = 2)
-#if !WITHOUTPBF
-			, ProtoMember(4)
-#endif
-]
+		[Key(2), DataMember(Order = 2)]
 		public string Name { get; set; }
 
 		/// <summary>
 		/// 観測点広域名
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(3),
-#endif
-				 DataMember(Order = 3)
-#if !WITHOUTPBF
-			, ProtoMember(5)
-#endif
-]
+		[Key(3), DataMember(Order = 3)]
 		public string Region { get; set; }
 
 		/// <summary>
 		/// 観測地点が休止状態(無効)かどうか
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(4),
-#endif
-				 DataMember(Order = 4)
-#if !WITHOUTPBF
-			, ProtoMember(3)
-#endif
-]
+		[Key(4), DataMember(Order = 4)]
 		public bool IsSuspended { get; set; }
 
 		/// <summary>
 		/// 地理座標
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(5),
-#endif
-				 DataMember(Order = 5)
-#if !WITHOUTPBF
-			, ProtoMember(6)
-#endif
-]
+		[Key(5), DataMember(Order = 5)]
 		public Location Location { get; set; }
 
 		/// <summary>
 		/// 強震モニタ画像上での座標
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(6),
-#endif
-				 DataMember(Order = 6)
-#if !WITHOUTPBF
-			, ProtoMember(7)
-#endif
-]
+		[Key(6), DataMember(Order = 6)]
 		public Point2? Point { get; set; }
 
 		/// <summary>
 		/// 緊急地震速報や震度速報で用いる区域のID(EqWatchインポート用)
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(7),
-#endif
-				 DataMember(Order = 7)
-#if !WITHOUTPBF
-			, ProtoMember(8, IsRequired = false)
-#endif
-			]
+		[Key(7), DataMember(Order = 7)]
 		public int? ClassificationId { get; set; }
 
 		/// <summary>
 		/// 緊急地震速報で用いる府県予報区のID(EqWatchインポート用)
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(8),
-#endif
-				 DataMember(Order = 8)
-#if !WITHOUTPBF
-			, ProtoMember(9, IsRequired = false)
-#endif
-			]
+		[Key(8), DataMember(Order = 8)]
 		public int? PrefectureClassificationId { get; set; }
 
 		/// <summary>

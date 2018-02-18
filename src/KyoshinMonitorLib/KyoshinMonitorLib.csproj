@@ -1,34 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netcoreapp2.0;net47;net46</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net47;net46</TargetFrameworks>
 		<AssemblyName>kmoni</AssemblyName>
-		<Version>0.0.8</Version>
+		<Version>0.1.0</Version>
 		<Copyright>Copyright © ingenWorkS 2017</Copyright>
 		<Company>ingenWorkS</Company>
 		<Authors>ingen084</Authors>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Description>.NETから簡単に強震モニタを利用できるようにするライブラリ</Description>
-		<Configurations>Debug;Release;Release-WithoutPbf;Release-WithoutMpk;Release-WithoutAll;Release-WithoutAll</Configurations>
+		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)'=='Release-WithoutMpk'">
-	  <DefineConstants>WITHOUTMPK</DefineConstants>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)'=='Release-WithoutPbf'">
-	  <DefineConstants>WITHOUTPBF</DefineConstants>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)'=='Release-WithoutAll'">
-	  <DefineConstants>WITHOUTPBF;WITHOUTMPK</DefineConstants>
-	</PropertyGroup>
-
-	<ItemGroup Condition="'$(Configuration)' != 'Release-WithoutPbf' AND '$(Configuration)' != 'Release-WithoutAll'">
-		<PackageReference Include="protobuf-net" Version="2.3.2" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)' != 'Release-WithoutMpk' AND '$(Configuration)' != 'Release-WithoutAll'">
-		<PackageReference Include="MessagePack" Version="1.7.2" />
+	<ItemGroup>
+		<PackageReference Include="MessagePack" Version="1.7.3.4" />
+		<PackageReference Include="Utf8Json" Version="1.3.7" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
-		<PackageReference Include="System.Drawing.Common" Version="4.5.0-preview1-25718-03" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="System.Drawing.Common" Version="4.5.0-preview1-25914-04" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net46'">
