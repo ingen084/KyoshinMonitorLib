@@ -20,16 +20,39 @@ namespace KyoshinMonitorLib.ApiResult.V2
 
 	public class Item
 	{
+		/// <summary>
+		/// 不明(内部ID？)
+		/// </summary>
 		[DataMember(Name = "muni")]
 		public int Muni { get; set; }
+		/// <summary>
+		/// RealTimeDataでのインデックスID
+		/// </summary>
 		[DataMember(Name = "siteidx")]
 		public int Siteidx { get; set; }
+		/// <summary>
+		/// 都道府県ID
+		/// </summary>
 		[DataMember(Name = "pref")]
-		public Prefecture Pref { get; set; }
+		public int PrefefectureId { get; set; }
+		/// <summary>
+		/// 都道府県
+		/// </summary>
+		[IgnoreDataMember]
+		public Prefecture Prefefecture => (Prefecture)(Enum.ToObject(typeof(Prefecture), PrefefectureId) ?? Prefecture.Unknown);
+		/// <summary>
+		/// ID
+		/// </summary>
 		[DataMember(Name = "siteid")]
-		public string Siteid { get; set; }
+		public string SiteId { get; set; }
+		/// <summary>
+		/// 緯度
+		/// </summary>
 		[DataMember(Name = "lat")]
 		public float Lat { get; set; }
+		/// <summary>
+		/// 経度
+		/// </summary>
 		[DataMember(Name = "lng")]
 		public float Lng { get; set; }
 	}
@@ -58,7 +81,7 @@ namespace KyoshinMonitorLib.ApiResult.V2
 		[PrefectureName("岩手", "岩手県")]
 		Iwate,
 		[PrefectureName("宮城", "宮城県")]
-		Mitagi,
+		Miyagi,
 		[PrefectureName("秋田", "秋田県")]
 		Akita,
 		[PrefectureName("山形", "山形県")]
@@ -138,7 +161,7 @@ namespace KyoshinMonitorLib.ApiResult.V2
 		[PrefectureName("熊本", "熊本県")]
 		Kumamoto,
 		[PrefectureName("大分", "大分県")]
-		Ooita,
+		Oita,
 		[PrefectureName("宮崎", "宮崎県")]
 		Miyazaki,
 		[PrefectureName("鹿児島", "鹿児島県")]

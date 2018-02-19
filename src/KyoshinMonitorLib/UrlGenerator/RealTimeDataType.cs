@@ -1,9 +1,9 @@
-﻿namespace KyoshinMonitorLib
+﻿namespace KyoshinMonitorLib.UrlGenerator
 {
 	/// <summary>
 	/// リアルタイム画像の種類
 	/// </summary>
-	public enum RealTimeImgType
+	public enum RealTimeDataType
 	{
 		/// <summary>
 		/// 震度
@@ -59,45 +59,45 @@
 	/// <summary>
 	/// RealTimeImgTypeの拡張メソッド
 	/// </summary>
-	public static class RealTimeImgTimeExtensions
+	public static class RealTimeDataExtensions
 	{
 		/// <summary>
 		/// URLに使用する文字列に変換する
 		/// </summary>
 		/// <param name="type">変換するRealTimeImgTypy</param>
 		/// <returns>変換された文字列</returns>
-		public static string ToUrlString(this RealTimeImgType type)
+		public static string ToUrlString(this RealTimeDataType type)
 		{
 			switch (type)
 			{
-				case RealTimeImgType.Shindo:
+				case RealTimeDataType.Shindo:
 					return "jma";
 
-				case RealTimeImgType.Pga:
+				case RealTimeDataType.Pga:
 					return "acmap";
 
-				case RealTimeImgType.Pgv:
+				case RealTimeDataType.Pgv:
 					return "vcmap";
 
-				case RealTimeImgType.Pgd:
+				case RealTimeDataType.Pgd:
 					return "dcmap";
 
-				case RealTimeImgType.Response_0_125Hz:
+				case RealTimeDataType.Response_0_125Hz:
 					return "rsp0125";
 
-				case RealTimeImgType.Response_0_25Hz:
+				case RealTimeDataType.Response_0_25Hz:
 					return "rsp0250";
 
-				case RealTimeImgType.Response_0_5Hz:
+				case RealTimeDataType.Response_0_5Hz:
 					return "rsp0500";
 
-				case RealTimeImgType.Response_1Hz:
+				case RealTimeDataType.Response_1Hz:
 					return "rsp1000";
 
-				case RealTimeImgType.Response_2Hz:
+				case RealTimeDataType.Response_2Hz:
 					return "rsp2000";
 
-				case RealTimeImgType.Response_4Hz:
+				case RealTimeDataType.Response_4Hz:
 					return "rsp4000";
 			}
 			return null;

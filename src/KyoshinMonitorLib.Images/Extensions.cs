@@ -33,7 +33,7 @@ namespace KyoshinMonitorLib.Images
 		{
 			using (var client = new HttpClient())
 			{
-				var response = await client.GetAsync(UrlGenerator.Generate(UrlType.RealTimeImg, datetime, RealTimeImgType.Shindo, isBehole));
+				var response = await client.GetAsync(UrlGeneratorV1.Generate(UrlType.RealTimeImg, datetime, RealTimeImgType.Shindo, isBehole));
 				if (!response.IsSuccessStatusCode)
 					throw new GetMonitorImageFailedException(response.StatusCode);
 				using (var bitmap = new Bitmap(await response.Content.ReadAsStreamAsync()))
