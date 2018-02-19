@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib", "src\Ky
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "src\Tests\Tests.csproj", "{40C247D7-1292-4FE5-9DAA-A47D067F2560}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib.Timers", "src\KyoshinMonitorLib.Timers\KyoshinMonitorLib.Timers.csproj", "{F3D3DB38-8BBC-42B2-8344-806917A4A888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib.Images", "src\KyoshinMonitorLib.Images\KyoshinMonitorLib.Images.csproj", "{0A7BD896-197C-4777-80E2-1F51D8F031E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{40C247D7-1292-4FE5-9DAA-A47D067F2560}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40C247D7-1292-4FE5-9DAA-A47D067F2560}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40C247D7-1292-4FE5-9DAA-A47D067F2560}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3D3DB38-8BBC-42B2-8344-806917A4A888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3D3DB38-8BBC-42B2-8344-806917A4A888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3D3DB38-8BBC-42B2-8344-806917A4A888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D3DB38-8BBC-42B2-8344-806917A4A888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A7BD896-197C-4777-80E2-1F51D8F031E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A7BD896-197C-4777-80E2-1F51D8F031E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A7BD896-197C-4777-80E2-1F51D8F031E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A7BD896-197C-4777-80E2-1F51D8F031E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

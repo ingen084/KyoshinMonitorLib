@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace KyoshinMonitorLib
+namespace KyoshinMonitorLib.Images
 {
 	/// <summary>
 	/// 画像解析結果

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace KyoshinMonitorLib.ApiResult
+namespace KyoshinMonitorLib.ApiResult.V2
 {
 	public class RealTimeData
 	{
@@ -18,25 +18,8 @@ namespace KyoshinMonitorLib.ApiResult
 		[DataMember(Name = "items")]
 		public float?[] Items { get; set; }
 		[DataMember(Name = "result")]
-		public RealTimeDataResult Result { get; set; }
+		public Result Result { get; set; }
 		[DataMember(Name = "security")]
 		public Security Security { get; set; }
 	}
-
-	public class RealTimeDataResult
-	{
-		[DataMember(Name = "status")]
-		public string Status { get; set; }
-		[DataMember(Name = "message")]
-		public string Message { get; set; }
-	}
-
-	public class Security
-	{
-		[DataMember(Name = "realm")]
-		public string Realm { get; set; }
-		[DataMember(Name = "hash")]
-		public string Hash { get; set; }
-	}
-
 }

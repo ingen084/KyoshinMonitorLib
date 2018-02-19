@@ -1,4 +1,6 @@
 ﻿using KyoshinMonitorLib;
+using KyoshinMonitorLib.Images;
+using KyoshinMonitorLib.Timers;
 using System;
 using System.Linq;
 using System.Net;
