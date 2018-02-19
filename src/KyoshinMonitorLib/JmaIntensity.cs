@@ -67,9 +67,9 @@
 	}
 
 	/// <summary>
-	/// Shindoの拡張メソッド
+	/// JmaIntensityの拡張メソッド
 	/// </summary>
-	public static class ShindoExtensions
+	public static class JmaIntensityExtensions
 	{
 		/// <summary>
 		/// 生の震度の値を気象庁震度階級に変換します。(float?版)
@@ -90,8 +90,6 @@
 		/// <returns>変換されたShindo</returns>
 		public static JmaIntensity ToJmaIntensity(this float intensity)
 		{
-			if (intensity < -3.0)
-				return JmaIntensity.Error;
 			if (intensity < 0.5)
 				return JmaIntensity.Int0;
 			if (intensity < 1.5)

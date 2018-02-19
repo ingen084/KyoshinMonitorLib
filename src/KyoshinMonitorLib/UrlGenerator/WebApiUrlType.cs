@@ -5,7 +5,7 @@ namespace KyoshinMonitorLib.UrlGenerator
 	/// <summary>
 	/// 生成するURLの種類(WebApi)
 	/// </summary>
-	public enum UrlTypeV1
+	public enum WebApiUrlType
 	{
 		/// <summary>
 		/// リアルタイム情報

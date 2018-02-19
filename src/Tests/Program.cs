@@ -31,7 +31,7 @@ namespace Tests
 					//現在の最大震度
 					Console.WriteLine($"最大震度: 生:{result.Max(r => r.AnalysisResult)} jma:{result.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
 				}
-				catch (GetMonitorImageFailedException ex)
+				catch (KyoshinMonitorException ex)
 				{
 					Console.WriteLine($"HTTPエラー発生 {ex.StatusCode}({(int)ex.StatusCode})");
 					if (ex.StatusCode != HttpStatusCode.NotFound) return;

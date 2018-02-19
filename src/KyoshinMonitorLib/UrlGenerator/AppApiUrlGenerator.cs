@@ -5,7 +5,7 @@ namespace KyoshinMonitorLib.UrlGenerator
 	/// <summary>
 	/// 強震モニタスマホアプリのURL生成器
 	/// </summary>
-	public class UrlGeneratorV2
+	public class AppApiUrlGenerator
 	{
 		/// <summary>
 		/// リアルタイムJsonのベースURL
@@ -39,17 +39,17 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// <param name="realTimeShindoType">(UrlType=RealTimeDataの際に使用)取得するリアルタイム情報の種類</param>
 		/// <param name="isBerehole">(UrlType=RealTimeDataの際に使用)地中の情報を取得するかどうか</param>
 		/// <returns></returns>
-		public static string Generate(UrlTypeV2 urlType, DateTime datetime, RealTimeDataType realTimeShindoType = RealTimeDataType.Shindo, bool isBerehole = false)
+		public static string Generate(AppApiUrlType urlType, DateTime datetime, RealTimeDataType realTimeShindoType = RealTimeDataType.Shindo, bool isBerehole = false)
 		{
 			switch (urlType)
 			{
-				case UrlTypeV2.RealTimeData:
+				case AppApiUrlType.RealTimeData:
 					return string.Format(RealTimeDataBase, realTimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
-				case UrlTypeV2.EstShindoJson:
+				case AppApiUrlType.EstShindoJson:
 					return string.Format(EewJsonBase, "EstShindoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "est");
-				case UrlTypeV2.PSWaveJson:
+				case AppApiUrlType.PSWaveJson:
 					return string.Format(EewJsonBase, "PSWaveJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "psw");
-				case UrlTypeV2.HypoInfoJson:
+				case AppApiUrlType.HypoInfoJson:
 					return string.Format(EewJsonBase, "HypoInfoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "hypo");
 			}
 			return null;

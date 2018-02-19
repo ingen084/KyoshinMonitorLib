@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace KyoshinMonitorLib.ApiResult.V2
+namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	public class SiteList
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace KyoshinMonitorLib.ApiResult.V1
+namespace KyoshinMonitorLib.ApiResult.WebApi
 {
 	public class Eew
 	{

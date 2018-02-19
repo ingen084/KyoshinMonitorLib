@@ -1,15 +1,16 @@
-﻿using System;
+﻿using KyoshinMonitorLib.UrlGenerator;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib.Images
 {
 	public static class Extensions
-    {
+	{
 		/// <summary>
 		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を取得します。
 		/// <para>asyncなのはStream取得部分のみなので注意してください。</para>
@@ -31,14 +32,9 @@ namespace KyoshinMonitorLib.Images
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
 		public static async Task<IEnumerable<ImageAnalysisResult>> ParseIntensityFromParameterAsync(this IEnumerable<ImageAnalysisResult> points, DateTime datetime, bool isBehole = false)
 		{
-			using (var client = new HttpClient())
-			{
-				var response = await client.GetAsync(UrlGeneratorV1.Generate(UrlType.RealTimeImg, datetime, RealTimeImgType.Shindo, isBehole));
-				if (!response.IsSuccessStatusCode)
-					throw new GetMonitorImageFailedException(response.StatusCode);
-				using (var bitmap = new Bitmap(await response.Content.ReadAsStreamAsync()))
-					return points.ParseIntensityFromImage(bitmap);
-			}
+			using (var stream = new MemoryStream(await WebApi.GetRealtimeImageData(datetime, RealTimeDataType.Shindo, isBehole)))
+			using (var bitmap = new Bitmap(stream))
+				return points.ParseIntensityFromImage(bitmap);
 		}
 
 		/// <summary>
@@ -51,7 +47,7 @@ namespace KyoshinMonitorLib.Images
 		{
 			foreach (var point in points)
 			{
-				if (point.Point == null || point.IsSuspended)
+				if (point.ObservationPoint.Point == null || point.ObservationPoint.IsSuspended)
 				{
 					point.AnalysisResult = null;
 					continue;
@@ -59,7 +55,7 @@ namespace KyoshinMonitorLib.Images
 
 				try
 				{
-					var color = bitmap.GetPixel(point.Point.Value.X, point.Point.Value.Y);
+					var color = bitmap.GetPixel(point.ObservationPoint.Point.Value.X, point.ObservationPoint.Point.Value.Y);
 					point.Color = color;
 					point.AnalysisResult = ColorToIntensityConverter.Convert(color);
 				}

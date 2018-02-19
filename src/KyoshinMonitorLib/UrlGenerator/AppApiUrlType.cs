@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 生成するURLの種類(スマホアプリApi)
 	/// </summary>
-	public enum UrlTypeV2
+	public enum AppApiUrlType
 	{
 		/// <summary>
 		/// リアルタイム情報
