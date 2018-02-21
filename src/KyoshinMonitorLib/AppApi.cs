@@ -11,7 +11,7 @@ namespace KyoshinMonitorLib
 	{
 		/// <summary>
 		/// 観測点情報のキャッシュ
-		/// <para>BaseSerialNoと観測点情報･idxに適合した</para>
+		/// <para>BaseSerialNoと観測点情報･idxに適合した情報のマッピング</para>
 		/// </summary>
 		private static Dictionary<string, (Site, ObservationPoint)[]> SiteListCache { get; set; } = new Dictionary<string, (Site, ObservationPoint)[]>();
 
@@ -22,13 +22,13 @@ namespace KyoshinMonitorLib
 		}
 
 		/// <summary>
-		/// 観測点一覧を取得します
+		/// 観測点一覧を取得します。
 		/// </summary>
 		public Task<SiteList> GetSiteList(string baseSerialNo)
 			=> GetJsonObject<SiteList>(AppApiUrlGenerator.Generate(baseSerialNo));
 
 		/// <summary>
-		/// リアルタイムなデータを取得します
+		/// リアルタイムなデータを取得します。
 		/// </summary>
 		public Task<RealTimeData> GetRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
 			=> GetJsonObject<RealTimeData>(AppApiUrlGenerator.Generate(AppApiUrlType.RealTimeData, time, dataType, isBehore));
