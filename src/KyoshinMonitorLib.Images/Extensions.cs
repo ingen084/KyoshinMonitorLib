@@ -19,8 +19,8 @@ namespace KyoshinMonitorLib.Images
 		/// <param name="datetime">参照する日付</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
-		public static async Task<IEnumerable<ImageAnalysisResult>> ParseIntensityFromParameterAsync(this IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false)
-			=> await points.Select(p => new ImageAnalysisResult(p)).ToArray().ParseIntensityFromParameterAsync(datetime, isBehole);
+		public static async Task<IEnumerable<ImageAnalysisResult>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false)
+			=> await webApi.ParseIntensityFromParameterAsync(points.Select(p => new ImageAnalysisResult(p)).ToArray(), datetime, isBehole);
 
 		/// <summary>
 		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を取得します。
@@ -30,9 +30,9 @@ namespace KyoshinMonitorLib.Images
 		/// <param name="datetime">参照する日付</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
-		public static async Task<IEnumerable<ImageAnalysisResult>> ParseIntensityFromParameterAsync(this IEnumerable<ImageAnalysisResult> points, DateTime datetime, bool isBehole = false)
+		public static async Task<IEnumerable<ImageAnalysisResult>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ImageAnalysisResult> points, DateTime datetime, bool isBehole = false)
 		{
-			using (var stream = new MemoryStream(await WebApi.GetRealtimeImageData(datetime, RealTimeDataType.Shindo, isBehole)))
+			using (var stream = new MemoryStream(await webApi.GetRealtimeImageData(datetime, RealTimeDataType.Shindo, isBehole)))
 			using (var bitmap = new Bitmap(stream))
 				return points.ParseIntensityFromImage(bitmap);
 		}

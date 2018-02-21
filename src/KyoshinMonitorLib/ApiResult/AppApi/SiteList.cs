@@ -7,7 +7,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 	public class SiteList
 	{
 		[DataMember(Name = "items")]
-		public Item[] Items { get; set; }
+		public Site[] Sites { get; set; }
 		[DataMember(Name = "security")]
 		public Security Security { get; set; }
 		[DataMember(Name = "dataTime")]
@@ -18,7 +18,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		public string SerialNo { get; set; }
 	}
 
-	public class Item
+	public class Site
 	{
 		/// <summary>
 		/// 不明(内部ID？)

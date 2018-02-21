@@ -17,8 +17,8 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <param name="url">要求するURL NTPの時刻が生で返されるURLである必要があります。</param>
 		/// <param name="timeout">タイムアウト時間(ミリ秒)</param>
-		/// <returns>取得された時刻 取得に失敗した場合はDateTime.MinValueが返されます。</returns>
-		public static async Task<DateTime> GetNetworkTimeWhithHttpAsync(string url = "http://ntp-a1.nict.go.jp/cgi-bin/ntp", double timeout = 100)
+		/// <returns>取得された時刻 取得に失敗した場合はnullが返されます。</returns>
+		public static async Task<DateTime?> GetNetworkTimeWhithHttpAsync(string url = "http://ntp-a1.nict.go.jp/cgi-bin/ntp", double timeout = 100)
 		{
 			try
 			{
@@ -27,7 +27,7 @@ namespace KyoshinMonitorLib
 			}
 			catch
 			{
-				return DateTime.MinValue;
+				return null;
 			}
 		}
 
@@ -37,8 +37,8 @@ namespace KyoshinMonitorLib
 		/// <param name="hostName">ホスト名</param>
 		/// <param name="port">ポート番号 通常はデフォルトのままで構いません。</param>
 		/// <param name="timeout">タイムアウト時間(ミリ秒)</param>
-		/// <returns>取得された時刻 取得に失敗した場合はDateTime.MinValueが返されます。</returns>
-		public static async Task<DateTime> GetNetworkTimeWithNtp(string hostName = "ntp.nict.jp", ushort port = 123, int timeout = 100)
+		/// <returns>取得された時刻 取得に失敗した場合はnullが返されます。</returns>
+		public static async Task<DateTime?> GetNetworkTimeWithNtp(string hostName = "ntp.nict.jp", ushort port = 123, int timeout = 100)
 		{
 			// RFC 2030に準拠しています。
 			var ntpData = new byte[48];
@@ -71,7 +71,7 @@ namespace KyoshinMonitorLib
 			{
 				ntpData = null;
 			}
-			if (ntpData == null) return DateTime.MinValue;
+			if (ntpData == null) return null;
 
 			//受信時刻=32 送信時刻=40
 			var serverReceivedTime = ToTime(ntpData, 32);

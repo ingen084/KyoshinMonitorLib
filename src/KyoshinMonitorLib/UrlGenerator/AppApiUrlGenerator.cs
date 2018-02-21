@@ -54,6 +54,9 @@ namespace KyoshinMonitorLib.UrlGenerator
 			}
 			return null;
 		}
-
+		public static string Generate(string baseSerialNo)
+		{
+			return string.Format(SiteListBase, baseSerialNo);
+		}
 	}
 }

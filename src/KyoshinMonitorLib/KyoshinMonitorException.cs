@@ -8,14 +8,17 @@ namespace KyoshinMonitorLib
 	/// </summary>
 	public class KyoshinMonitorException : Exception
 	{
-		public KyoshinMonitorException(string message, HttpStatusCode? statusCode = null) : base(message)
+		public KyoshinMonitorException(string url, string message, HttpStatusCode? statusCode = null) : base(message)
 		{
+			Url = url;
 			StatusCode = statusCode;
 		}
-		public KyoshinMonitorException(string message, Exception innerException) : base(message, innerException)
+		public KyoshinMonitorException(string url, string message, Exception innerException) : base(message, innerException)
 		{
+			Url = url;
 		}
 
+		public string Url { get; }
 		public HttpStatusCode? StatusCode { get; }
 	}
 }
