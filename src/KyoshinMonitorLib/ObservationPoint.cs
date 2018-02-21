@@ -205,6 +205,12 @@ namespace KyoshinMonitorLib
 		public Location Location { get; set; }
 
 		/// <summary>
+		/// 地理座標(日本座標系)
+		/// </summary>
+		[Key(9), DataMember(Order = 9)]
+		public Location OldLocation { get; set; }
+
+		/// <summary>
 		/// 強震モニタ画像上での座標
 		/// </summary>
 		[Key(6), DataMember(Order = 6)]
