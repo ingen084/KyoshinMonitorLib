@@ -1,4 +1,5 @@
 ﻿using KyoshinMonitorLib;
+using KyoshinMonitorLib.ApiResult.AppApi;
 using KyoshinMonitorLib.Images;
 using KyoshinMonitorLib.Timers;
 using KyoshinMonitorLib.UrlGenerator;

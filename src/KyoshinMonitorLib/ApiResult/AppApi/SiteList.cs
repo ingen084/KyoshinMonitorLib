@@ -176,14 +176,14 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 	{
 		public static string GetLongName(this Prefecture pref)
 		{
-			var attr = pref.GetType().GetTypeInfo().GetCustomAttribute<PrefectureNameAttribute>();
+			var attr = pref.GetType().GetField(pref.ToString()).GetCustomAttribute<PrefectureNameAttribute>();
 			if (attr == null)
 				return "不明";
 			return attr.LongName;
 		}
 		public static string GetShortName(this Prefecture pref)
 		{
-			var attr = pref.GetType().GetTypeInfo().GetCustomAttribute<PrefectureNameAttribute>();
+			var attr = pref.GetType().GetField(pref.ToString()).GetCustomAttribute<PrefectureNameAttribute>();
 			if (attr == null)
 				return "不明";
 			return attr.ShortName;
