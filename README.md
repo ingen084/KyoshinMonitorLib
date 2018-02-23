@@ -51,13 +51,13 @@ public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(
 ### SaveToCsv/Mpk/Json
 ```c#
 public static void SaveToCsv(string path, IEnumerable<ObservationPoint> points);
-public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool usingLz4 = false);
+public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool useLz4 = false);
 public static void SaveToJson(string path, IEnumerable<ObservationPoint> points);
 ```
 拡張メソッド版
 ```c#
 public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path);
-public static void SaveToMpk(this IEnumerable<ObservationPoint> points, string path, bool usingLz4 = false);
+public static void SaveToMpk(this IEnumerable<ObservationPoint> points, string path, bool useLz4 = false);
 public static void SaveToJson(this IEnumerable<ObservationPoint> points, string path);
 ```
 観測点情報を各形式に保存します。失敗した場合は例外がスローされます。

@@ -19,12 +19,12 @@ namespace KyoshinMonitorLib
 		/// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
 		/// <param name="path">読み込むmpkファイルのパス</param>
-		/// <param name="usingLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
+		/// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
 		/// <returns>読み込まれた観測点情報</returns>
-		public static ObservationPoint[] LoadFromMpk(string path, bool usingLz4 = false)
+		public static ObservationPoint[] LoadFromMpk(string path, bool useLz4 = false)
 		{
 			using (var stream = new FileStream(path, FileMode.Open))
-				return usingLz4
+				return useLz4
 					? LZ4MessagePackSerializer.Deserialize<ObservationPoint[]>(stream)
 					: MessagePackSerializer.Deserialize<ObservationPoint[]>(stream);
 		}
@@ -34,11 +34,11 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <param name="path">書き込むmpkファイルのパス</param>
 		/// <param name="points">書き込む観測点情報の配列</param>
-		/// <param name="usingLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
-		public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool usingLz4 = false)
+		/// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
+		public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool useLz4 = false)
 		{
 			using (var stream = new FileStream(path, FileMode.Create))
-				if (usingLz4)
+				if (useLz4)
 					LZ4MessagePackSerializer.Serialize(stream, points.ToArray());
 				else
 					MessagePackSerializer.Serialize(stream, points.ToArray());
@@ -103,6 +103,9 @@ namespace KyoshinMonitorLib
 							point.ClassificationId = int.Parse(strings[9]);
 							point.PrefectureClassificationId = int.Parse(strings[10]);
 						}
+						if (strings.Length >= 13)
+							point.OldLocation = new Location(float.Parse(strings[11]), float.Parse(strings[12]));
+
 						points.Add(point);
 						addedCount++;
 					}
