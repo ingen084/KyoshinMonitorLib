@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace KyoshinMonitorLib
+namespace KyoshinMonitorLib.Timers
 {
 	/// <summary>
 	/// 誤差を蓄積させないようにするタイマー ただし極微量のずれはあります
@@ -13,7 +13,7 @@ namespace KyoshinMonitorLib
 
 		private bool _isEventRunning;
 
-		private QueryPerformanceStopwatch _sw;
+		private HighPerformanceStopwatch _sw;
 
 		private TimeSpan _interval = TimeSpan.FromMilliseconds(1000);
 
@@ -104,7 +104,7 @@ namespace KyoshinMonitorLib
 						_timer.Change(Timeout.Infinite, Timeout.Infinite);
 				}
 			}, null, Timeout.Infinite, Timeout.Infinite);
-			_sw = new QueryPerformanceStopwatch();
+			_sw = new HighPerformanceStopwatch();
 		}
 
 		/// <summary>

@@ -1,9 +1,4 @@
-﻿#if !WITHOUTMPK
-using MessagePack;
-#endif
-#if !WITHOUTPBF
-using ProtoBuf;
-#endif
+﻿using MessagePack;
 using System.Drawing;
 using System.Runtime.Serialization;
 
@@ -12,15 +7,7 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// シリアライズ+四則演算をできるようにしたPointクラス
 	/// </summary>
-	[
-#if !WITHOUTMPK
-		MessagePackObject,
-#endif
-		DataContract
-#if !WITHOUTPBF
-		, ProtoContract
-#endif
-			]
+	[MessagePackObject, DataContract]
 	public struct Point2
 	{
 		/// <summary>
@@ -37,29 +24,13 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// X座標
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(0),
-#endif
-			DataMember(Order = 0)
-#if !WITHOUTPBF
-			, ProtoMember(1)
-#endif
-			]
+		[Key(0), DataMember(Order = 0)]
 		public int X { get; set; }
 
 		/// <summary>
 		/// Y座標
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(1),
-#endif
-			DataMember(Order = 1)
-#if !WITHOUTPBF
-			, ProtoMember(2)
-#endif
-			]
+		[Key(1), DataMember(Order = 1)]
 		public int Y { get; set; }
 
 		/// <summary>

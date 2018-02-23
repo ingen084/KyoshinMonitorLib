@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net47;net46</TargetFrameworks>
+    <Version>0.1.0</Version>
+    <Copyright>Copyright © ingenWorkS 2017</Copyright>
+    <Company>ingenWorkS</Company>
+    <Authors>ingen084</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Description>.NETから簡単に強震モニタを利用できるようにするライブラリ</Description>
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+</Project>

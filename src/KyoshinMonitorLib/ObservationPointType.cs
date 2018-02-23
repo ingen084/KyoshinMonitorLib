@@ -1,15 +1,9 @@
-﻿#if !WITHOUTPBF
-using ProtoBuf;
-#endif
-
+﻿
 namespace KyoshinMonitorLib
 {
 	/// <summary>
 	/// 観測点のタイプ
 	/// </summary>
-#if !WITHOUTPBF
-	[ProtoContract]
-#endif
 	public enum ObservationPointType
 	{
 		/// <summary>

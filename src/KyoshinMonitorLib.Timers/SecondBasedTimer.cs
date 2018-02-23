@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace KyoshinMonitorLib
+namespace KyoshinMonitorLib.Timers
 {
 	/// <summary>
 	/// 時刻補正機能付きタイマー
@@ -21,7 +17,7 @@ namespace KyoshinMonitorLib
 		//最後にNTP更新された時刻
 		private DateTime _lastUpdatedTime;
 
-		private QueryPerformanceStopwatch _sw;
+		private HighPerformanceStopwatch _sw;
 
 		private TimeSpan _interval = TimeSpan.FromSeconds(1);
 
@@ -94,7 +90,7 @@ namespace KyoshinMonitorLib
 						_timer.Change(Timeout.Infinite, Timeout.Infinite);
 				}
 			}, null, Timeout.Infinite, Timeout.Infinite);
-			_sw = new QueryPerformanceStopwatch();
+			_sw = new HighPerformanceStopwatch();
 		}
 
 		/// <summary>

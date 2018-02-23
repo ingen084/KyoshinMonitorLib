@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace KyoshinMonitorLib
+namespace KyoshinMonitorLib.Timers
 {
 	/// <summary>
 	/// Win32のQueryPerformanceCounterのラッパクラス
 	/// 失敗すると普通にStopWatchを使用します。
 	/// </summary>
-	public class QueryPerformanceStopwatch
+	public class HighPerformanceStopwatch
 	{
 		[DllImport("kernel32.dll")]
 		private static extern bool QueryPerformanceCounter(ref long lpPerformanceCount);

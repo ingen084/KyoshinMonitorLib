@@ -1,10 +1,4 @@
-﻿#if !WITHOUTMPK
-using MessagePack;
-#endif
-#if !WITHOUTPBF
-using ProtoBuf;
-#endif
-
+﻿using MessagePack;
 using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib
@@ -12,15 +6,7 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// 地理座標
 	/// </summary>
-	[
-#if !WITHOUTMPK
-		MessagePackObject,
-#endif
-		DataContract
-#if !WITHOUTPBF
-		, ProtoContract
-#endif
-		]
+	[MessagePackObject, DataContract]
 	public class Location
 	{
 		/// <summary>
@@ -44,29 +30,13 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(0),
-#endif
-				 DataMember(Order = 0)
-#if !WITHOUTPBF
-			, ProtoMember(1)
-#endif
-			]
+		[Key(0), DataMember(Order = 0)]
 		public float Latitude { get; set; }
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		[
-#if !WITHOUTMPK
-			Key(1),
-#endif
-				 DataMember(Order = 1)
-#if !WITHOUTPBF
-			, ProtoMember(2)
-#endif
-			]
+		[Key(1), DataMember(Order = 1)]
 		public float Longitude { get; set; }
 
 		/// <summary>

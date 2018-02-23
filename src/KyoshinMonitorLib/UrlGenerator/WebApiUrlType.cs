@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace KyoshinMonitorLib
+namespace KyoshinMonitorLib.UrlGenerator
 {
 	/// <summary>
-	/// 生成するURLの種類
+	/// 生成するURLの種類(WebApi)
 	/// </summary>
-	public enum UrlType
+	public enum WebApiUrlType
 	{
 		/// <summary>
 		/// リアルタイム情報
@@ -27,11 +27,5 @@ namespace KyoshinMonitorLib
 		/// 緊急地震速報のJson
 		/// </summary>
 		EewJson,
-
-		/// <summary>
-		/// 到達予想震度(誤字ってた方)
-		/// </summary>
-		[Obsolete("RestShindoは誤字で、EstShindoです。", true)]
-		RestShindo,
 	}
 }

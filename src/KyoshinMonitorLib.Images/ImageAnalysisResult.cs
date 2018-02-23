@@ -1,12 +1,17 @@
 ﻿using System.Drawing;
 
-namespace KyoshinMonitorLib
+namespace KyoshinMonitorLib.Images
 {
 	/// <summary>
 	/// 画像解析結果
 	/// </summary>
-	public class ImageAnalysisResult : ObservationPoint
+	public class ImageAnalysisResult
 	{
+		/// <summary>
+		/// 観測点情報
+		/// </summary>
+		public ObservationPoint ObservationPoint { get; }
+
 		/// <summary>
 		/// 解析された値
 		/// </summary>
@@ -21,8 +26,9 @@ namespace KyoshinMonitorLib
 		/// ObservationPointを元にImageAnalysisResultを初期化します。
 		/// </summary>
 		/// <param name="point">元にするObservationPoint</param>
-		public ImageAnalysisResult(ObservationPoint point) : base(point)
+		public ImageAnalysisResult(ObservationPoint point)
 		{
+			ObservationPoint = point;
 		}
 	}
 }
