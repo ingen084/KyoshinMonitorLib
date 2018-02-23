@@ -1,4 +1,0 @@
-theme: jekyll-theme-leap-day
-markdown: redcarpet
-redcarpet:
-  extensions: ["tables"]

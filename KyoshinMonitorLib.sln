@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0725ADC2-85A0-4F75-97F2-475756E5362F}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,19 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F088323E-F76A-45F8-8442-E6926AEC3472}"
-	ProjectSection(SolutionItems) = preProject
-		docs\_config.yml = docs\_config.yml
-		docs\README.md = docs\README.md
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib", "src\KyoshinMonitorLib\KyoshinMonitorLib.csproj", "{5A597781-7993-4CDB-8E50-539E93A6F705}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "src\Tests\Tests.csproj", "{40C247D7-1292-4FE5-9DAA-A47D067F2560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib.Timers", "src\KyoshinMonitorLib.Timers\KyoshinMonitorLib.Timers.csproj", "{F3D3DB38-8BBC-42B2-8344-806917A4A888}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib.Timers", "src\KyoshinMonitorLib.Timers\KyoshinMonitorLib.Timers.csproj", "{F3D3DB38-8BBC-42B2-8344-806917A4A888}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib.Images", "src\KyoshinMonitorLib.Images\KyoshinMonitorLib.Images.csproj", "{0A7BD896-197C-4777-80E2-1F51D8F031E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib.Images", "src\KyoshinMonitorLib.Images\KyoshinMonitorLib.Images.csproj", "{0A7BD896-197C-4777-80E2-1F51D8F031E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
