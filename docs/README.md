@@ -3,145 +3,41 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
-## 0.0.8.0
-### 変更
-- **プロジェクトを再編しました。(その2)**  
-  これによりビルド構成によってはMessagePackやprotobuf-netを無効化しました。
-- `ParseIntensityFromParameterAsync`の強震モニタから画像を取得する際に失敗したときに`GetMonitorImageFailedException`が発生するようになりました。  
-   ちょっとステータスコードの取得が楽になったと思います。
+## 0.1.0.0-beta1
+**全面的な内容の変更のため破壊的変更が多数含まれています。**
+- **protobuf-netを切り捨て、MessagePackのみの対応になりました。**
+- 従来の`拡張メソッドで地点情報の配列から情報を取得する`方針から、`APIを呼ぶためのインスタンスを作成し、そこから情報を取得する`方針へと変更になりました。
+- **プロジェクトが分割されました。**
+- `ObservationPoint`のプロパティが拡張されました。
+  - AppApiを使用して観測点情報をリンクさせる場合、旧座標のインポートが必要になります。
 
-## 0.0.7.0
-### 変更
-- **プロジェクトを再編しました。**  
-  これにより`.NET Core 2.0(netcoreapp2.0)` `.NET Framework 4.6/4.7` に対応しました。
-  また、nugetパッケージとしての提供も視野に入れています。
+**今後も0.1.0.0が正式にリリースされるまでに破壊的変更が多く含まれる可能性があります。ソフトウェアなどに使用する際はリリースまでもうしばらくお待ち下さい。**
 
-## 0.0.6.2
-### 修正
-- `UrlType`の`EstShindo`が`RestShindo`になっていたのを修正しました。  
-  尚、`RestShindo`はObsoleteになっていますので、利用されている方は修正をお願いします。
-
-## 0.0.6.1
-### 修正
-- シリアライズに失敗する可能性があった部分を修正しました。
-
-## 0.0.6.0
-### 削除
-- `NtpTimer`を削除しました。
-
-### 追加
-- `NtpTimer`に代わり、`SecondBasedTimer`を追加しました。  
-  - 間隔が設定できなくなりました。常に毎秒イベントが発生します。
-  - 時刻取得機能を廃止し、`UpdateTime`メソッドによる手動での時刻更新が利用できるようにしました。
-
-### 変更
-- `NtpAssistance`の処理を変更し、通信遅延の考慮もするようにしました。
-
-## 0.0.5.0
-### 追加
-- `FixedTimer`･`NtpTimer`にプロパティ`BlockingMode`を追加しました。  
-  Trueにすると前回のイベントの実行中であれば新たにイベントが発行されなくなります。  
-  初期値はTrueになっています。
-
-### 修正
-- `FixedTimer`･`NtpTimer`の挙動を修正し、一度に大量のイベントが発生しないようにしました。
-
-## 0.0.4.1
-### 修正
-- `IEnumerable<ObservationPoint>`の拡張メソッド`ParseIntensityFromParameterAsync`において遅延評価を考慮せずに処理していたため正常に色が震度に変換されない場合がある不具合を修正しました。
-
-## 0.0.4.0
-### 追加
-- UWP版の提供を開始しました。  
-  が、注意事項があります、下記参照してください。
-- `ImageAnalysisResult`に解析に使用した色を保存するプロパティ`Color`を追加しました。
-- `IEnumerable<ImageAnalysisResult>`の拡張メソッドを使用して一括で画像から震度に解析する際に新しくインスタンスを生成せずにインスタンスを使いまわすようにしました。  
-  これによって負荷・GC回数の軽減を期待しています。
-- NTPベースのタイマー`NtpTimer`を作成しました。
-
-## 0.0.3.0
-### 追加
-- 気象庁震度階級を示す列挙型 `JmaIntensity` の追加(使用方法はリファレンス参照)
-- XMLドキュメントの追加
-
-## 0.0.2.0
-### 追加
-- NTP補助クラス
-- 観測点情報で新たに
-  - Json
-  - MessagePack
-  - MessagePack+LZ4
-
-  のサポート
-
-### 仕様変更
-- FixedTimer  
-  時間のベースにDateTime.Nowを使用していたものをQueryPerformanceCounterに変更  
-  そのためDateTime.Nowで確認すると精度が低下したようにみえるかもしれません。
-
-## 0.0.1.0
-初版
-
+*過去のアップデートは長くなるため省略しています。過去バージョンをご利用ください。*
 
 # リファレンス
-バージョン:`0.0.8.0`  
-一部の解説のみ行います。各メソッドのパラメータはコメントを参照してください。
+バージョン:`0.1.0.0-beta1`  
+主要なクラスのみ解説します。詳細な解説はソースなどを参照してください。  
+また、気象庁震度階級や地球の緯度経度など、前提知識が必要なものがあります。
 
-## 一番知ってほしい機能
-簡単に強震モニタの震度を取得できる機能を提供します。
-### ParseIntensityFromParameterAsync
-```c#
-public static async Task<ImageAnalysisResult[]> ParseIntensityFromParameterAsync(this IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false);
-```
-与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を解析します。  
-asyncなのは画像取得部分のみなので注意してください。  
-ちなみに、強震モニタのサーバーから画像が取得できない(ステータスコードが404等)場合は`GetMonitorImageFailedException`を、タイムアウトなどの場合は容赦なく例外を吐くので注意してください。
+## KyoshinMonitorExceptionクラス
+強震モニタのAPIから情報を取得している間に、HTTPエラーまたはタイムアウトが発生した場合に発生する例外です。
+### プロパティ
+| 型 | 名前(引数) | 解説 |
+|---|---|---|
+|`string`|Message|どのような例外が発生したか|
+|`Exception`|InnerException|内部で発生した例外|
+|`string`|Url|例外が発生したAPIのURL  アクセス中でない場合はnullが代入されます。|
+|`HttpStatusCode?`|StatusCode|HTTPエラーが発生した場合そのHTTPStatus  アクセス中でない場合はnullが代入されます。|
 
-#### サンプル
-```c#
-//観測点情報読み込み
-var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
-//時間計算(今回は適当にPC時間-5秒)
-var time = DateTime.Now.AddSeconds(-5);
-//画像を取得して結果を計算
-IEnumerable<ImageAnalysisResult> result = await points.ParseIntensityFromParameterAsync(time, false);
-```
-#### 注釈
-`ImageAnalysisResult`は`ObservationPoint`を継承したクラスになっていて、そのメンバの`AnalysisResult`に震度が入っています。  
-`IsSuspended`がtrueの場合や、震度に変換できなかった場合、ピクセル取得に例外が発生した場合はnullが代入されています。
-
-### ParseIntensityFromBitmap
-```c#
-public static IEnumerable<ImageAnalysisResult> ParseIntensityFromImage(this IEnumerable<ObservationPoint> obsPoints, Bitmap bitmap);
-```
-与えられた画像から観測点情報を使用し震度を取得します。
-#### サンプル
-Bitmapを指定するだけでFromParameterAsyncと何ら変わりはないので省略
-
-## ColorToIntensityConverter
-### Convert
-```c#
-public static float? Convert(System.Drawing.Color color);
-```
-
-色を震度に変換します。テーブルにない値を参照した場合nullが返されます。  
-透明度も判定されるので十分気をつけてください。
-#### サンプル
-```c#
-//using System.Drawing;
-Color color = Color.FromArgb(255, 63, 250, 54); //とりあえずサンプル色を作成
-float? result = ColorToIntensityConverter.Convert(color); //0
-```
-
-## ObservationPoint
+## ObservationPointクラス
 [KyoshinShindoPlaceEditor](https://github.com/ingen084/KyoshinShindoPlaceEditor)と互換があります。
-### LoadFromPbf/Mpk/Json
+### LoadFromMpk/Json
 ```c#
-public static ObservationPoint[] LoadFromPbf(string path);
 public static ObservationPoint[] LoadFromMpk(string path, bool usingLz4 = false);
 public static ObservationPoint[] LoadFromJson(string path);
 ```
-観測点情報をpbf/mpk/jsonから読み込みます。失敗した場合は例外がスローされます。  
+観測点情報をmpk/jsonから読み込みます。失敗した場合は例外がスローされます。  
 **lz4圧縮済みのmpkを通常のmpkとして読み込まないように注意してください。**
 
 ### LoadFromCsv
@@ -150,37 +46,51 @@ public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(
 ```
 観測点情報をcsvから読み込みます。失敗した場合は例外がスローされます。
 
-### SaveToPbf/Csv/Mpk/Json
+### SaveToCsv/Mpk/Json
 ```c#
-public static void SaveToPbf(string path, IEnumerable<ObservationPoint> points);
 public static void SaveToCsv(string path, IEnumerable<ObservationPoint> points);
 public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool usingLz4 = false);
 public static void SaveToJson(string path, IEnumerable<ObservationPoint> points);
 ```
 拡張メソッド版
 ```c#
-public static void SaveToPbf(this IEnumerable<ObservationPoint> points, string path);
 public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path);
 public static void SaveToMpk(this IEnumerable<ObservationPoint> points, string path, bool usingLz4 = false);
 public static void SaveToJson(this IEnumerable<ObservationPoint> points, string path);
 ```
 観測点情報を各形式に保存します。失敗した場合は例外がスローされます。
 
-## UrlGenerator
-### Generate
-```c#
-public static string Generate(UrlType urlType, DateTime datetime,
-	RealTimeImgType realTimeShindoType = RealTimeImgType.Shindo, bool isBerehole = false);
-```
-与えられた値を使用して**新**強震モニタのURLを生成します。
-#### サンプル
-```c#
-DateTime time = DateTime.Parse("2017/03/19 22:13:47");
-string url = UrlGenerator.Generate(UrlType.EewJson, time); //http://www.kmoni.bosai.go.jp/new/webservice/hypo/eew/20170319221347.json
-string url2 = UrlGenerator.Generate(UrlType.RealTimeImg, time, RealTimeImgType.Shindo, true); //http://www.kmoni.bosai.go.jp/new/data/map_img/RealTimeImg/jma_b/20170319/20170319221347.jma_b.gif
-```
 
-## FixedTimer
+## WebApiクラス
+Webで見ることができる強震モニタのAPIを使用してEEWなどの画像やデータを取得するためのクラスです。
+### メソッド
+| 返り値の型 | 名前(引数) | 解説 |
+|---|---|---|
+|`Task<Eew>`|GetEewInfo(`DateTime` time)|緊急地震速報のJsonを取得します。  EewクラスはJsonをそのままパースしたものです。 |
+|`Task<byte[]>`|GetRealtimeImageData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムな情報(リアルタイム･震度･加速度など)の画像のbyte配列を取得します。  画像解析まで行いたい場合は下記の拡張メソッドをご利用ください。|
+|`Task<byte[]>`|GetEstShindoImageData(`DateTime` time)|緊急地震速報の予想震度の画像のbyte配列を取得します。|
+|`Task<byte[]>`|GetPSWaveImageData(`DateTime` time)|緊急地震速報のP波とS波の広がりを示す円の画像のbyte配列を取得します。|
+
+### KyoshinMonitorLib.Imagesによる拡張メソッド
+| 返り値の型 | 名前(引数) | 解説 |
+|---|---|---|
+|`Task<IEnumerable<ImageAnalysisResult>>`|ParseIntensityFromParameterAsync(this `WebApi` webApi, `IEnumerable<ObservationPoint>` points, `DateTime` datetime, `bool` isBehole = false)|ObservationPointのコレクションを使用して新強震モニタリアルタイム震度の画像を取得し、解析します。|
+
+他にもありますが割愛させていただきます。
+
+## AppApiクラス
+スマートフォンアプリケーションのAPIを使用してリアルタイム震度などのデータを取得します。
+### メソッド
+| 返り値の型 | 名前(引数) | 解説 |
+|---|---|---|
+|`Task<LinkedRealTimeData[]>`|GetLinkedRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|**未実装です！0.1.0.0正式リリース時に実装します。**  リアルタイムデータを取得します。  自動で観測点情報などと結びつけ、インスタンスを返します。|
+|`Task<RealTimeData>`|GetRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
+|`Task<SiteList>`|GetSiteList(`string` baseSerialNo)|APIから参照できる観測点情報の一覧を取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
+
+## UrlGeneratorクラス群
+UrlGeneratorは分離した上に、各種Apiクラスでラップしているため、解説は省略させていただきます。
+
+## FixedTimerクラス
 通常のタイマー(System.Timers.Timerなど。FormsのTimerは申し訳ないが論外)では、誤差が蓄積していきずれていきますが、それを対策したものです。
 
 ### サンプル
@@ -203,8 +113,8 @@ Console.ReadLine();
 timer.Stop();
 ```
 
-## SecondBasedTimer
-FixedTimerにNTPからの自動取得機能・オフセットの設定機能をつけたものです。  
+## SecondBasedTimerクラス
+FixedTimerに時刻管理機能をつけたものです。  
 強震モニタの取得タイマーとしてしか考慮していないので必ず1秒になります。
 
 ### 注意
@@ -233,32 +143,11 @@ timer.Stop();
 ## NtpAssistance
 NTPから簡単に時刻取得をするクラスです。
 
-### GetNetworkTimeWithNtp
-```c#
-public static async Task<DateTime> GetNetworkTimeWithNtp(string hostName = "ntp.nict.jp", ushort port = 123, int timeout = 100);
-```
-Ntp通信を使用してネットワーク上から時刻を取得します。  
-プロトコル実装が適当なのでNICT以外のNTPサーバーでの挙動は保証しません。
-
-#### サンプル
-```c#
-//timeがもう時間
- var time = await NtpAssistance.GetNetworkTimeWithNtp();
-```
-### GetNetworkTimeWhithHttpAsync
-```c#
-public static async Task<DateTime> GetNetworkTimeWhithHttpAsync(string url = "http://ntp-a1.nict.go.jp/cgi-bin/ntp", double timeout = 100);
-```
-Http通信を使用してネットワーク上から時刻を取得します。**未検証です。(ぉぃ)**  
-可能な限りNTPを使用することを推奨します。  
-NTPの時刻が生で返されるURLである必要があります。  
-**注意 NICTのサーバーはこのURLだけではありません。**
-
-#### サンプル
-```c#
-//timeがもう時間
- var time = await NtpAssistance.GetNetworkTimeWhithHttpAsync();
-```
+### メソッド
+| 返り値の型 | 名前(引数) | 解説 |
+|---|---|---|
+|`Task<DateTime>`|GetNetworkTimeWithNtp(`string` hostName = "ntp.nict.jp", `ushort` port = 123, `int` timeout = 100)|SNTP通信を使用してネットワーク上から時刻を取得します。  一応SNTPを実装していますが、NICT以外のNTPサーバーでの挙動は保証しません。|
+|`Task<DateTime>`|GetNetworkTimeWhithHttpAsync(`string` url = "http://ntp-a1.nict.go.jp/cgi-bin/ntp", `double` timeout = 100)|**現在正常に動作していないことを確認しています。0.1.0.0リリース時には修正予定です。**  Http通信を使用してネットワーク上から時刻を取得します。|
 
 ## JmaIntensity
 気象庁震度階級を示す列挙型(Enum)です。震度異常などを扱うために値が増やされています。

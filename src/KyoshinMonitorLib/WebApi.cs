@@ -10,7 +10,7 @@ namespace KyoshinMonitorLib
 		public Task<Eew> GetEewInfo(DateTime time)
 			=> GetJsonObject<Eew>(WebApiUrlGenerator.Generate(WebApiUrlType.EewJson, time));
 
-		public Task<byte[]> GetRealtimeImageData(DateTime time, RealTimeDataType dataType, bool isBehore)
+		public Task<byte[]> GetRealtimeImageData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
 			=> GetBytes(WebApiUrlGenerator.Generate(WebApiUrlType.RealTimeImg, time, dataType, isBehore));
 
 		public Task<byte[]> GetEstShindoImageData(DateTime time)
