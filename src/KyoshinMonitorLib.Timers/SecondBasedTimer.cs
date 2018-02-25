@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib.Timers
 {
@@ -56,7 +57,7 @@ namespace KyoshinMonitorLib.Timers
 		/// <summary>
 		/// タイマーイベント
 		/// </summary>
-		public event Action<DateTime> Elapsed;
+		public event Func<DateTime, Task> Elapsed;
 
 		/// <summary>
 		/// NtpTimerを初期化します。
@@ -71,7 +72,7 @@ namespace KyoshinMonitorLib.Timers
 						ThreadPool.QueueUserWorkItem(s2 =>
 						{
 							_isEventRunning = true;
-							Elapsed?.Invoke(_currentTime);
+							Elapsed?.Invoke(_currentTime)?.Wait();
 							_isEventRunning = false;
 						});
 					//かなり時間のズレが大きければその分修正する

@@ -1,6 +1,7 @@
 ﻿using KyoshinMonitorLib.ApiResult.AppApi;
 using KyoshinMonitorLib.UrlGenerator;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace KyoshinMonitorLib
 		/// 観測点情報のキャッシュ
 		/// <para>BaseSerialNoと観測点情報･idxに適合した情報のマッピング</para>
 		/// </summary>
-		private static Dictionary<string, (Site, ObservationPoint)[]> SiteListCache { get; set; } = new Dictionary<string, (Site, ObservationPoint)[]>();
+		private static IDictionary<string, (Site, ObservationPoint)[]> SiteListCache { get; set; } = new ConcurrentDictionary<string, (Site, ObservationPoint)[]>();
 
 		private ObservationPoint[] ObservationPoints { get; }
 		public AppApi(ObservationPoint[] observationPoints = null)

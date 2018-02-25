@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
@@ -12,21 +13,27 @@ namespace KyoshinMonitorLib
 	/// </summary>
 	public class NtpAssistance
 	{
+		static Regex TimeRegex = new Regex("[^0-9]*(\\d+\\.\\d+)+.*", RegexOptions.Compiled);
+
 		/// <summary>
 		/// Http通信を使用してネットワーク上から時刻を取得します。
 		/// </summary>
-		/// <param name="url">要求するURL NTPの時刻が生で返されるURLである必要があります。</param>
+		/// <param name="url">要求するURL POSIX Timeが生で返されるURLである必要があります。</param>
 		/// <param name="timeout">タイムアウト時間(ミリ秒)</param>
 		/// <returns>取得された時刻 取得に失敗した場合はnullが返されます。</returns>
-		public static async Task<DateTime?> GetNetworkTimeWhithHttpAsync(string url = "http://ntp-a1.nict.go.jp/cgi-bin/ntp", double timeout = 100)
+		public static async Task<DateTime?> GetNetworkTimeWithHttp(string url = "https://ntp-a1.nict.go.jp/cgi-bin/jst", double timeout = 1000)
 		{
 			try
 			{
 				using (var client = new HttpClient() { Timeout = TimeSpan.FromMilliseconds(timeout) })
-					return (new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(double.Parse(await client.GetStringAsync(url))).ToLocalTime();
+				{
+					var match = TimeRegex.Match(await client.GetStringAsync(url));
+					return (new DateTime(1970, 1, 1, 9, 0, 0)).AddSeconds(double.Parse(match.Groups[1].Value));
+				}
 			}
-			catch
+			catch (Exception ex)
 			{
+				Debug.WriteLine("GetNetworkTimeWhithHttpAsync Error: " + ex);
 				return null;
 			}
 		}
@@ -90,7 +97,7 @@ namespace KyoshinMonitorLib
 			var milliseconds = (intPart * 1000) + ((fractPart * 1000) / 0x100000000L);
 
 			//時間生成
-			return (new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds((long)milliseconds).ToLocalTime();
+			return (new DateTime(1900, 1, 1, 9, 0, 0)).AddMilliseconds((long)milliseconds);
 		}
 
 		//ビット列を逆にする stackoverflow.com/a/3294698/162671
