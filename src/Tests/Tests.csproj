@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\KyoshinMonitorLib.Images\KyoshinMonitorLib.Images.csproj" />
     <ProjectReference Include="..\KyoshinMonitorLib.Timers\KyoshinMonitorLib.Timers.csproj" />
+    <ProjectReference Include="..\KyoshinMonitorLib.Training\KyoshinMonitorLib.Training.csproj" />
     <ProjectReference Include="..\KyoshinMonitorLib\KyoshinMonitorLib.csproj" />
   </ItemGroup>
 

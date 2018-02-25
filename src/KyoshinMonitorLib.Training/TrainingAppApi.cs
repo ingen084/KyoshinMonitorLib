@@ -7,14 +7,14 @@ using Utf8Json;
 
 namespace KyoshinMonitorLib.Training
 {
-	public class AppApiTraining : AppApi
+	public class TrainingAppApi : AppApi
 	{
 		public string BasePath { get; }
 		/// <summary>
 		/// 初期化
 		/// </summary>
 		/// <param name="basePath">かならずディレクトリ区切り文字で終わらせること！</param>
-		public AppApiTraining(string basePath, ObservationPoint[] points) : base(points)
+		public TrainingAppApi(string basePath, ObservationPoint[] points) : base(points)
 		{
 			BasePath = basePath;
 		}

@@ -46,7 +46,7 @@ namespace KyoshinMonitorLib
 			{
 				var pairList = new List<(Site, ObservationPoint)>();
 				var siteList = await GetSiteList(data.BaseSerialNo);
-				var count = 0;
+				var count = siteList.Sites.Min(s => s.Siteidx);
 				foreach (var site in siteList.Sites.OrderBy(s => s.Siteidx))
 				{
 					if (count != site.Siteidx)
@@ -54,9 +54,9 @@ namespace KyoshinMonitorLib
 					count++;
 
 					//世界座標系で検索してだめだったら日本座標系で検索
-					var point = ObservationPoints.FirstOrDefault(p => Math.Abs(p.Location.Latitude - site.Lat) < 0.001 && Math.Abs(p.Location.Longitude - site.Lng) < 0.001);
+					var point = ObservationPoints.Where(p => !p.IsSuspended).FirstOrDefault(p => Math.Abs(p.Location.Latitude - site.Lat) < 0.001 && Math.Abs(p.Location.Longitude - site.Lng) < 0.001);
 					if (point == null)
-						point = ObservationPoints.FirstOrDefault(p => Math.Abs(p.OldLocation.Latitude - site.Lat) < 0.001 && Math.Abs(p.OldLocation.Longitude - site.Lng) < 0.001);
+						point = ObservationPoints.Where(p => !p.IsSuspended).FirstOrDefault(p => Math.Abs(p.OldLocation.Latitude - site.Lat) < 0.001 && Math.Abs(p.OldLocation.Longitude - site.Lng) < 0.001);
 
 					pairList.Add((site, point));
 				}
