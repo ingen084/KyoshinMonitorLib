@@ -73,5 +73,11 @@ namespace KyoshinMonitorLib
 			}
 			return result.ToArray();
 		}
+
+		/// <summary>
+		/// 緊急地震速報の情報を取得します。
+		/// </summary>
+		public Task<Hypo> GetHypoInfo(DateTime time)
+			=> GetJsonObject<Hypo>(AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time));
 	}
 }
