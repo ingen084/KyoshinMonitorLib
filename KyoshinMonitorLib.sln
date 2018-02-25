@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib.Timers", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib.Images", "src\KyoshinMonitorLib.Images\KyoshinMonitorLib.Images.csproj", "{0A7BD896-197C-4777-80E2-1F51D8F031E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib.Training", "src\KyoshinMonitorLib.Training\KyoshinMonitorLib.Training.csproj", "{500AAAD5-C29E-49C4-A4B2-480820B551B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0A7BD896-197C-4777-80E2-1F51D8F031E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A7BD896-197C-4777-80E2-1F51D8F031E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A7BD896-197C-4777-80E2-1F51D8F031E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{500AAAD5-C29E-49C4-A4B2-480820B551B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{500AAAD5-C29E-49C4-A4B2-480820B551B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{500AAAD5-C29E-49C4-A4B2-480820B551B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{500AAAD5-C29E-49C4-A4B2-480820B551B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
