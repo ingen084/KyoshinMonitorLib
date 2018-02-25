@@ -46,9 +46,15 @@ namespace KyoshinMonitorLib
 			{
 				var pairList = new List<(Site, ObservationPoint)>();
 				var siteList = await GetSiteList(data.BaseSerialNo);
-				var count = siteList.Sites.Min(s => s.Siteidx);
+				var count = 0;
 				foreach (var site in siteList.Sites.OrderBy(s => s.Siteidx))
 				{
+					if (count < site.Siteidx)
+					{
+						pairList.Add((site, null));
+						count++;
+						continue;
+					}
 					if (count != site.Siteidx)
 						throw new KyoshinMonitorException(null, "リアルタイムデータの結合に失敗しました。 APIから送られてくる値が不正です。");
 					count++;

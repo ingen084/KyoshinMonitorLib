@@ -5,6 +5,18 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
+## 0.1.1.0
+### バグ修正
+- `GetLinkedRealTimeData`において休止中の観測点と結び付けないようにしました。
+  - ついでに異常な値が入っててもそれなりに対処できるようにしました。
+
+### 追加
+- `GetHypoInfo`を追加しました。 詳細はリファレンス参照してください。
+- `KyoshinMonitorLib.Training`を作成しました。
+  - `TrainingAppApi`クラスを追加しました。  
+    `AppApi`クラスを継承しており、ファイルからJsonなどを読み込むクラスとなっています。  
+    - 開設を書く時間がなかったのでとりあえず使いたい人はソース読んでください…。
+
 ## 0.1.0.0
 **全面的な内容の変更のため破壊的変更が多数含まれています。**
 - **protobuf-netを切り捨て、MessagePackのみの対応になりました。**
@@ -21,7 +33,7 @@
 *過去のアップデートは長くなるため省略しています。過去バージョンをご利用ください。*
 
 # リファレンス
-バージョン:`0.1.0.0`  
+バージョン:`0.1.1.0`  
 主要なクラスのみ解説します。詳細な解説はソースなどを参照してください。  
 また、気象庁震度階級や地球の緯度経度など、前提知識が必要なものがあります。
 
@@ -91,6 +103,7 @@ Webで見ることができる強震モニタのAPIを使用してEEWなどの�
 |`Task<LinkedRealTimeData[]>`|GetLinkedRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  自動で観測点情報などと結びつけ、インスタンスを返します。|
 |`Task<RealTimeData>`|GetRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
 |`Task<SiteList>`|GetSiteList(`string` baseSerialNo)|APIから参照できる観測点情報の一覧を取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
+|`Task<Hypo>`|GetHypoInfo(`DateTime` time)|APIから緊急地震速報の情報を取得します。  **ちなみに、このAPIは複数のEEWに対応してそうです…(要検証)**|
 
 ## UrlGeneratorクラス群
 UrlGeneratorは分離した上に、各種Apiクラスでラップしているため、解説は省略させていただきます。
