@@ -127,7 +127,7 @@ namespace KyoshinMonitorLib
 			using (var stream = File.OpenWrite(path))
 			using (var writer = new StreamWriter(stream))
 				foreach (var point in points)
-					writer.WriteLine($"{(int)point.Type},{point.Code},{point.IsSuspended},{point.Name},{point.Region},{point.Location.Latitude},{point.Location.Longitude},{point.Point?.X.ToString() ?? ""},{point.Point?.Y.ToString() ?? ""},{point.ClassificationId?.ToString() ?? ""},{point.PrefectureClassificationId?.ToString() ?? ""}");
+					writer.WriteLine($"{(int)point.Type},{point.Code},{point.IsSuspended},{point.Name},{point.Region},{point.Location.Latitude},{point.Location.Longitude},{point.Point?.X.ToString() ?? ""},{point.Point?.Y.ToString() ?? ""},{point.ClassificationId?.ToString() ?? ""},{point.PrefectureClassificationId?.ToString() ?? ""},{point.OldLocation.Latitude},{point.OldLocation.Longitude}");
 		}
 
 		/// <summary>
@@ -135,40 +135,6 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		public ObservationPoint()
 		{
-		}
-
-		/// <summary>
-		/// ObservationPointの情報をコピーした上で初期化します。
-		/// </summary>
-		/// <param name="point"></param>
-		public ObservationPoint(ObservationPoint point) :
-			this(point.Type, point.Code, point.IsSuspended, point.Name, point.Region, point.Location, point.Point, point.ClassificationId, point.PrefectureClassificationId)
-		{
-		}
-
-		/// <summary>
-		/// ObservationPointを初期化します。
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="code"></param>
-		/// <param name="isSuspended"></param>
-		/// <param name="name"></param>
-		/// <param name="region"></param>
-		/// <param name="location"></param>
-		/// <param name="point"></param>
-		/// <param name="classId"></param>
-		/// <param name="prefClassId"></param>
-		public ObservationPoint(ObservationPointType type, string code, bool isSuspended, string name, string region, Location location, Point2? point = null, int? classId = null, int? prefClassId = null)
-		{
-			Type = type;
-			Code = code;
-			IsSuspended = isSuspended;
-			Name = name;
-			Region = region;
-			Location = location;
-			Point = point;
-			ClassificationId = classId;
-			PrefectureClassificationId = prefClassId;
 		}
 
 		/// <summary>

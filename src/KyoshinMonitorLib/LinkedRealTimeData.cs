@@ -1,19 +1,16 @@
-﻿using System;
-using KyoshinMonitorLib.ApiResult.AppApi;
+﻿using KyoshinMonitorLib.ApiResult.AppApi;
 
 namespace KyoshinMonitorLib
 {
 	public class LinkedRealTimeData
 	{
-		public LinkedRealTimeData(Site site, ObservationPoint observationPoint, float? value)
+		public LinkedRealTimeData((Site, ObservationPoint) point, float? value)
 		{
-			Site = site ?? throw new ArgumentNullException(nameof(site));
-			ObservationPoint = observationPoint;
+			Point = point;
 			Value = value;
 		}
 
-		public Site Site { get; }
-		public ObservationPoint ObservationPoint { get; }
+		public (Site, ObservationPoint) Point { get; }
 		public float? Value { get; }
 	}
 }

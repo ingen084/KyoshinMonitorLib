@@ -5,6 +5,11 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
+## 0.1.0.0-beta2
+- `ObservationPoint`の追加されたプロパティがCSVに正常に保存できていなかったのを修正
+- `GetLinkedRealTimeData`を実装
+  - **注意** `ObservationPoint`の`OldLocation`を入力していない場合正常に動作しない可能性があります。
+
 ## 0.1.0.0-beta1
 **全面的な内容の変更のため破壊的変更が多数含まれています。**
 - **protobuf-netを切り捨て、MessagePackのみの対応になりました。**
@@ -85,7 +90,7 @@ Webで見ることができる強震モニタのAPIを使用してEEWなどの�
 ### メソッド
 | 返り値の型 | 名前(引数) | 解説 |
 |---|---|---|
-|`Task<LinkedRealTimeData[]>`|GetLinkedRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|**未実装です！0.1.0.0正式リリース時に実装します。**  リアルタイムデータを取得します。  自動で観測点情報などと結びつけ、インスタンスを返します。|
+|`Task<LinkedRealTimeData[]>`|GetLinkedRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  自動で観測点情報などと結びつけ、インスタンスを返します。|
 |`Task<RealTimeData>`|GetRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
 |`Task<SiteList>`|GetSiteList(`string` baseSerialNo)|APIから参照できる観測点情報の一覧を取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
 
