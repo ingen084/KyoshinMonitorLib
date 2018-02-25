@@ -10,7 +10,7 @@ namespace KyoshinMonitorLib
 			Value = value;
 		}
 
-		public (Site, ObservationPoint) Point { get; }
+		public (Site site, ObservationPoint point) Point { get; }
 		public float? Value { get; }
 	}
 }
