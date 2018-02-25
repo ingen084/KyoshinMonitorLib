@@ -5,25 +5,20 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
-## 0.1.0.0-beta2
-- `ObservationPoint`の追加されたプロパティがCSVに正常に保存できていなかったのを修正
-- `GetLinkedRealTimeData`を実装
-  - **注意** `ObservationPoint`の`OldLocation`を入力していない場合正常に動作しない可能性があります。
-
-## 0.1.0.0-beta1
+## 0.1.0.0
 **全面的な内容の変更のため破壊的変更が多数含まれています。**
 - **protobuf-netを切り捨て、MessagePackのみの対応になりました。**
 - 従来の`拡張メソッドで地点情報の配列から情報を取得する`方針から、`APIを呼ぶためのインスタンスを作成し、そこから情報を取得する`方針へと変更になりました。
 - **プロジェクトが分割されました。**
-- `ObservationPoint`のプロパティが拡張されました。
+  - コアは`KyoshinMonitorLib`、画像を使用する場合は`KyoshinMonitorLib.Images`、タイマー関係は`KyoshinMonitorLib.Timers`になりました。
+- `ObservationPoint`のプロパティ`OldLocation`(日本座標系)が追加されました。  
+`GetLinkedRealTimeData`を使用する際にこれがセットされていないと正常にマッピングされません。
   - AppApiを使用して観測点情報をリンクさせる場合、旧座標のインポートが必要になります。
-
-**今後も0.1.0.0が正式にリリースされるまでに破壊的変更が多く含まれる可能性があります。ソフトウェアなどに使用する際はリリースまでもうしばらくお待ち下さい。**
 
 *過去のアップデートは長くなるため省略しています。過去バージョンをご利用ください。*
 
 # リファレンス
-バージョン:`0.1.0.0-beta1`  
+バージョン:`0.1.0.0`  
 主要なクラスのみ解説します。詳細な解説はソースなどを参照してください。  
 また、気象庁震度階級や地球の緯度経度など、前提知識が必要なものがあります。
 
@@ -153,8 +148,8 @@ NTPから簡単に時刻取得をするクラスです。
 ### メソッド
 | 返り値の型 | 名前(引数) | 解説 |
 |---|---|---|
-|`Task<DateTime>`|GetNetworkTimeWithNtp(`string` hostName = "ntp.nict.jp", `ushort` port = 123, `int` timeout = 100)|SNTP通信を使用してネットワーク上から時刻を取得します。  一応SNTPを実装していますが、NICT以外のNTPサーバーでの挙動は保証しません。|
-|`Task<DateTime>`|GetNetworkTimeWhithHttpAsync(`string` url = "http://ntp-a1.nict.go.jp/cgi-bin/ntp", `double` timeout = 100)|**現在正常に動作していないことを確認しています。0.1.0.0リリース時には修正予定です。**  Http通信を使用してネットワーク上から時刻を取得します。|
+|`Task<DateTime?>`|GetNetworkTimeWithNtp(`string` hostName = "ntp.nict.jp", `ushort` port = 123, `int` timeout = 100)|SNTP通信を使用してネットワーク上から時刻を取得します。  一応SNTPを実装していますが、NICT以外のNTPサーバーでの挙動は保証しません。|
+|`Task<DateTime?>`|GetNetworkTimeWithHttp(`string` url = "https://ntp-a1.nict.go.jp/cgi-bin/jst", `double` timeout = 1000)|Http通信を使用してネットワーク上から時刻を取得します。  小数のPOSIX Timeを含んだレスポンスが返されるURLであればなんでも使用できるとおもいます。|
 
 ## JmaIntensity
 気象庁震度階級を示す列挙型(Enum)です。震度異常などを扱うために値が増やされています。
