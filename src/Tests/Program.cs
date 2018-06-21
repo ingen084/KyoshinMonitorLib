@@ -6,12 +6,13 @@ using KyoshinMonitorLib.UrlGenerator;
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Tests
 {
 	internal class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
 			using (var appApi = new AppApi(points))
@@ -20,7 +21,7 @@ namespace Tests
 				//タイマーのインスタンスを作成
 				var timer = new SecondBasedTimer()
 				{
-					Offset = TimeSpan.FromSeconds(2.2),//1.1
+					Offset = TimeSpan.FromSeconds(3.1),//1.1
 				};
 
 				//適当にイベント設定
@@ -29,14 +30,21 @@ namespace Tests
 					Console.WriteLine($"\nsys: {DateTime.Now.ToString("HH:mm:ss.fff")} ntp:{time.ToString("HH:mm:ss.fff")}");
 					try
 					{
+						try
 						{
-							//APIから結果を計算 (良い子のみんなはawaitを使おうね！)
-							var result = await appApi.GetLinkedRealTimeData(time, RealTimeDataType.Shindo, false);
-							//現在の最大震度
-							Console.WriteLine($"*API* 最大震度: 生:{result.Max(r => r.Value)} jma:{result.Max(r => r.Value).ToJmaIntensity().ToLongString()}");
-							//最大震度観測点(の1つ)
-							//var maxPoint = result.OrderByDescending(r => r.Value).First();
-							//Console.WriteLine($"最大観測点 {maxPoint.Point.site.Prefefecture.GetLongName()} {maxPoint.Point.point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
+							{
+								//APIから結果を計算 (良い子のみんなはawaitを使おうね！)
+								var result = await appApi.GetLinkedRealTimeData(time, RealTimeDataType.Shindo, false);
+								//現在の最大震度
+								Console.WriteLine($"*API* 最大震度: 生:{result.Max(r => r.Value)} jma:{result.Max(r => r.Value).ToJmaIntensity().ToLongString()}");
+								//最大震度観測点(の1つ)
+								//var maxPoint = result.OrderByDescending(r => r.Value).First();
+								//Console.WriteLine($"最大観測点 {maxPoint.Point.site.Prefefecture.GetLongName()} {maxPoint.Point.point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
+							}
+						}
+						catch (KyoshinMonitorException ex1)
+						{
+							Console.WriteLine($"API HTTPエラー発生 {ex1.StatusCode}({(int)ex1.StatusCode})");
 						}
 						{
 							//APIから結果を計算 (良い子のみんなはawaitを使おうね！)
@@ -55,7 +63,7 @@ namespace Tests
 				};
 
 				//タイマー開始
-				timer.Start(NtpAssistance.GetNetworkTimeWithNtp().Result ?? throw new Exception());
+				timer.Start((await NtpAssistance.GetNetworkTimeWithNtp()) ?? throw new Exception());
 
 				Console.WriteLine("Enterキー入力で終了");
 

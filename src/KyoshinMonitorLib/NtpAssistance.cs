@@ -60,7 +60,7 @@ namespace KyoshinMonitorLib
 			{
 				var addresses = (await Dns.GetHostEntryAsync(hostName)).AddressList;
 				var ipEndPoint = new IPEndPoint(addresses[0], port);
-				using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+				using (var socket = new Socket(ipEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp))
 				{
 					socket.Connect(ipEndPoint);
 
@@ -76,9 +76,8 @@ namespace KyoshinMonitorLib
 			}
 			catch (SocketException)
 			{
-				ntpData = null;
+				return null;
 			}
-			if (ntpData == null) return null;
 
 			//受信時刻=32 送信時刻=40
 			var serverReceivedTime = ToTime(ntpData, 32);
