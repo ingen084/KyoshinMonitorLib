@@ -32,6 +32,11 @@ namespace KyoshinMonitorLib.UrlGenerator
 		public const string SiteListBase = "http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/site_list/eq/{0}.json";
 
 		/// <summary>
+		/// メッシュ一覧のURL
+		/// </summary>
+		public const string Meches = "http://kv.kmoni.bosai.go.jp/webservice/est/mesh_v2/list.json";
+
+		/// <summary>
 		/// 与えられた値を使用してURLを生成します。
 		/// </summary>
 		/// <param name="urlType">生成するURLのタイプ</param>
@@ -55,8 +60,6 @@ namespace KyoshinMonitorLib.UrlGenerator
 			return null;
 		}
 		public static string Generate(string baseSerialNo)
-		{
-			return string.Format(SiteListBase, baseSerialNo);
-		}
+			=> string.Format(SiteListBase, baseSerialNo);
 	}
 }

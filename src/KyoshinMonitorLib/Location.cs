@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using System;
 using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib
@@ -25,6 +26,20 @@ namespace KyoshinMonitorLib
 		{
 			Latitude = latitude;
 			Longitude = longitude;
+		}
+		/// <summary>
+		/// メートル座標を指定してLocationを初期化します。
+		/// </summary>
+		/// <param name="x">北緯方向への距離</param>
+		/// <param name="y">東経方向への距離</param>
+		public Location(double x, double y)
+		{
+			x = x / 20037508.34 * 180;
+			y = y / 20037508.34 * 180;
+			x = 180 / Math.PI * (2 * Math.Atan(Math.Exp(x * Math.PI / 180)) - Math.PI / 2);
+
+			Latitude = (float)x;
+			Longitude = (float)y;
 		}
 
 		/// <summary>

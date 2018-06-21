@@ -91,15 +91,37 @@ namespace KyoshinMonitorLib
 			=> GetJsonObject<Hypo>(AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time));
 
 		/// <summary>
+		/// 緊急地震速報から算出された揺れの広がりを取得します。
+		/// </summary>
+		public virtual Task<PSWave> GetPSWave(DateTime time)
+			=> GetJsonObject<PSWave>(AppApiUrlGenerator.Generate(AppApiUrlType.PSWaveJson, time));
+
+		/// <summary>
 		/// 緊急地震速報から算出された予想震度のメッシュ情報を取得します。
 		/// </summary>
 		public virtual Task<EstShindo> GetEstShindo(DateTime time)
 			=> GetJsonObject<EstShindo>(AppApiUrlGenerator.Generate(AppApiUrlType.EstShindoJson, time));
 
 		/// <summary>
-		/// 緊急地震速報から算出された揺れの広がりを取得します。
+		/// メッシュ一覧を取得します。
+		/// 非常に時間がかかるため、キャッシュしておくことを推奨します。
 		/// </summary>
-		public virtual Task<PSWave> GetPSWave(DateTime time)
-			=> GetJsonObject<PSWave>(AppApiUrlGenerator.Generate(AppApiUrlType.PSWaveJson, time));
+		public virtual async Task<Mesh[]> GetMeshes()
+		{
+			var meches = await GetJsonObject<MeshList>(AppApiUrlGenerator.Meches);
+			if (meches == null)
+				throw new KyoshinMonitorException(AppApiUrlGenerator.Meches, "メッシュ情報の取得に失敗しました。");
+
+			var result = new List<Mesh>();
+
+			await Task.Run(() =>
+			{
+				var length = meches.Items.GetLength(0);
+				for (var i = 0; i < length; i++)
+					result.Add(new Mesh(meches.Items[i][0] as string, (double)meches.Items[i][1], (double)meches.Items[i][2]));
+			});
+
+			return result.ToArray();
+		}
 	}
 }
