@@ -89,5 +89,17 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		public virtual Task<Hypo> GetEewHypoInfo(DateTime time)
 			=> GetJsonObject<Hypo>(AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time));
+
+		/// <summary>
+		/// 緊急地震速報から算出された予想震度のメッシュ情報を取得します。
+		/// </summary>
+		public virtual Task<EstShindo> GetEstShindo(DateTime time)
+			=> GetJsonObject<EstShindo>(AppApiUrlGenerator.Generate(AppApiUrlType.EstShindoJson, time));
+
+		/// <summary>
+		/// 緊急地震速報から算出された揺れの広がりを取得します。
+		/// </summary>
+		public virtual Task<PSWave> GetPSWave(DateTime time)
+			=> GetJsonObject<PSWave>(AppApiUrlGenerator.Generate(AppApiUrlType.PSWaveJson, time));
 	}
 }
