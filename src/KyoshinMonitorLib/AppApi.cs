@@ -80,10 +80,14 @@ namespace KyoshinMonitorLib
 			return result.ToArray();
 		}
 
+		//todo 近いウチ削除
+		[Obsolete("GetHypoInfoだけでは分かりづらいため、GetEewHypoInfoを使用してください。")]
+		public virtual Task<Hypo> GetHypoInfo(DateTime time)
+			=> GetEewHypoInfo(time);
 		/// <summary>
 		/// 緊急地震速報の情報を取得します。
 		/// </summary>
-		public virtual Task<Hypo> GetHypoInfo(DateTime time)
+		public virtual Task<Hypo> GetEewHypoInfo(DateTime time)
 			=> GetJsonObject<Hypo>(AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time));
 	}
 }
