@@ -1,8 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net47;net46</TargetFrameworks>
-  </PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net47;net46</TargetFrameworks>
+		<Version>0.1.1.1</Version>
+		<Copyright>Copyright © ingenWorkS 2018</Copyright>
+		<Company>ingenWorkS</Company>
+		<Authors>ingen084</Authors>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Description>.NETから簡単に強震モニタを利用できるようにするライブラリ</Description>
+		<Configurations>Debug;Release</Configurations>
+	</PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\KyoshinMonitorLib\KyoshinMonitorLib.csproj" />
