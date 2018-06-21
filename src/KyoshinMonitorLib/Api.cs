@@ -13,11 +13,14 @@ namespace KyoshinMonitorLib
 		{
 			try
 			{
-				var response = await HttpClient.GetAsync(url);
-				if (!response.IsSuccessStatusCode)
-					throw new KyoshinMonitorException(url, "Request Not completed", response.StatusCode);
+				using (var response = await HttpClient.GetAsync(url))
+				{
 
-				return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync());
+					if (!response.IsSuccessStatusCode)
+						throw new KyoshinMonitorException(url, "Request Not completed", response.StatusCode);
+
+					return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync());
+				}
 			}
 			catch (TaskCanceledException)
 			{
@@ -28,11 +31,13 @@ namespace KyoshinMonitorLib
 		{
 			try
 			{
-				var response = await HttpClient.GetAsync(url);
-				if (!response.IsSuccessStatusCode)
-					throw new KyoshinMonitorException(url, "Request Not completed", response.StatusCode);
+				using (var response = await HttpClient.GetAsync(url))
+				{
+					if (!response.IsSuccessStatusCode)
+						throw new KyoshinMonitorException(url, "Request Not completed", response.StatusCode);
 
-				return await response.Content.ReadAsByteArrayAsync();
+					return await response.Content.ReadAsByteArrayAsync();
+				}
 			}
 			catch (TaskCanceledException)
 			{
