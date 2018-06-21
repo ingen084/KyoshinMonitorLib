@@ -8,6 +8,9 @@ namespace KyoshinMonitorLib
 {
 	public class Mesh
 	{
+		public Mesh()
+		{
+		}
 		public Mesh(string code, Location location1, Location location2)
 		{
 			Code = code ?? throw new ArgumentNullException(nameof(code));
