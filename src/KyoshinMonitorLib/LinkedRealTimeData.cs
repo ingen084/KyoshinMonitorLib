@@ -12,5 +12,6 @@ namespace KyoshinMonitorLib
 
 		public (Site site, ObservationPoint point) Point { get; }
 		public float? Value { get; }
+		public JmaIntensity Intensity => Value.ToJmaIntensity();
 	}
 }
