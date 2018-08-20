@@ -1,5 +1,4 @@
 ﻿using KyoshinMonitorLib;
-using KyoshinMonitorLib.ApiResult.AppApi;
 using KyoshinMonitorLib.Images;
 using KyoshinMonitorLib.Timers;
 using KyoshinMonitorLib.UrlGenerator;
@@ -46,11 +45,16 @@ namespace Tests
 						{
 							Console.WriteLine($"API HTTPエラー発生 {ex1.StatusCode}({(int)ex1.StatusCode})");
 						}
+						try
 						{
 							//APIから結果を計算 (良い子のみんなはawaitを使おうね！)
 							var result = await webApi.ParseIntensityFromParameterAsync(points, time);
 							//現在の最大震度
 							Console.WriteLine($"*WEB* 最大震度: 生:{result.Max(r => r.AnalysisResult)} jma:{result.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
+						}
+						catch (Exception ex)
+						{
+							Console.WriteLine($"*WEB* 取得失敗 " + ex.Message);
 						}
 					}
 					catch (KyoshinMonitorException ex)
