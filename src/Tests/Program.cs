@@ -35,7 +35,7 @@ namespace Tests
 								//APIから結果を計算 (良い子のみんなはawaitを使おうね！)
 								var result = await appApi.GetLinkedRealTimeData(time, RealTimeDataType.Shindo, false);
 								//現在の最大震度
-								Console.WriteLine($"*API* 最大震度: 生:{result.Max(r => r.Value)} jma:{result.Max(r => r.Value).ToJmaIntensity().ToLongString()}");
+								Console.WriteLine($"*API* 最大震度: 生:{result.Max(r => r.Value)} jma:{result.Max(r => r.Value).ToJmaIntensity().ToLongString()} {result.Count(r => r.Point.point != null)},{result.Count(r => r.Point.point == null)}");
 								//最大震度観測点(の1つ)
 								//var maxPoint = result.OrderByDescending(r => r.Value).First();
 								//Console.WriteLine($"最大観測点 {maxPoint.Point.site.Prefefecture.GetLongName()} {maxPoint.Point.point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
