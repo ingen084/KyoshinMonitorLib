@@ -14,9 +14,16 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		public string RequestTime { get; set; }
 		[DataMember(Name = "region_name")]
 		public string RegionName { get; set; }
-		[DataMember(Name = "longitude")]
-		public float? Longitude { get; set; }
-		[DataMember(Name = "is_cancel")]
+
+	    [DataMember(Name = "longitude")] public string _longitudeRaw;
+
+	    public float? Longitude
+        {
+            get => this._longitudeRaw != null && float.TryParse(this._longitudeRaw, out var lon) ? lon : null as float?;
+            set => this._longitudeRaw = value?.ToString();
+        }
+
+        [DataMember(Name = "is_cancel")]
 		public bool? IsCancel { get; set; }
 		[DataMember(Name = "depth")]
 		public string Depth { get; set; }
@@ -26,9 +33,15 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		public bool? IsFinal { get; set; }
 		[DataMember(Name = "isTraining")]
 		public bool? IsTraining { get; set; }
-		[DataMember(Name = "latitude")]
-		public float? Latitude { get; set; }
-		[DataMember(Name = "origin_time")]
+
+	    [DataMember(Name = "latitude")] public string _latitudeRaw;
+	    public float? Latitude
+	    {
+	        get => this._latitudeRaw != null && float.TryParse(this._latitudeRaw, out var lat) ? lat : null as float?;
+	        set => this._latitudeRaw = value?.ToString();
+	    }
+
+        [DataMember(Name = "origin_time")]
 		public string OriginTime { get; set; }
 		[DataMember(Name = "security")]
 		public Security Security { get; set; }
