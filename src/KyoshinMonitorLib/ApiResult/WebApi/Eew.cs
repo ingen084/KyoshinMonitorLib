@@ -15,15 +15,16 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		[DataMember(Name = "region_name")]
 		public string RegionName { get; set; }
 
-	    [DataMember(Name = "longitude")] public string _longitudeRaw;
+		[DataMember(Name = "longitude")]
+		public string LongitudeString;
 
-	    public float? Longitude
-        {
-            get => this._longitudeRaw != null && float.TryParse(this._longitudeRaw, out var lon) ? lon : null as float?;
-            set => this._longitudeRaw = value?.ToString();
-        }
+		public float? Longitude
+		{
+			get => this.LongitudeString != null && float.TryParse(this.LongitudeString, out var lon) ? lon : null as float?;
+			set => this.LongitudeString = value?.ToString();
+		}
 
-        [DataMember(Name = "is_cancel")]
+		[DataMember(Name = "is_cancel")]
 		public bool? IsCancel { get; set; }
 		[DataMember(Name = "depth")]
 		public string Depth { get; set; }
@@ -34,14 +35,15 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		[DataMember(Name = "isTraining")]
 		public bool? IsTraining { get; set; }
 
-	    [DataMember(Name = "latitude")] public string _latitudeRaw;
-	    public float? Latitude
-	    {
-	        get => this._latitudeRaw != null && float.TryParse(this._latitudeRaw, out var lat) ? lat : null as float?;
-	        set => this._latitudeRaw = value?.ToString();
-	    }
+		[DataMember(Name = "latitude")]
+		public string LatitudeString;
+		public float? Latitude
+		{
+			get => this.LatitudeString != null && float.TryParse(this.LatitudeString, out var lat) ? lat : null as float?;
+			set => this.LatitudeString = value?.ToString();
+		}
 
-        [DataMember(Name = "origin_time")]
+		[DataMember(Name = "origin_time")]
 		public string OriginTime { get; set; }
 		[DataMember(Name = "security")]
 		public Security Security { get; set; }
