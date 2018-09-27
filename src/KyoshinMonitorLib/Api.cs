@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Utf8Json;
 
 namespace KyoshinMonitorLib
 {
@@ -19,7 +19,7 @@ namespace KyoshinMonitorLib
 					if (!response.IsSuccessStatusCode)
 						throw new KyoshinMonitorException(url, "Request Not completed", response.StatusCode);
 
-					return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync());
+					return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
 				}
 			}
 			catch (TaskCanceledException)

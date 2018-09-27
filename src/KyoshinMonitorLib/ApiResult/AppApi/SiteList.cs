@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -6,15 +7,15 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	public class SiteList
 	{
-		[DataMember(Name = "items")]
+		[JsonProperty("items")]
 		public Site[] Sites { get; set; }
-		[DataMember(Name = "security")]
+		[JsonProperty("security")]
 		public Security Security { get; set; }
-		[DataMember(Name = "dataTime")]
+		[JsonProperty("dataTime")]
 		public string DataTime { get; set; }
-		[DataMember(Name = "result")]
+		[JsonProperty("result")]
 		public Result Result { get; set; }
-		[DataMember(Name = "serialNo")]
+		[JsonProperty("serialNo")]
 		public string SerialNo { get; set; }
 	}
 
@@ -23,37 +24,37 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 不明(内部ID？)
 		/// </summary>
-		[DataMember(Name = "muni")]
+		[JsonProperty("muni")]
 		public int Muni { get; set; }
 		/// <summary>
 		/// RealTimeDataでのインデックスID
 		/// </summary>
-		[DataMember(Name = "siteidx")]
+		[JsonProperty("siteidx")]
 		public int Siteidx { get; set; }
 		/// <summary>
 		/// 都道府県ID
 		/// </summary>
-		[DataMember(Name = "pref")]
+		[JsonProperty("pref")]
 		public int PrefefectureId { get; set; }
 		/// <summary>
 		/// 都道府県
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public Prefecture Prefefecture => (Prefecture)(Enum.ToObject(typeof(Prefecture), PrefefectureId) ?? Prefecture.Unknown);
 		/// <summary>
 		/// ID
 		/// </summary>
-		[DataMember(Name = "siteid")]
+		[JsonProperty("siteid")]
 		public string SiteId { get; set; }
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		[DataMember(Name = "lat")]
+		[JsonProperty("lat")]
 		public float Lat { get; set; }
 		/// <summary>
 		/// 経度
 		/// </summary>
-		[DataMember(Name = "lng")]
+		[JsonProperty("lng")]
 		public float Lng { get; set; }
 	}
 

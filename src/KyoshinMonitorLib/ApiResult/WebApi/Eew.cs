@@ -1,61 +1,64 @@
-﻿using System.Runtime.Serialization;
+﻿using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.WebApi
 {
 	public class Eew
 	{
-		[DataMember(Name = "result")]
+		[JsonProperty("result")]
 		public Result Result { get; set; }
-		[DataMember(Name = "report_time")]
+		[JsonProperty("report_time")]
 		public string ReportTime { get; set; }
-		[DataMember(Name = "region_code")]
+		[JsonProperty("region_code")]
 		public string RegionCode { get; set; }
-		[DataMember(Name = "request_time")]
+		[JsonProperty("request_time")]
 		public string RequestTime { get; set; }
-		[DataMember(Name = "region_name")]
+		[JsonProperty("region_name")]
 		public string RegionName { get; set; }
 
-		[DataMember(Name = "longitude")]
-		public string LongitudeString;
+		[JsonProperty("longitude")]
+		public string LongitudeString { get; set; }
 
+		[JsonIgnore]
 		public float? Longitude
 		{
-			get => this.LongitudeString != null && float.TryParse(this.LongitudeString, out var lon) ? lon : null as float?;
-			set => this.LongitudeString = value?.ToString();
+			get => LongitudeString != null && float.TryParse(LongitudeString, out var lon) ? lon : null as float?;
+			set => LongitudeString = value?.ToString();
 		}
 
-		[DataMember(Name = "is_cancel")]
+		[JsonProperty("is_cancel")]
 		public bool? IsCancel { get; set; }
-		[DataMember(Name = "depth")]
+		[JsonProperty("depth")]
 		public string Depth { get; set; }
-		[DataMember(Name = "calcintensity")]
+		[JsonProperty("calcintensity")]
 		public string Calcintensity { get; set; }
-		[DataMember(Name = "is_final")]
+		[JsonProperty("is_final")]
 		public bool? IsFinal { get; set; }
-		[DataMember(Name = "isTraining")]
+		[JsonProperty("isTraining")]
 		public bool? IsTraining { get; set; }
 
-		[DataMember(Name = "latitude")]
-		public string LatitudeString;
+		[JsonProperty("latitude")]
+		public string LatitudeString { get; set; }
+		[JsonIgnore]
 		public float? Latitude
 		{
-			get => this.LatitudeString != null && float.TryParse(this.LatitudeString, out var lat) ? lat : null as float?;
-			set => this.LatitudeString = value?.ToString();
+			get => LatitudeString != null && float.TryParse(LatitudeString, out var lat) ? lat : null as float?;
+			set => LatitudeString = value?.ToString();
 		}
 
-		[DataMember(Name = "origin_time")]
+		[JsonProperty("origin_time")]
 		public string OriginTime { get; set; }
-		[DataMember(Name = "security")]
+		[JsonProperty("security")]
 		public Security Security { get; set; }
-		[DataMember(Name = "magunitude")]
+		[JsonProperty("magunitude")]
 		public string Magunitude { get; set; }
-		[DataMember(Name = "report_num")]
+		[JsonProperty("report_num")]
 		public string ReportNum { get; set; }
-		[DataMember(Name = "request_hypo_type")]
+		[JsonProperty("request_hypo_type")]
 		public string RequestHypoType { get; set; }
-		[DataMember(Name = "report_id")]
+		[JsonProperty("report_id")]
 		public string ReportId { get; set; }
-		[DataMember(Name = "alertflg")]
+		[JsonProperty("alertflg")]
 		public string AlertFlag { get; set; }
 	}
 }

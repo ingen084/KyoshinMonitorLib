@@ -1,12 +1,13 @@
-﻿using System.Runtime.Serialization;
+﻿using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult
 {
 	public class Result
 	{
-		[DataMember(Name = "status")]
+		[JsonProperty("status")]
 		public string Status { get; set; }
-		[DataMember(Name = "message")]
+		[JsonProperty("message")]
 		public string Message { get; set; }
 	}
 }

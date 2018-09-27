@@ -1,11 +1,11 @@
 ﻿using MessagePack;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Utf8Json;
 
 namespace KyoshinMonitorLib
 {
@@ -50,10 +50,7 @@ namespace KyoshinMonitorLib
 		/// <param name="path">読み込むJsonファイルのパス</param>
 		/// <returns>読み込まれた観測点情報</returns>
 		public static ObservationPoint[] LoadFromJson(string path)
-		{
-			using (var stream = new FileStream(path, FileMode.Open))
-				return JsonSerializer.Deserialize<ObservationPoint[]>(stream);
-		}
+			=> JsonConvert.DeserializeObject<ObservationPoint[]>(File.ReadAllText(path));
 
 		/// <summary>
 		/// 観測点情報をJson形式で保存します。失敗した場合は例外がスローされます。
@@ -63,7 +60,10 @@ namespace KyoshinMonitorLib
 		public static void SaveToJson(string path, IEnumerable<ObservationPoint> points)
 		{
 			using (var stream = new FileStream(path, FileMode.Create))
-				JsonSerializer.Serialize(stream, points.ToArray());
+			{
+				var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(points.ToArray()));
+				stream.Write(data, 0, data.Length);
+			}
 		}
 
 		/// <summary>

@@ -1,4 +1,5 @@
 ﻿using KyoshinMonitorLib;
+using KyoshinMonitorLib.ApiResult.WebApi;
 using KyoshinMonitorLib.Images;
 using KyoshinMonitorLib.Timers;
 using KyoshinMonitorLib.UrlGenerator;
@@ -51,6 +52,7 @@ namespace Tests
 							var result = await webApi.ParseIntensityFromParameterAsync(points, time);
 							//現在の最大震度
 							Console.WriteLine($"*WEB* 最大震度: 生:{result.Max(r => r.AnalysisResult)} jma:{result.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
+							var result2 = await webApi.GetEewInfo(time);
 						}
 						catch (Exception ex)
 						{

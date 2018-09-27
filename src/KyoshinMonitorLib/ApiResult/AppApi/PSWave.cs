@@ -1,32 +1,33 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	public class PSWave
 	{
-		[DataMember(Name = "dataTime")]
+		[JsonProperty("dataTime")]
 		public DateTime DataTime { get; set; }
-		[DataMember(Name = "hypoType")]
+		[JsonProperty("hypoType")]
 		public string HypoType { get; set; }
-		[DataMember(Name = "items")]
+		[JsonProperty("items")]
 		public PSWaveItem[] Items { get; set; }
 
-		[DataMember(Name = "result")]
+		[JsonProperty("result")]
 		public Result Result { get; set; }
-		[DataMember(Name = "security")]
+		[JsonProperty("security")]
 		public Security Security { get; set; }
 	}
 
 	public class PSWaveItem
 	{
-		[DataMember(Name = "latitude")]
+		[JsonProperty("latitude")]
 		public string Latitude { get; set; }
-		[DataMember(Name = "longitude")]
+		[JsonProperty("longitude")]
 		public string Longitude { get; set; }
-		[DataMember(Name = "p_radius")]
+		[JsonProperty("p_radius")]
 		public string PWaveRadius { get; set; }
-		[DataMember(Name = "s_radius")]
+		[JsonProperty("s_radius")]
 		public string SWaveRadius { get; set; }
 	}
 }

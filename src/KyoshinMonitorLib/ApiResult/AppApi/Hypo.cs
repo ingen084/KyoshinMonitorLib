@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	public class Hypo
 	{
-		[DataMember(Name = "dataTime")]
+		[JsonProperty("dataTime")]
 		public DateTime DataTime { get; set; }
-		[DataMember(Name = "items")]
+		[JsonProperty("items")]
 		public EewInfo[] Eews { get; set; }
-		[DataMember(Name = "result")]
+		[JsonProperty("result")]
 		public Result Result { get; set; }
-		[DataMember(Name = "security")]
+		[JsonProperty("security")]
 		public Security Security { get; set; }
 	}
 
@@ -20,58 +21,58 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 発報時間
 		/// </summary>
-		[DataMember(Name = "reportTime")]
+		[JsonProperty("reportTime")]
 		public DateTime ReportTime { get; set; }
 
 		/// <summary>
 		/// 震源の地点コード(生の値)
 		/// </summary>
-		[DataMember(Name = "regionCode")]
+		[JsonProperty("regionCode")]
 		public string RegionCodeString { get; set; }
 		/// <summary>
 		/// 震源の地点コード(変換済み)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public int RegionCode => int.Parse(RegionCodeString);
 
 		/// <summary>
 		/// 震源名
 		/// </summary>
-		[DataMember(Name = "regionName")]
+		[JsonProperty("regionName")]
 		public string RegionName { get; set; }
 
 		/// <summary>
 		/// 経度(生の値)
 		/// </summary>
-		[DataMember(Name = "longitude")]
+		[JsonProperty("longitude")]
 		public string LongitudeString { get; set; }
 		/// <summary>
 		/// 経度(変換済)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public float Longitude => float.Parse(LongitudeString.Replace("N", "+").Replace("S", "-"));
 
 		/// <summary>
 		/// キャンセル報かどうか(生の値)
 		/// </summary>
-		[DataMember(Name = "isCancel")]
+		[JsonProperty("isCancel")]
 		public string IsCancelString { get; set; }
 		/// <summary>
 		/// キャンセル報かどうか(変換済)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public bool IsCancel => IsCancelString == "true";
 
 		/// <summary>
 		/// 深さ(生の値)
 		/// </summary>
-		[DataMember(Name = "depth")]
+		[JsonProperty("depth")]
 		public string DepthString { get; set; }
 		/// <summary>
 		/// 深さ(変換済)
 		/// <para>変換できなかった場合nullが返されます。</para>
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public int? Depth
 		{
 			get
@@ -85,79 +86,79 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 予想最大震度(生の値)
 		/// </summary>
-		[DataMember(Name = "calcintensity")]
+		[JsonProperty("calcintensity")]
 		public string CalcintensityString { get; set; }
 		/// <summary>
 		/// 予想最大震度(変換済)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public JmaIntensity Calcintensity => CalcintensityString.ToJmaIntensity();
 
 		/// <summary>
 		/// 最終報かどうか(生の値)
 		/// </summary>
-		[DataMember(Name = "isFinal")]
+		[JsonProperty("isFinal")]
 		public string IsFinalString { get; set; }
 		/// <summary>
 		/// 最終法かどうか(変換済)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public bool IsFinal => IsFinalString == "true";
 
 		/// <summary>
 		/// 訓練報かどうか(生の値)
 		/// </summary>
-		[DataMember(Name = "isTraining")]
+		[JsonProperty("isTraining")]
 		public string IsTrainingString { get; set; }
 		/// <summary>
 		/// 訓練報かどうか(変換済)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public bool IsTraining => IsTrainingString == "true";
 
 		/// <summary>
 		/// 緯度(生の値)
 		/// </summary>
-		[DataMember(Name = "latitude")]
+		[JsonProperty("latitude")]
 		public string LatitudeString { get; set; }
 		/// <summary>
 		/// 緯度(変換済み)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public float Latitude => float.Parse(LatitudeString.Replace("E", "+").Replace("W", "-"));
 
 		/// <summary>
 		/// 発生時刻
 		/// </summary>
-		[DataMember(Name = "originTime")]
+		[JsonProperty("originTime")]
 		public DateTime OriginTime { get; set; }
 
 		/// <summary>
 		/// マグニチュード(生の値)
 		/// </summary>
-		[DataMember(Name = "magnitude")]
+		[JsonProperty("magnitude")]
 		public string MagnitudeString { get; set; }
 		/// <summary>
 		/// マグニチュード(変換済み)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public float Magnitude => float.Parse(MagnitudeString);
 
 		/// <summary>
 		/// 発報番号(生の値)
 		/// </summary>
-		[DataMember(Name = "reportNum")]
+		[JsonProperty("reportNum")]
 		public string ReportNumString { get; set; }
 		/// <summary>
 		/// 発報番号(変換済み)
 		/// </summary>
-		[IgnoreDataMember]
+		[JsonIgnore]
 		public int ReportNum => int.Parse(ReportNumString);
 
 		/// <summary>
 		/// EEWID?
 		/// </summary>
-		[DataMember(Name = "reportId")]
+		[JsonProperty("reportId")]
 		public string ReportId { get; set; }
 	}
 }

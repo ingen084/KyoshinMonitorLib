@@ -1,12 +1,13 @@
-﻿using System.Runtime.Serialization;
+﻿using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult
 {
 	public class Security
 	{
-		[DataMember(Name = "realm")]
+		[JsonProperty("realm")]
 		public string Realm { get; set; }
-		[DataMember(Name = "hash")]
+		[JsonProperty("hash")]
 		public string Hash { get; set; }
 	}
 }

@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	public class MeshList
 	{
-		[DataMember(Name = "items")]
+		[JsonProperty("items")]
 		public object[][] Items { get; set; }
-		[DataMember(Name = "dataTime")]
+		[JsonProperty("dataTime")]
 		public DateTime DataTime { get; set; }
-		[DataMember(Name = "serialNo")]
+		[JsonProperty("serialNo")]
 		public string SerialNo { get; set; }
 
-		[DataMember(Name = "result")]
+		[JsonProperty("result")]
 		public Result Result { get; set; }
 	}
 }
