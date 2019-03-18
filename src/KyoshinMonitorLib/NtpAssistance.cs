@@ -13,7 +13,7 @@ namespace KyoshinMonitorLib
 	/// </summary>
 	public class NtpAssistance
 	{
-		static Regex TimeRegex = new Regex("[^0-9]*(\\d+\\.\\d+)+.*", RegexOptions.Compiled);
+		static readonly Regex TimeRegex = new Regex("[^0-9]*(\\d+\\.\\d+)+.*", RegexOptions.Compiled);
 
 		/// <summary>
 		/// Http通信を使用してネットワーク上から時刻を取得します。
@@ -33,7 +33,7 @@ namespace KyoshinMonitorLib
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("GetNetworkTimeWhithHttpAsync Error: " + ex);
+				Debug.WriteLine("GetNetworkTimeWithHttpAsync Error: " + ex);
 				return null;
 			}
 		}
