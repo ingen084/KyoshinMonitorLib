@@ -5,6 +5,10 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
+## 0.1.6
+### 変更
+- `KyoshinMonitorLib.Images` で色から震度に変換する際に7.0以上の色を追加しました。
+
 ## 0.1.5
 ### 変更
 - `Nullable` パース問題のためJsonシリアライザを `Utf8Json` から `Newtonsoft.Json` に変更しました。
@@ -134,6 +138,12 @@ Webで見ることができる強震モニタのAPIを使用してEEWなどの�
 |`Task<IEnumerable<ImageAnalysisResult>>`|ParseIntensityFromParameterAsync(this `WebApi` webApi, `IEnumerable<ObservationPoint>` points, `DateTime` datetime, `bool` isBehole = false)|ObservationPointのコレクションを使用して新強震モニタリアルタイム震度の画像を取得し、解析します。|
 
 他にもありますが割愛させていただきます。
+
+#### 画像から震度を解析するにあたってのメモ
+
+震度7以上観測された場合、必ず7.0が帰ってくるようです。  
+`7.0+` のような表記を採用してあげるとユーザーに優しいかもしれません。  
+尚、AppApiで取得した値は7.0以上でも正確に表示されます。
 
 ## AppApiクラス
 スマートフォンアプリケーションのAPIを使用してリアルタイム震度などのデータを取得します。
