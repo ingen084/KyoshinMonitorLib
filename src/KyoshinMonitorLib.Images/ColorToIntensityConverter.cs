@@ -111,6 +111,7 @@ namespace KyoshinMonitorLib.Images
 			{Color.FromArgb(255, 192, 0, 0), 6.7f},
 			{Color.FromArgb(255, 185, 0, 0), 6.8f},
 			{Color.FromArgb(255, 177, 0, 0), 6.9f},
+			{Color.FromArgb(255, 170, 0, 0), 7.0f},
 		};
 
 		/// <summary>
