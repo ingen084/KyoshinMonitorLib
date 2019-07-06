@@ -9,6 +9,14 @@ namespace KyoshinMonitorLib
 	public abstract class Api : IDisposable
 	{
 		private HttpClient HttpClient { get; } = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+		/// <summary>
+		/// APIを呼ぶのにあたってのタイムアウト時間
+		/// </summary>
+		public TimeSpan Timeout
+		{
+			get => HttpClient.Timeout;
+			set => HttpClient.Timeout = value;
+		}
 
 		protected async Task<ApiResult<T>> GetJsonObject<T>(string url)
 		{

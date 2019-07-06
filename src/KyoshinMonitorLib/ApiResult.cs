@@ -8,7 +8,7 @@ namespace KyoshinMonitorLib
 	/// <typeparam name="TResult"></typeparam>
 	public class ApiResult<TResult>
 	{
-		public ApiResult(HttpStatusCode? statusCode, TResult data)
+		public ApiResult(HttpStatusCode statusCode, TResult data)
 		{
 			StatusCode = statusCode;
 			Data = data;
@@ -18,7 +18,7 @@ namespace KyoshinMonitorLib
 		/// HTTPステータスコード
 		/// <para>nullの場合はタイムアウトを示します。</para>
 		/// </summary>
-		public HttpStatusCode? StatusCode { get; }
+		public HttpStatusCode StatusCode { get; }
 		/// <summary>
 		/// API実行結果
 		/// <para>実行に失敗した場合nullが代入されます。</para>
