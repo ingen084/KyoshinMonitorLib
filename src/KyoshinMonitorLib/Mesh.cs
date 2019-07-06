@@ -21,8 +21,8 @@ namespace KyoshinMonitorLib
 		{
 			Code = code ?? throw new ArgumentNullException(nameof(code));
 
-			LocationLeftTop = new Location(x, y);
-			LocationRightBottom = new Location(x - 5334, y + 5334); //5kmメッシュ ちょっと大きめに設定する
+			LocationLeftTop = Location.FromMeters(x, y);
+			LocationRightBottom = Location.FromMeters(x - 5334, y + 5334); //5kmメッシュ ちょっと大きめに設定する
 		}
 
 		/// <summary>

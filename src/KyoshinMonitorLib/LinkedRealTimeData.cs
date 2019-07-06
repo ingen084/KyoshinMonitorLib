@@ -2,15 +2,15 @@
 
 namespace KyoshinMonitorLib
 {
-	public class LinkedRealTimeData
+	public struct LinkedRealTimeData
 	{
-		public LinkedRealTimeData((Site, ObservationPoint) point, float? value)
+		public LinkedRealTimeData(LinkedObservationPoint point, float? value)
 		{
-			Point = point;
+			ObservationPoint = point;
 			Value = value;
 		}
 
-		public (Site site, ObservationPoint point) Point { get; }
+		public LinkedObservationPoint ObservationPoint { get; }
 		public float? Value { get; }
 		public JmaIntensity Intensity => Value.ToJmaIntensity();
 	}

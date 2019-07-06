@@ -3,7 +3,7 @@ using KyoshinMonitorLib.UrlGenerator;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
@@ -14,7 +14,7 @@ namespace KyoshinMonitorLib
 		/// 観測点情報のキャッシュ
 		/// <para>BaseSerialNoと観測点情報･idxに適合した情報のマッピング</para>
 		/// </summary>
-		private static IDictionary<string, (Site, ObservationPoint)[]> SiteListCache { get; set; } = new ConcurrentDictionary<string, (Site, ObservationPoint)[]>();
+		private static IDictionary<string, LinkedObservationPoint[]> SiteListCache { get; set; } = new ConcurrentDictionary<string, LinkedObservationPoint[]>();
 
 		private ObservationPoint[] ObservationPoints { get; }
 		public AppApi(ObservationPoint[] observationPoints = null)
@@ -25,93 +25,117 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測点一覧を取得します。
 		/// </summary>
-		public virtual Task<SiteList> GetSiteList(string baseSerialNo)
+		public virtual Task<ApiResult<SiteList>> GetSiteList(string baseSerialNo)
 			=> GetJsonObject<SiteList>(AppApiUrlGenerator.Generate(baseSerialNo));
 
 		/// <summary>
 		/// リアルタイムなデータを取得します。
 		/// </summary>
-		public virtual Task<RealTimeData> GetRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
+		public virtual Task<ApiResult<RealTimeData>> GetRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
 			=> GetJsonObject<RealTimeData>(AppApiUrlGenerator.Generate(AppApiUrlType.RealTimeData, time, dataType, isBehore));
 
 		/// <summary>
-		/// 観測点情報と結合済みのリアルタイムなデータを取得します
+		/// 観測点情報と結合済みのリアルタイムなデータを取得します。
 		/// </summary>
-		public async Task<LinkedRealTimeData[]> GetLinkedRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
+		public async Task<ApiResult<LinkedRealTimeData[]>> GetLinkedRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
 		{
-			var data = await GetRealTimeData(time, dataType, isBehore);
+			var dataResult = await GetRealTimeData(time, dataType, isBehore);
+			if (dataResult.Data == null)
+				return new ApiResult<LinkedRealTimeData[]>(dataResult.StatusCode, null);
+			var data = dataResult.Data;
 
-			//存在しない場合作成
-			if (!SiteListCache.TryGetValue(data.BaseSerialNo, out var pair))
-			{
-				var pairList = new List<(Site, ObservationPoint)>();
-				var siteList = await GetSiteList(data.BaseSerialNo);
-				var count = 0;
-				foreach (var site in siteList.Sites.OrderBy(s => s.Siteidx))
-				{
-					if (count < site.Siteidx)
-					{
-						pairList.Add((site, null));
-						count++;
-						continue;
-					}
-					if (count != site.Siteidx)
-						throw new KyoshinMonitorException(null, "リアルタイムデータの結合に失敗しました。 APIから送られてくる値が不正です。");
-					count++;
-
-					//世界座標系で検索してだめだったら日本座標系で検索
-					var point = ObservationPoints.Where(p => !p.IsSuspended && p.Location != null).FirstOrDefault(p => Math.Abs(Math.Floor(p.Location.Latitude * 1000) / 1000 - site.Lat) <= 0.01 && Math.Abs(Math.Floor(p.Location.Longitude * 1000) / 1000 - site.Lng) <= 0.01);
-					if (point == null)
-						point = ObservationPoints.Where(p => !p.IsSuspended && p.OldLocation != null).FirstOrDefault(p => Math.Abs(Math.Floor(p.OldLocation.Latitude * 1000) / 1000 - site.Lat) <= 0.01 && Math.Abs(Math.Floor(p.OldLocation.Longitude * 1000) / 1000 - site.Lng) <= 0.01);
-
-					pairList.Add((site, point));
-				}
-				pair = pairList.ToArray();
-				SiteListCache.Add(data.BaseSerialNo, pair);
-			}
-
+			var pair = await GetOrLinkObservationPoint(data.BaseSerialNo);
 			var result = new List<LinkedRealTimeData>();
 			for (var i = 0; i < data.Items.Length; i++)
 			{
 				if (pair.Length <= i)
-					throw new KyoshinMonitorException(null, "リアルタイムデータの結合に失敗しました。 SiteListの観測点が少なすぎます。");
+					throw new KyoshinMonitorException("リアルタイムデータの結合に失敗しました。 SiteListの観測点が少なすぎます。");
 				result.Add(new LinkedRealTimeData(pair[i], data.Items[i]));
 			}
-			return result.ToArray();
+			return new ApiResult<LinkedRealTimeData[]>(dataResult.StatusCode, result.ToArray());
 		}
+		/// <summary>
+		/// 観測点情報を結合もしくはキャッシュから取得します。
+		/// </summary>
+		/// <param name="serialNo">観測点一覧の番号</param>
+		/// <returns>結合された観測点情報</returns>
+		public async Task<LinkedObservationPoint[]> GetOrLinkObservationPoint(string serialNo)
+		{
+			if (SiteListCache.TryGetValue(serialNo, out var pair))
+				return pair;
 
-		//todo 近いウチ削除
-		[Obsolete("GetHypoInfoだけでは分かりづらいため、GetEewHypoInfoを使用してください。")]
-		public virtual Task<Hypo> GetHypoInfo(DateTime time)
-			=> GetEewHypoInfo(time);
+			var pairList = new List<LinkedObservationPoint>();
+			var siteListResult = await GetSiteList(serialNo);
+			if (siteListResult.Data == null)
+				throw new KyoshinMonitorException("SiteListの取得に失敗しました。");
+			var siteList = siteListResult.Data;
+			for (var i = 0; i < siteList.Sites.Length; i++)
+			{
+				var site = siteList.Sites[i];
+				if (i < site.Siteidx)
+				{
+					pairList.Add(new LinkedObservationPoint(site, null));
+					continue;
+				}
+				if (i != site.Siteidx)
+					throw new KyoshinMonitorException("リアルタイムデータの結合に失敗しました。 idxが一致しません。");
+
+				ObservationPoint point = null;
+				for (int j = 0; j< ObservationPoints.Length; j++)
+				{
+					var p = ObservationPoints[j];
+					if (p.IsSuspended || p.Location == null) continue;
+					if (CheckNearLocation(p.Location, site))
+					{
+						point = p;
+						break;
+					}
+					if (p.OldLocation == null) continue;
+					if (CheckNearLocation(p.OldLocation, site))
+					{
+						point = p;
+						break;
+					}
+				}
+
+				pairList.Add(new LinkedObservationPoint(site, point));
+			}
+			pair = pairList.ToArray();
+			SiteListCache.Add(serialNo, pair);
+			return pair;
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private bool CheckNearLocation(Location l, Site s)
+			=> Math.Abs(Math.Floor(l.Latitude * 1000) / 1000 - s.Lat) <= 0.01 && Math.Abs(Math.Floor(l.Longitude * 1000) / 1000 - s.Lng) <= 0.01;
+
 		/// <summary>
 		/// 緊急地震速報の情報を取得します。
 		/// </summary>
-		public virtual Task<Hypo> GetEewHypoInfo(DateTime time)
+		public virtual Task<ApiResult<Hypo>> GetEewHypoInfo(DateTime time)
 			=> GetJsonObject<Hypo>(AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time));
 
 		/// <summary>
 		/// 緊急地震速報から算出された揺れの広がりを取得します。
 		/// </summary>
-		public virtual Task<PSWave> GetPSWave(DateTime time)
+		public virtual Task<ApiResult<PSWave>> GetPSWave(DateTime time)
 			=> GetJsonObject<PSWave>(AppApiUrlGenerator.Generate(AppApiUrlType.PSWaveJson, time));
 
 		/// <summary>
 		/// 緊急地震速報から算出された予想震度のメッシュ情報を取得します。
 		/// </summary>
-		public virtual Task<EstShindo> GetEstShindo(DateTime time)
+		public virtual Task<ApiResult<EstShindo>> GetEstShindo(DateTime time)
 			=> GetJsonObject<EstShindo>(AppApiUrlGenerator.Generate(AppApiUrlType.EstShindoJson, time));
 
 		/// <summary>
 		/// メッシュ一覧を取得します。
 		/// 非常に時間がかかるため、キャッシュしておくことを推奨します。
 		/// </summary>
-		public virtual async Task<Mesh[]> GetMeshes()
+		public virtual async Task<ApiResult<Mesh[]>> GetMeshes()
 		{
-			var meches = await GetJsonObject<MeshList>(AppApiUrlGenerator.Meches);
-			if (meches == null)
-				throw new KyoshinMonitorException(AppApiUrlGenerator.Meches, "メッシュ情報の取得に失敗しました。");
-
+			var mechesResult = await GetJsonObject<MeshList>(AppApiUrlGenerator.Meches);
+			if (mechesResult.Data == null)
+				return new ApiResult<Mesh[]>(mechesResult.StatusCode, null);
+			var meches = mechesResult.Data;
 			var result = new List<Mesh>();
 
 			await Task.Run(() =>
@@ -121,7 +145,7 @@ namespace KyoshinMonitorLib
 					result.Add(new Mesh(meches.Items[i][0] as string, (double)meches.Items[i][1], (double)meches.Items[i][2]));
 			});
 
-			return result.ToArray();
+			return new ApiResult<Mesh[]>(mechesResult.StatusCode, result.ToArray());
 		}
 	}
 }
