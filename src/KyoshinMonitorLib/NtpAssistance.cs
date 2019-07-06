@@ -79,9 +79,10 @@ namespace KyoshinMonitorLib
 			var serverReceivedTime = ToTime(ntpData, 32);
 			var serverSendedTime = ToTime(ntpData, 40);
 
-			var delta = TimeSpan.FromTicks((recivedTime - sendedTime - (serverReceivedTime - serverSendedTime)).Ticks / 2);
-			Debug.WriteLine("delta:" + delta);
-			return sendedTime - delta;
+			// (送信から受信までの時間 - 鯖側での受信から送信までの時間) / 2
+			var delta = TimeSpan.FromTicks((recivedTime.Ticks - sendedTime.Ticks - (serverSendedTime.Ticks - serverReceivedTime.Ticks)) / 2);
+			Debug.WriteLine("theta:" + delta);
+			return serverSendedTime + delta;
 		}
 
 		private static DateTime ToTime(byte[] bytes, ushort offset)
