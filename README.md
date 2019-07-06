@@ -122,7 +122,7 @@ Webで見ることができる強震モニタのAPIを使用してEEWなどの�
 |`Task<ApiResult<RealTimeData>>`|GetRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
 |`Task<ApiResult<SiteList>>`|GetSiteList(`string` baseSerialNo)|APIから参照できる観測点情報の一覧を取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
 |`Task<ApiResult<Hypo>>`|GetEewHypoInfo(`DateTime` time)|APIから緊急地震速報の情報を取得します。  **ちなみに、複数のEEWに対応してそうです…(要検証)**|
-|`Task<ApiResult<PSWave>>`|GetPSWave(`DateTime` time)|緊急地震速報から算出された揺れの広がりを取得します。  **こちらも、は複数のEEWに対応してそうです。**|
+|`Task<ApiResult<PSWave>>`|GetPSWave(`DateTime` time)|緊急地震速報から算出された揺れの広がりを取得します。  **こちらも複数のEEWに対応してそうです。**|
 |`Task<ApiResult<EstShindo>>`|GetEstShindo(`DateTime` time)|緊急地震速報から算出された予想震度の5kmメッシュ情報を取得します。|
 |`Task<ApiResult<Mesh[]>>`|GetMeshes()|メッシュ一覧を取得します。 非常に時間がかかるため、起動時などに行い、別ファイルとしてキャッシュしておくことを推奨します。|
 
