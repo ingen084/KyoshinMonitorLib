@@ -9,18 +9,23 @@ namespace KyoshinMonitorLib.Timers
 	/// </summary>
 	public class SecondBasedTimer
 	{
-		private Timer _timer;
-		private TimeSpan _lastTime;
-		private DateTime _currentTime;
+		private readonly TimeSpan Interval = TimeSpan.FromSeconds(1);
+		private Timer InnerTimer { get; }
+		private TimeSpan LastTime { get; set; }
+		private HighPerformanceStopwatch StopWatch { get; }
 
-		private bool _isEventRunning;
-
-		//最後にNTP更新された時刻
-		private DateTime _lastUpdatedTime;
-
-		private HighPerformanceStopwatch _sw;
-
-		private TimeSpan Interval = TimeSpan.FromSeconds(1);
+		/// <summary>
+		/// 現在のタイマー内の時間
+		/// </summary>
+		public DateTime CurrentTime { get; private set; }
+		/// <summary>
+		/// イベントタスクが実行中かどうか
+		/// </summary>
+		public bool IsEventRunning { get; private set; }
+		/// <summary>
+		/// 最後に内部時刻が更新された時刻
+		/// </summary>
+		public DateTime LastUpdatedTime { get; private set; }
 
 		private TimeSpan _offset = TimeSpan.Zero;
 		/// <summary>
@@ -31,7 +36,7 @@ namespace KyoshinMonitorLib.Timers
 			get => _offset;
 			set
 			{
-				_lastTime -= (_offset - value);
+				LastTime -= _offset - value;
 				_offset = value;
 			}
 		}
@@ -64,46 +69,46 @@ namespace KyoshinMonitorLib.Timers
 		/// </summary>
 		public SecondBasedTimer()
 		{
-			_timer = new Timer(s =>
+			InnerTimer = new Timer(s =>
 			{
-				if (_sw.Elapsed - _lastTime >= Interval)
+				if (StopWatch.Elapsed - LastTime >= Interval)
 				{
-					if (!BlockingMode || !_isEventRunning)
+					if (!BlockingMode || !IsEventRunning)
 						ThreadPool.QueueUserWorkItem(s2 =>
 						{
-							_isEventRunning = true;
-							Elapsed?.Invoke(_currentTime)?.Wait();
-							_isEventRunning = false;
+							IsEventRunning = true;
+							Elapsed?.Invoke(CurrentTime)?.Wait();
+							IsEventRunning = false;
 						});
 					//かなり時間のズレが大きければその分修正する
-					if (_sw.Elapsed.Ticks - _lastTime.Ticks >= Interval.Ticks * 2)
+					if (StopWatch.Elapsed.Ticks - LastTime.Ticks >= Interval.Ticks * 2)
 					{
-						var skipCount = ((_sw.Elapsed.Ticks - _lastTime.Ticks) / Interval.Ticks);
-						_lastTime += TimeSpan.FromTicks(Interval.Ticks * skipCount);
-						_currentTime = _currentTime.AddSeconds(skipCount);
+						var skipCount = (StopWatch.Elapsed.Ticks - LastTime.Ticks) / Interval.Ticks;
+						LastTime += TimeSpan.FromTicks(Interval.Ticks * skipCount);
+						CurrentTime = CurrentTime.AddSeconds(skipCount);
 					}
 					else //そうでなかったばあい普通に修正
 					{
-						_lastTime += Interval;
-						_currentTime = _currentTime.AddSeconds(1);
+						LastTime += Interval;
+						CurrentTime = CurrentTime.AddSeconds(1);
 					}
 					if (!AutoReset)
-						_timer.Change(Timeout.Infinite, Timeout.Infinite);
+						InnerTimer.Change(Timeout.Infinite, Timeout.Infinite);
 				}
 			}, null, Timeout.Infinite, Timeout.Infinite);
-			_sw = new HighPerformanceStopwatch();
+			StopWatch = new HighPerformanceStopwatch();
 		}
 
 		/// <summary>
-		/// 時間を更新します。このメソッドが呼ばれたタイミングで
+		/// 時間を更新します。
 		/// </summary>
 		/// <param name="time">書き込む時間</param>
 		public void UpdateTime(DateTime time)
 		{
-			_lastUpdatedTime = time;
-			_currentTime = _lastUpdatedTime.AddMilliseconds(-_lastUpdatedTime.Millisecond).AddSeconds(-Math.Floor(Offset.TotalSeconds));
-			_lastTime = _sw.Elapsed - TimeSpan.FromMilliseconds(_lastUpdatedTime.Millisecond);
-			_lastTime += (Offset - TimeSpan.FromSeconds(Offset.Seconds));
+			LastUpdatedTime = time;
+			CurrentTime = LastUpdatedTime.AddMilliseconds(-LastUpdatedTime.Millisecond).AddSeconds(-Math.Floor(Offset.TotalSeconds));
+			LastTime = StopWatch.Elapsed - TimeSpan.FromMilliseconds(LastUpdatedTime.Millisecond);
+			LastTime += Offset - TimeSpan.FromSeconds(Offset.Seconds);
 		}
 
 		/// <summary>
@@ -112,16 +117,16 @@ namespace KyoshinMonitorLib.Timers
 		/// <param name="currentTime">現在時間</param>
 		public void Start(DateTime currentTime)
 		{
-			_isEventRunning = false;
-			_sw.Start();
+			IsEventRunning = false;
+			StopWatch.Start();
 			UpdateTime(currentTime);
-			_timer.Change(Accuracy, Accuracy);
+			InnerTimer.Change(Accuracy, Accuracy);
 		}
 
 		/// <summary>
 		/// タイマーを停止します。
 		/// </summary>
 		public void Stop()
-			=> _timer.Change(Timeout.Infinite, Timeout.Infinite);
+			=> InnerTimer.Change(Timeout.Infinite, Timeout.Infinite);
 	}
 }

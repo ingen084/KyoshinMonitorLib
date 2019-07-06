@@ -28,7 +28,7 @@ namespace KyoshinMonitorLib
 				using (var client = new HttpClient() { Timeout = TimeSpan.FromMilliseconds(timeout) })
 				{
 					var match = TimeRegex.Match(await client.GetStringAsync(url));
-					return (new DateTime(1970, 1, 1, 9, 0, 0)).AddSeconds(double.Parse(match.Groups[1].Value));
+					return new DateTime(1970, 1, 1, 9, 0, 0).AddSeconds(double.Parse(match.Groups[1].Value));
 				}
 			}
 			catch (Exception ex)
@@ -47,7 +47,7 @@ namespace KyoshinMonitorLib
 		/// <returns>取得された時刻 取得に失敗した場合はnullが返されます。</returns>
 		public static async Task<DateTime?> GetNetworkTimeWithNtp(string hostName = "ntp.nict.jp", ushort port = 123, int timeout = 100)
 		{
-			// RFC 2030に準拠しています。
+			// RFC 2030準拠
 			var ntpData = new byte[48];
 
 			//特に使用しません
@@ -56,7 +56,7 @@ namespace KyoshinMonitorLib
 			DateTime sendedTime, recivedTime;
 			sendedTime = recivedTime = DateTime.Now;
 
-			try
+			await Task.Run(async () =>
 			{
 				var addresses = (await Dns.GetHostEntryAsync(hostName)).AddressList;
 				var ipEndPoint = new IPEndPoint(addresses[0], port);
@@ -73,17 +73,13 @@ namespace KyoshinMonitorLib
 					socket.Receive(ntpData);
 					recivedTime = DateTime.Now;
 				}
-			}
-			catch (SocketException)
-			{
-				return null;
-			}
+			});
 
 			//受信時刻=32 送信時刻=40
 			var serverReceivedTime = ToTime(ntpData, 32);
 			var serverSendedTime = ToTime(ntpData, 40);
 
-			var delta = TimeSpan.FromTicks(((recivedTime - sendedTime) - (serverReceivedTime - serverSendedTime)).Ticks / 2);
+			var delta = TimeSpan.FromTicks((recivedTime - sendedTime - (serverReceivedTime - serverSendedTime)).Ticks / 2);
 			Debug.WriteLine("delta:" + delta);
 			return sendedTime - delta;
 		}
@@ -93,10 +89,10 @@ namespace KyoshinMonitorLib
 			ulong intPart = SwapEndianness(BitConverter.ToUInt32(bytes, offset));
 			ulong fractPart = SwapEndianness(BitConverter.ToUInt32(bytes, offset + 4));
 
-			var milliseconds = (intPart * 1000) + ((fractPart * 1000) / 0x100000000L);
+			var milliseconds = (intPart * 1000) + (fractPart * 1000 / 0x100000000L);
 
 			//時間生成
-			return (new DateTime(1900, 1, 1, 9, 0, 0)).AddMilliseconds((long)milliseconds);
+			return new DateTime(1900, 1, 1, 9, 0, 0).AddMilliseconds((long)milliseconds);
 		}
 
 		//ビット列を逆にする stackoverflow.com/a/3294698/162671
