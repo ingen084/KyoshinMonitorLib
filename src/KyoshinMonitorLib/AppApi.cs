@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
@@ -35,7 +36,7 @@ namespace KyoshinMonitorLib
 			=> GetJsonObject<RealTimeData>(AppApiUrlGenerator.Generate(AppApiUrlType.RealTimeData, time, dataType, isBehore));
 
 		/// <summary>
-		/// 観測点情報と結合済みのリアルタイムなデータを取得します
+		/// 観測点情報と結合済みのリアルタイムなデータを取得します。
 		/// </summary>
 		public async Task<ApiResult<LinkedRealTimeData[]>> GetLinkedRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
 		{
@@ -54,6 +55,11 @@ namespace KyoshinMonitorLib
 			}
 			return new ApiResult<LinkedRealTimeData[]>(dataResult.StatusCode, result.ToArray());
 		}
+		/// <summary>
+		/// 観測点情報を結合もしくはキャッシュから取得します。
+		/// </summary>
+		/// <param name="serialNo">観測点一覧の番号</param>
+		/// <returns>結合された観測点情報</returns>
 		public async Task<LinkedObservationPoint[]> GetOrLinkObservationPoint(string serialNo)
 		{
 			if (SiteListCache.TryGetValue(serialNo, out var pair))
@@ -64,23 +70,34 @@ namespace KyoshinMonitorLib
 			if (siteListResult.Data == null)
 				throw new KyoshinMonitorException("SiteListの取得に失敗しました。");
 			var siteList = siteListResult.Data;
-			var count = 0;
-			foreach (var site in siteList.Sites/*.OrderBy(s => s.Siteidx)*/)
+			for (var i = 0; i < siteList.Sites.Length; i++)
 			{
-				if (count < site.Siteidx)
+				var site = siteList.Sites[i];
+				if (i < site.Siteidx)
 				{
 					pairList.Add(new LinkedObservationPoint(site, null));
-					count++;
 					continue;
 				}
-				if (count != site.Siteidx)
+				if (i != site.Siteidx)
 					throw new KyoshinMonitorException("リアルタイムデータの結合に失敗しました。 idxが一致しません。");
-				count++;
 
-				//世界座標系で検索してだめだったら日本座標系で検索
-				var point = ObservationPoints.Where(p => !p.IsSuspended && p.Location != null).FirstOrDefault(p => Math.Abs(Math.Floor(p.Location.Latitude * 100) / 100 - site.Lat) <= 0.01 && Math.Abs(Math.Floor(p.Location.Longitude * 100) / 100 - site.Lng) <= 0.01);
-				if (point == null)
-					point = ObservationPoints.Where(p => !p.IsSuspended && p.OldLocation != null).FirstOrDefault(p => Math.Abs(Math.Floor(p.OldLocation.Latitude * 100) / 100 - site.Lat) <= 0.01 && Math.Abs(Math.Floor(p.OldLocation.Longitude * 100) / 100 - site.Lng) <= 0.01);
+				ObservationPoint point = null;
+				for (int j = 0; j< ObservationPoints.Length; j++)
+				{
+					var p = ObservationPoints[j];
+					if (p.IsSuspended || p.Location == null) continue;
+					if (CheckNearLocation(p.Location, site))
+					{
+						point = p;
+						break;
+					}
+					if (p.OldLocation == null) continue;
+					if (CheckNearLocation(p.OldLocation, site))
+					{
+						point = p;
+						break;
+					}
+				}
 
 				pairList.Add(new LinkedObservationPoint(site, point));
 			}
@@ -88,6 +105,9 @@ namespace KyoshinMonitorLib
 			SiteListCache.Add(serialNo, pair);
 			return pair;
 		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private bool CheckNearLocation(Location l, Site s)
+			=> Math.Abs(Math.Floor(l.Latitude * 1000) / 1000 - s.Lat) <= 0.01 && Math.Abs(Math.Floor(l.Longitude * 1000) / 1000 - s.Lng) <= 0.01;
 
 		/// <summary>
 		/// 緊急地震速報の情報を取得します。

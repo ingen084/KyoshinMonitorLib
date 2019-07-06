@@ -1,5 +1,4 @@
 ﻿using KyoshinMonitorLib;
-using KyoshinMonitorLib.ApiResult.WebApi;
 using KyoshinMonitorLib.Images;
 using KyoshinMonitorLib.Timers;
 using KyoshinMonitorLib.UrlGenerator;
@@ -21,7 +20,7 @@ namespace Tests
 				// タイマーのインスタンスを作成
 				var timer = new SecondBasedTimer()
 				{
-					Offset = TimeSpan.FromSeconds(1.1),//1.1
+					Offset = TimeSpan.FromSeconds(1.2),//1.1
 				};
 				// 適当にイベント設定
 				timer.Elapsed += async time =>
@@ -37,8 +36,6 @@ namespace Tests
 							var data = result.Data;
 							// 現在の最大震度
 							Console.WriteLine($"*API* 最大震度: 生:{data.Max(r => r.Value)} jma:{data.Max(r => r.Value).ToJmaIntensity().ToLongString()} {data.Count(r => r.ObservationPoint.Point != null)},{data.Count(r => r.ObservationPoint.Point == null)}");
-							var p = data.First(r => r.ObservationPoint.Point == null);
-							Console.WriteLine(p.ObservationPoint.Site.Lat + "/" + p.ObservationPoint.Site.Lng);
 							// 最大震度観測点(の1つ)
 							//var maxPoint = result.OrderByDescending(r => r.Value).First();
 							//Console.WriteLine($"最大観測点 {maxPoint.Point.site.Prefefecture.GetLongName()} {maxPoint.Point.point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
@@ -74,7 +71,7 @@ namespace Tests
 					}
 				};
 
-				var ntp = await NtpAssistance.GetNetworkTimeWithHttp();
+				var ntp = await NtpAssistance.GetNetworkTimeWithNtp();
 				// タイマー開始
 				timer.Start(ntp ?? throw new Exception());
 
