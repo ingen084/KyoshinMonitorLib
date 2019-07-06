@@ -19,7 +19,7 @@ namespace KyoshinMonitorLib.Images
 		/// <param name="datetime">参照する日付</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
-		public static async Task<IEnumerable<ImageAnalysisResult>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false)
+		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false)
 			=> await webApi.ParseIntensityFromParameterAsync(points.Select(p => new ImageAnalysisResult(p)).ToArray(), datetime, isBehole);
 
 		/// <summary>
@@ -30,11 +30,15 @@ namespace KyoshinMonitorLib.Images
 		/// <param name="datetime">参照する日付</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
-		public static async Task<IEnumerable<ImageAnalysisResult>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ImageAnalysisResult> points, DateTime datetime, bool isBehole = false)
+		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ImageAnalysisResult> points, DateTime datetime, bool isBehole = false)
 		{
-			using (var stream = new MemoryStream(await webApi.GetRealtimeImageData(datetime, RealTimeDataType.Shindo, isBehole)))
+			var imageResult = await webApi.GetRealtimeImageData(datetime, RealTimeDataType.Shindo, isBehole);
+			if (imageResult.Data == null)
+				return new ApiResult<IEnumerable<ImageAnalysisResult>>(imageResult.StatusCode, null);
+
+			using (var stream = new MemoryStream(imageResult.Data))
 			using (var bitmap = new Bitmap(stream))
-				return points.ParseIntensityFromImage(bitmap);
+				return new ApiResult<IEnumerable<ImageAnalysisResult>>(imageResult.StatusCode, points.ParseIntensityFromImage(bitmap));
 		}
 
 		/// <summary>

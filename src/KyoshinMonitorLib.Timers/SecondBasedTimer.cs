@@ -20,7 +20,7 @@ namespace KyoshinMonitorLib.Timers
 
 		private HighPerformanceStopwatch _sw;
 
-		private TimeSpan _interval = TimeSpan.FromSeconds(1);
+		private TimeSpan Interval = TimeSpan.FromSeconds(1);
 
 		private TimeSpan _offset = TimeSpan.Zero;
 		/// <summary>
@@ -66,7 +66,7 @@ namespace KyoshinMonitorLib.Timers
 		{
 			_timer = new Timer(s =>
 			{
-				if (_sw.Elapsed - _lastTime >= _interval)
+				if (_sw.Elapsed - _lastTime >= Interval)
 				{
 					if (!BlockingMode || !_isEventRunning)
 						ThreadPool.QueueUserWorkItem(s2 =>
@@ -76,15 +76,15 @@ namespace KyoshinMonitorLib.Timers
 							_isEventRunning = false;
 						});
 					//かなり時間のズレが大きければその分修正する
-					if (_sw.Elapsed.Ticks - _lastTime.Ticks >= _interval.Ticks * 2)
+					if (_sw.Elapsed.Ticks - _lastTime.Ticks >= Interval.Ticks * 2)
 					{
-						var skipCount = ((_sw.Elapsed.Ticks - _lastTime.Ticks) / _interval.Ticks);
-						_lastTime += TimeSpan.FromTicks(_interval.Ticks * skipCount);
+						var skipCount = ((_sw.Elapsed.Ticks - _lastTime.Ticks) / Interval.Ticks);
+						_lastTime += TimeSpan.FromTicks(Interval.Ticks * skipCount);
 						_currentTime = _currentTime.AddSeconds(skipCount);
 					}
 					else //そうでなかったばあい普通に修正
 					{
-						_lastTime += _interval;
+						_lastTime += Interval;
 						_currentTime = _currentTime.AddSeconds(1);
 					}
 					if (!AutoReset)

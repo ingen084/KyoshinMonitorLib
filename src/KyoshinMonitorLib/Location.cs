@@ -32,14 +32,13 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <param name="x">北緯方向への距離</param>
 		/// <param name="y">東経方向への距離</param>
-		public Location(double x, double y)
+		public static Location FromMeters(double x, double y)
 		{
 			x = x / 20037508.34 * 180;
 			y = y / 20037508.34 * 180;
 			x = 180 / Math.PI * (2 * Math.Atan(Math.Exp(x * Math.PI / 180)) - Math.PI / 2);
 
-			Latitude = (float)x;
-			Longitude = (float)y;
+			return new Location((float)x, (float)y);
 		}
 
 		/// <summary>
