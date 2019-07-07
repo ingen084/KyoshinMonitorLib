@@ -111,18 +111,21 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 緊急地震速報の情報を取得します。
 		/// </summary>
+		[Obsolete]
 		public virtual Task<ApiResult<Hypo>> GetEewHypoInfo(DateTime time)
 			=> GetJsonObject<Hypo>(AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time));
 
 		/// <summary>
 		/// 緊急地震速報から算出された揺れの広がりを取得します。
 		/// </summary>
+		[Obsolete]
 		public virtual Task<ApiResult<PSWave>> GetPSWave(DateTime time)
 			=> GetJsonObject<PSWave>(AppApiUrlGenerator.Generate(AppApiUrlType.PSWaveJson, time));
 
 		/// <summary>
 		/// 緊急地震速報から算出された予想震度のメッシュ情報を取得します。
 		/// </summary>
+		[Obsolete]
 		public virtual Task<ApiResult<EstShindo>> GetEstShindo(DateTime time)
 			=> GetJsonObject<EstShindo>(AppApiUrlGenerator.Generate(AppApiUrlType.EstShindoJson, time));
 
@@ -130,6 +133,7 @@ namespace KyoshinMonitorLib
 		/// メッシュ一覧を取得します。
 		/// 非常に時間がかかるため、キャッシュしておくことを推奨します。
 		/// </summary>
+		[Obsolete]
 		public virtual async Task<ApiResult<Mesh[]>> GetMeshes()
 		{
 			var mechesResult = await GetJsonObject<MeshList>(AppApiUrlGenerator.Meches);

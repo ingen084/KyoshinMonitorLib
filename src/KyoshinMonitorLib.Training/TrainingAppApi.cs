@@ -36,6 +36,7 @@ namespace KyoshinMonitorLib.Training
 			return Task.FromResult(new ApiResult<RealTimeData>(HttpStatusCode.OK, JsonConvert.DeserializeObject<RealTimeData>(File.ReadAllText(path))));
 		}
 
+		[Obsolete]
 		public override Task<ApiResult<Hypo>> GetEewHypoInfo(DateTime time)
 		{
 			var path = AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time).Replace("http://kv.kmoni.bosai.go.jp/kyoshin_monitor/static/jsondata/", BasePath);

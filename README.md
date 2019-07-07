@@ -5,6 +5,11 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
+## 0.2.0.2
+### 削除
+
+- 現在利用できないAPIに `Obsolate` をつけて利用できなくしました。
+
 ## 0.2.0.1
 ### バグ修正
 
@@ -114,17 +119,18 @@ Webで見ることができる強震モニタのAPIを使用してEEWなどの�
 尚、AppApiで取得した値は7.0以上でも正確に表示されます。
 
 ## AppApiクラス
-スマートフォンアプリケーションのAPIを使用してリアルタイム震度などのデータを取得します。
+スマートフォンアプリケーションのAPIを使用してリアルタイム震度などのデータを取得します。  
+**ほとんどのAPIが現在利用できません。** いつか復活を願って処理は残しておきます…。
 ### メソッド
 | 返り値の型 | 名前(引数) | 解説 |
 |---|---|---|
 |`Task<ApiResult<LinkedRealTimeData[]>>`|GetLinkedRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  自動で観測点情報などと結びつけ、インスタンスを返します。|
 |`Task<ApiResult<RealTimeData>>`|GetRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
 |`Task<ApiResult<SiteList>>`|GetSiteList(`string` baseSerialNo)|APIから参照できる観測点情報の一覧を取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
-|`Task<ApiResult<Hypo>>`|GetEewHypoInfo(`DateTime` time)|APIから緊急地震速報の情報を取得します。  **ちなみに、複数のEEWに対応してそうです…(要検証)**|
-|`Task<ApiResult<PSWave>>`|GetPSWave(`DateTime` time)|緊急地震速報から算出された揺れの広がりを取得します。  **こちらも複数のEEWに対応してそうです。**|
-|`Task<ApiResult<EstShindo>>`|GetEstShindo(`DateTime` time)|緊急地震速報から算出された予想震度の5kmメッシュ情報を取得します。|
-|`Task<ApiResult<Mesh[]>>`|GetMeshes()|メッシュ一覧を取得します。 非常に時間がかかるため、起動時などに行い、別ファイルとしてキャッシュしておくことを推奨します。|
+|`Task<ApiResult<Hypo>>`|GetEewHypoInfo(`DateTime` time)|**[利用不可]** APIから緊急地震速報の情報を取得します。  **ちなみに、複数のEEWに対応してそうです…(要検証)**|
+|`Task<ApiResult<PSWave>>`|GetPSWave(`DateTime` time)|**[利用不可]** 緊急地震速報から算出された揺れの広がりを取得します。  **こちらも複数のEEWに対応してそうです。**|
+|`Task<ApiResult<EstShindo>>`|GetEstShindo(`DateTime` time)|**[利用不可]** 緊急地震速報から算出された予想震度の5kmメッシュ情報を取得します。|
+|`Task<ApiResult<Mesh[]>>`|GetMeshes()|**[利用不可]** メッシュ一覧を取得します。 非常に時間がかかるため、起動時などに行い、別ファイルとしてキャッシュしておくことを推奨します。|
 
 ### 重要事項
 - `GetEewHypoInfo`
