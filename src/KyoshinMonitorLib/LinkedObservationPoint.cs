@@ -7,7 +7,7 @@ namespace KyoshinMonitorLib
 	{
 		public LinkedObservationPoint(Site site, ObservationPoint point)
 		{
-			Site = site ?? throw new ArgumentNullException(nameof(site));
+			Site = site;
 			Point = point;
 		}
 
