@@ -20,7 +20,7 @@ namespace Tests
 				// タイマーのインスタンスを作成
 				var timer = new SecondBasedTimer()
 				{
-					Offset = TimeSpan.FromSeconds(1.2),//1.1
+					Offset = TimeSpan.FromSeconds(1.05),//1.1
 				};
 				// 適当にイベント設定
 				timer.Elapsed += async time =>
@@ -35,7 +35,7 @@ namespace Tests
 						{
 							var data = result.Data;
 							// 現在の最大震度
-							Console.WriteLine($"*API* 最大震度: 生:{data.Max(r => r.Value)} jma:{data.Max(r => r.Value).ToJmaIntensity().ToLongString()} {data.Count(r => r.ObservationPoint.Point != null)},{data.Count(r => r.ObservationPoint.Point == null)}");
+							Console.WriteLine($"*API* 最大震度: 生:{data.Max(r => r.Value)} jma:{data.Max(r => r.Value).ToJmaIntensity().ToLongString()} 数:{data.Length}");
 							// 最大震度観測点(の1つ)
 							//var maxPoint = result.OrderByDescending(r => r.Value).First();
 							//Console.WriteLine($"最大観測点 {maxPoint.Point.site.Prefefecture.GetLongName()} {maxPoint.Point.point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
@@ -55,12 +55,13 @@ namespace Tests
 						{
 							var data = result.Data;
 							// 現在の最大震度
-							Console.WriteLine($"*WEB* 最大震度: 生:{data.Max(r => r.AnalysisResult)} jma:{data.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()}");
+							Console.WriteLine($"*WEB* 最大震度: 生:{data.Max(r => r.AnalysisResult)} jma:{data.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()} 数:{data.Count(d => d.AnalysisResult != null)}");
 						}
 						else if (result.StatusCode == HttpStatusCode.NotFound)
 						{
-							timer.Offset += TimeSpan.FromMilliseconds(100);
-							Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
+							// timer.Offset += TimeSpan.FromMilliseconds(100);
+							// Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
+							Console.WriteLine($"404");
 						}
 						else
 							Console.WriteLine($"*WEB* 取得失敗 " + result.StatusCode);

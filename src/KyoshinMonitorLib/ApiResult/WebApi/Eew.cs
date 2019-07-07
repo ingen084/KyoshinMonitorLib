@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.WebApi
 {
@@ -44,6 +43,18 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		{
 			get => LatitudeString != null && float.TryParse(LatitudeString, out var lat) ? lat : null as float?;
 			set => LatitudeString = value?.ToString();
+		}
+		[JsonIgnore]
+		public Location Location
+		{
+			get
+			{
+				var lat = Latitude;
+				var lng = Longitude;
+				if (lat == null || lng == null)
+					return null;
+				return new Location(lat.Value, lng.Value);
+			}
 		}
 
 		[JsonProperty("origin_time")]

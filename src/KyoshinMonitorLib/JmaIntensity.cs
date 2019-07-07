@@ -211,6 +211,8 @@
 		/// <returns>変換されたShindo</returns>
 		public static JmaIntensity ToJmaIntensity(this string source)
 		{
+			if (string.IsNullOrWhiteSpace(source))
+				return JmaIntensity.Unknown;
 			source = source.Replace("震度", "");
 			switch (source)
 			{

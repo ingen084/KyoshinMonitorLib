@@ -1,6 +1,4 @@
-﻿using KyoshinMonitorLib.ApiResult.AppApi;
-
-namespace KyoshinMonitorLib
+﻿namespace KyoshinMonitorLib
 {
 	public struct LinkedRealTimeData
 	{

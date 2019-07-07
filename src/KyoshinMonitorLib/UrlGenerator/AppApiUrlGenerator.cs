@@ -50,12 +50,12 @@ namespace KyoshinMonitorLib.UrlGenerator
 			{
 				case AppApiUrlType.RealTimeData:
 					return string.Format(RealTimeDataBase, realTimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
-				case AppApiUrlType.EstShindoJson:
-					return string.Format(EewJsonBase, "EstShindoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "est");
-				case AppApiUrlType.PSWaveJson:
-					return string.Format(EewJsonBase, "PSWaveJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "psw");
-				case AppApiUrlType.HypoInfoJson:
-					return string.Format(EewJsonBase, "HypoInfoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "hypo");
+				//case AppApiUrlType.EstShindoJson:
+				//	return string.Format(EewJsonBase, "EstShindoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "est");
+				//case AppApiUrlType.PSWaveJson:
+				//	return string.Format(EewJsonBase, "PSWaveJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "psw");
+				//case AppApiUrlType.HypoInfoJson:
+				//	return string.Format(EewJsonBase, "HypoInfoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "hypo");
 			}
 			return null;
 		}

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KyoshinMonitorLib.UrlGenerator
+﻿namespace KyoshinMonitorLib.UrlGenerator
 {
 	/// <summary>
 	/// 生成するURLの種類(WebApi)

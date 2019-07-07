@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Runtime.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
+	[Obsolete("このAPIは現在利用できなくなっています。")]
 	public class Hypo
 	{
 		[JsonProperty("dataTime")]
