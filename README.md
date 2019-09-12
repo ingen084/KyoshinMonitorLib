@@ -10,6 +10,11 @@
 
 - .NET Standard2.1(.NET Core3.0)に対応しました。
 
+### 修正
+
+- `WebApi` の `Eew` の `report_time`が正常に解析できていなかった点を修正しました。
+- `LinkedObservationPoint` の初期化時に `site` がnullだった場合に例外を投げていた問題を修正しました。
+
 ## 0.2.0.2
 ### 変更
 

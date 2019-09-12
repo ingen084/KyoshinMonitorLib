@@ -11,7 +11,7 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		[JsonProperty("report_time")]
 		public string ReportTimeString { get; set; }
 		[JsonIgnore]
-		public DateTime? ReportTime => DateTime.TryParseExact(ReportTimeString, "yyyyMMddHHmmss", null, DateTimeStyles.None, out var time) ? time : null as DateTime?;
+		public DateTime? ReportTime => DateTime.TryParse(ReportTimeString, out var time) ? time : null as DateTime?;
 		[JsonProperty("region_code")]
 		public string RegionCode { get; set; }
 		[JsonProperty("request_time")]
