@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;net47;net461</TargetFrameworks>
-		<Version>0.2.1.0</Version>
+		<Version>0.2.2.0</Version>
 		<Copyright>Copyright © ingenWorkS 2018</Copyright>
 		<Company>ingenWorkS</Company>
 		<Authors>ingen084</Authors>

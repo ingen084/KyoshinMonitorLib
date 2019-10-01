@@ -20,7 +20,7 @@ namespace Tests
 				// タイマーのインスタンスを作成
 				var timer = new SecondBasedTimer()
 				{
-					Offset = TimeSpan.FromSeconds(1.05),//1.1
+					Offset = TimeSpan.FromSeconds(1.1),//1.1
 				};
 				// 適当にイベント設定
 				timer.Elapsed += async time =>
