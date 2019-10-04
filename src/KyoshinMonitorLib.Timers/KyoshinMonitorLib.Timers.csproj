@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net47;net461</TargetFrameworks>
-    <Version>0.2.2.0</Version>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
+    <Version>0.2.3.0</Version>
     <Copyright>Copyright © ingenWorkS 2018</Copyright>
     <Company>ingenWorkS</Company>
     <Authors>ingen084</Authors>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>.NETから簡単に強震モニタを利用できるようにするライブラリ</Description>
     <Configurations>Debug;Release</Configurations>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
