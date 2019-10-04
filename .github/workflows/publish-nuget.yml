@@ -8,11 +8,14 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-	steps:
+    strategy:
+      matrix:
+        dotnet: [ '3.0.0', '2.1.13', '4.7', '4.6.1' ]
+    steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: [ '3.0.0', '2.1.13', '4.7', '4.6.1' ]
+        dotnet-version: ${{ matrix.dotnet }}
     - run: dotnet build src/KyoshinMonitorLib/KyoshinMonitorLib.csproj -c Release
     - run: dotnet nuget push src/KyoshinMonitorLib/bin/Release/KyoshinMonitorLib.*.nupkg -k $NUGET_OLG_API_KEY -s https://api.nuget.org/v3/index.json
       env:
