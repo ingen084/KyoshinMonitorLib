@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult
 {
 	public class Security
 	{
-		[JsonProperty("realm")]
+		[JsonPropertyName("realm")]
 		public string Realm { get; set; }
-		[JsonProperty("hash")]
+		[JsonPropertyName("hash")]
 		public string Hash { get; set; }
 	}
 }

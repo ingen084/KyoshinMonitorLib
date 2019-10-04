@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
@@ -27,7 +27,7 @@ namespace KyoshinMonitorLib
 					if (!response.IsSuccessStatusCode)
 						return new ApiResult<T>(response.StatusCode, default);
 
-					return new ApiResult<T>(response.StatusCode, JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync()));
+					return new ApiResult<T>(response.StatusCode, JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync()));
 				}
 			}
 			catch (TaskCanceledException)

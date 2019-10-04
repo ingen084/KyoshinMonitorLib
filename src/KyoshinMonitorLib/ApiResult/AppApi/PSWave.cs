@@ -1,28 +1,28 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	[Obsolete("このAPIは現在利用できなくなっています。")]
 	public class PSWave
 	{
-		[JsonProperty("dataTime")]
+		[JsonPropertyName("dataTime")]
 		public DateTime DataTime { get; set; }
-		[JsonProperty("hypoType")]
+		[JsonPropertyName("hypoType")]
 		public string HypoType { get; set; }
-		[JsonProperty("items")]
+		[JsonPropertyName("items")]
 		public PSWaveItem[] Items { get; set; }
 
-		[JsonProperty("result")]
+		[JsonPropertyName("result")]
 		public Result Result { get; set; }
-		[JsonProperty("security")]
+		[JsonPropertyName("security")]
 		public Security Security { get; set; }
 	}
 
 	[Obsolete("このAPIは現在利用できなくなっています。")]
 	public class PSWaveItem
 	{
-		[JsonProperty("latitude")]
+		[JsonPropertyName("latitude")]
 		public string LatitudeString { get; set; }
 		[JsonIgnore]
 		public float? Latitude
@@ -34,7 +34,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 				return val;
 			}
 		}
-		[JsonProperty("longitude")]
+		[JsonPropertyName("longitude")]
 		public string LongitudeString { get; set; }
 		[JsonIgnore]
 		public float? Longitude
@@ -46,9 +46,9 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 				return val;
 			}
 		}
-		[JsonProperty("p_radius")]
+		[JsonPropertyName("p_radius")]
 		public string PWaveRadiusString { get; set; }
-		[JsonProperty("s_radius")]
+		[JsonPropertyName("s_radius")]
 		public string SWaveRadiusString { get; set; }
 	}
 }

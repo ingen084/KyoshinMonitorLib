@@ -1,25 +1,25 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	public class RealTimeData
 	{
-		[JsonProperty("dataTime")]
+		[JsonPropertyName("dataTime")]
 		public DateTime DateTime { get; set; }
-		[JsonProperty("packetType")]
+		[JsonPropertyName("packetType")]
 		public string PacketType { get; set; }
-		[JsonProperty("kyoshinType")]
+		[JsonPropertyName("kyoshinType")]
 		public string KyoshinType { get; set; }
-		[JsonProperty("baseData")]
+		[JsonPropertyName("baseData")]
 		public string BaseData { get; set; }
-		[JsonProperty("baseSerialNo")]
+		[JsonPropertyName("baseSerialNo")]
 		public string BaseSerialNo { get; set; }
-		[JsonProperty("items")]
+		[JsonPropertyName("items")]
 		public float?[] Items { get; set; }
-		[JsonProperty("result")]
+		[JsonPropertyName("result")]
 		public Result Result { get; set; }
-		[JsonProperty("security")]
+		[JsonPropertyName("security")]
 		public Security Security { get; set; }
 	}
 }

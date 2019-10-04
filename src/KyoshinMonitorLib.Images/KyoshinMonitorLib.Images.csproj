@@ -9,6 +9,9 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>.NETから簡単に強震モニタを利用できるようにするライブラリ</Description>
     <Configurations>Debug;Release</Configurations>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/ingen084/KyoshinMonitorLib</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +20,12 @@
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
     <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview9.19421.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

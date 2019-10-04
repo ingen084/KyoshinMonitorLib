@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using KyoshinMonitorLib.ApiResult.AppApi;
 using KyoshinMonitorLib.UrlGenerator;
-using Newtonsoft.Json;
 
 namespace KyoshinMonitorLib.Training
 {
@@ -25,7 +25,7 @@ namespace KyoshinMonitorLib.Training
 			var path = AppApiUrlGenerator.Generate(baseSerialNo).Replace("http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/", BasePath);
 			if (!File.Exists(path))
 				return Task.FromResult(new ApiResult<SiteList>(HttpStatusCode.NotFound, null));
-			return Task.FromResult(new ApiResult<SiteList>(HttpStatusCode.OK, JsonConvert.DeserializeObject<SiteList>(File.ReadAllText(path))));
+			return Task.FromResult(new ApiResult<SiteList>(HttpStatusCode.OK, JsonSerializer.Deserialize<SiteList>(File.ReadAllText(path))));
 		}
 
 		public override Task<ApiResult<RealTimeData>> GetRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
@@ -33,7 +33,7 @@ namespace KyoshinMonitorLib.Training
 			var path = AppApiUrlGenerator.Generate(AppApiUrlType.RealTimeData, time, dataType, isBehore).Replace("http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/", BasePath);
 			if (!File.Exists(path))
 				return Task.FromResult(new ApiResult<RealTimeData>(HttpStatusCode.NotFound, null));
-			return Task.FromResult(new ApiResult<RealTimeData>(HttpStatusCode.OK, JsonConvert.DeserializeObject<RealTimeData>(File.ReadAllText(path))));
+			return Task.FromResult(new ApiResult<RealTimeData>(HttpStatusCode.OK, JsonSerializer.Deserialize<RealTimeData>(File.ReadAllText(path))));
 		}
 
 		[Obsolete]
@@ -42,7 +42,7 @@ namespace KyoshinMonitorLib.Training
 			var path = AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time).Replace("http://kv.kmoni.bosai.go.jp/kyoshin_monitor/static/jsondata/", BasePath);
 			if (!File.Exists(path))
 				return Task.FromResult(new ApiResult<Hypo>(HttpStatusCode.NotFound, null));
-			return Task.FromResult(new ApiResult<Hypo>(HttpStatusCode.OK, JsonConvert.DeserializeObject<Hypo>(File.ReadAllText(path))));
+			return Task.FromResult(new ApiResult<Hypo>(HttpStatusCode.OK, JsonSerializer.Deserialize<Hypo>(File.ReadAllText(path))));
 		}
 	}
 }

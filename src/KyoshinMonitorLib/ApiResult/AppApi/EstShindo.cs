@@ -1,28 +1,28 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	public class EstShindo
 	{
-		[JsonProperty("list")]
+		[JsonPropertyName("list")]
 		public float[] List { get; set; }
-		[JsonProperty("dataTime")]
+		[JsonPropertyName("dataTime")]
 		public DateTime DataTime { get; set; }
-		[JsonProperty("hypoType")]
+		[JsonPropertyName("hypoType")]
 		public string HypoType { get; set; }
-		[JsonProperty("baseData")]
+		[JsonPropertyName("baseData")]
 		public string BaseData { get; set; }
-		[JsonProperty("startMesh")]
+		[JsonPropertyName("startMesh")]
 		public string StartMesh { get; set; }
-		[JsonProperty("startMeshIdx")]
+		[JsonPropertyName("startMeshIdx")]
 		public int StartMeshIdx { get; set; }
-		[JsonProperty("serialNo")]
+		[JsonPropertyName("serialNo")]
 		public string SerialNo { get; set; }
 
-		[JsonProperty("security")]
+		[JsonPropertyName("security")]
 		public Security Security { get; set; }
-		[JsonProperty("result")]
+		[JsonPropertyName("result")]
 		public Result Result { get; set; }
 	}
 }

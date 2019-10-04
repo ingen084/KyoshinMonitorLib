@@ -1,71 +1,71 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.WebApi
 {
 	public class Eew
 	{
-		[JsonProperty("result")]
+		[JsonPropertyName("result")]
 		public Result Result { get; set; }
-		[JsonProperty("report_time")]
+		[JsonPropertyName("report_time")]
 		public string ReportTimeString { get; set; }
 		[JsonIgnore]
 		public DateTime? ReportTime => DateTime.TryParse(ReportTimeString, out var time) ? time : null as DateTime?;
-		[JsonProperty("region_code")]
+		[JsonPropertyName("region_code")]
 		public string RegionCode { get; set; }
-		[JsonProperty("request_time")]
+		[JsonPropertyName("request_time")]
 		public string RequestTime { get; set; }
-		[JsonProperty("region_name")]
+		[JsonPropertyName("region_name")]
 		public string RegionName { get; set; }
 
-		[JsonProperty("longitude")]
+		[JsonPropertyName("longitude")]
 		public string LongitudeString { get; set; }
 
 		[JsonIgnore]
 		public float? Longitude => LongitudeString != null && float.TryParse(LongitudeString, out var lon) ? lon : null as float?;
 
-		[JsonProperty("is_cancel")]
+		[JsonPropertyName("is_cancel")]
 		public bool? IsCancel { get; set; }
-		[JsonProperty("depth")]
+		[JsonPropertyName("depth")]
 		public string DepthString { get; set; }
 		[JsonIgnore]
 		public int? Depth => int.TryParse(DepthString.Replace("km", ""), out var depth) ? depth : null as int?;
-		[JsonProperty("calcintensity")]
+		[JsonPropertyName("calcintensity")]
 		public string CalcintensityString { get; set; }
 		[JsonIgnore]
 		public JmaIntensity Calcintensity => CalcintensityString?.ToJmaIntensity() ?? JmaIntensity.Unknown;
 
-		[JsonProperty("is_final")]
+		[JsonPropertyName("is_final")]
 		public bool? IsFinal { get; set; }
-		[JsonProperty("isTraining")]
+		[JsonPropertyName("isTraining")]
 		public bool? IsTraining { get; set; }
 
-		[JsonProperty("latitude")]
+		[JsonPropertyName("latitude")]
 		public string LatitudeString { get; set; }
 		[JsonIgnore]
 		public float? Latitude => LatitudeString != null && float.TryParse(LatitudeString, out var lat) ? lat : null as float?;
 		[JsonIgnore]
 		public Location Location => (Latitude == null || Longitude == null) ? null : new Location(Latitude.Value, Longitude.Value);
-		[JsonProperty("origin_time")]
+		[JsonPropertyName("origin_time")]
 		public string OriginTimeString { get; set; }
 		[JsonIgnore]
 		public DateTime? OriginTime => DateTime.TryParseExact(OriginTimeString, "yyyyMMddHHmmss", null, DateTimeStyles.None, out var time) ? time : null as DateTime?;
-		[JsonProperty("security")]
+		[JsonPropertyName("security")]
 		public Security Security { get; set; }
-		[JsonProperty("magunitude")]
+		[JsonPropertyName("magunitude")]
 		public string MagunitudeString { get; set; }
 		[JsonIgnore]
 		public float? Magunitude => float.TryParse(MagunitudeString, out var val) ? val : null as float?;
-		[JsonProperty("report_num")]
+		[JsonPropertyName("report_num")]
 		public string ReportNumString { get; set; }
 		[JsonIgnore]
 		public int? ReportNum => int.TryParse(ReportNumString, out var val) ? val : null as int?;
-		[JsonProperty("request_hypo_type")]
+		[JsonPropertyName("request_hypo_type")]
 		public string RequestHypoType { get; set; }
-		[JsonProperty("report_id")]
+		[JsonPropertyName("report_id")]
 		public string ReportId { get; set; }
-		[JsonProperty("alertflg")]
+		[JsonPropertyName("alertflg")]
 		public string AlertFlag { get; set; }
 		[JsonIgnore]
 		public bool IsAlert => AlertFlag == "警報";

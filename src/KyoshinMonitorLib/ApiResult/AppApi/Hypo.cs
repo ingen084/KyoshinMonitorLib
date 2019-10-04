@@ -1,18 +1,18 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	[Obsolete("このAPIは現在利用できなくなっています。")]
 	public class Hypo
 	{
-		[JsonProperty("dataTime")]
+		[JsonPropertyName("dataTime")]
 		public DateTime DataTime { get; set; }
-		[JsonProperty("items")]
+		[JsonPropertyName("items")]
 		public EewInfo[] Eews { get; set; }
-		[JsonProperty("result")]
+		[JsonPropertyName("result")]
 		public Result Result { get; set; }
-		[JsonProperty("security")]
+		[JsonPropertyName("security")]
 		public Security Security { get; set; }
 	}
 
@@ -21,13 +21,13 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 発報時間
 		/// </summary>
-		[JsonProperty("reportTime")]
+		[JsonPropertyName("reportTime")]
 		public DateTime ReportTime { get; set; }
 
 		/// <summary>
 		/// 震源の地点コード(生の値)
 		/// </summary>
-		[JsonProperty("regionCode")]
+		[JsonPropertyName("regionCode")]
 		public string RegionCodeString { get; set; }
 		/// <summary>
 		/// 震源の地点コード(変換済み)
@@ -38,13 +38,13 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 震源名
 		/// </summary>
-		[JsonProperty("regionName")]
+		[JsonPropertyName("regionName")]
 		public string RegionName { get; set; }
 
 		/// <summary>
 		/// 経度(生の値)
 		/// </summary>
-		[JsonProperty("longitude")]
+		[JsonPropertyName("longitude")]
 		public string LongitudeString { get; set; }
 		/// <summary>
 		/// 経度(変換済)
@@ -55,7 +55,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// キャンセル報かどうか(生の値)
 		/// </summary>
-		[JsonProperty("isCancel")]
+		[JsonPropertyName("isCancel")]
 		public string IsCancelString { get; set; }
 		/// <summary>
 		/// キャンセル報かどうか(変換済)
@@ -66,7 +66,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 深さ(生の値)
 		/// </summary>
-		[JsonProperty("depth")]
+		[JsonPropertyName("depth")]
 		public string DepthString { get; set; }
 		/// <summary>
 		/// 深さ(変換済)
@@ -86,7 +86,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 予想最大震度(生の値)
 		/// </summary>
-		[JsonProperty("calcintensity")]
+		[JsonPropertyName("calcintensity")]
 		public string CalcintensityString { get; set; }
 		/// <summary>
 		/// 予想最大震度(変換済)
@@ -97,7 +97,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 最終報かどうか(生の値)
 		/// </summary>
-		[JsonProperty("isFinal")]
+		[JsonPropertyName("isFinal")]
 		public string IsFinalString { get; set; }
 		/// <summary>
 		/// 最終法かどうか(変換済)
@@ -108,7 +108,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 訓練報かどうか(生の値)
 		/// </summary>
-		[JsonProperty("isTraining")]
+		[JsonPropertyName("isTraining")]
 		public string IsTrainingString { get; set; }
 		/// <summary>
 		/// 訓練報かどうか(変換済)
@@ -119,7 +119,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 緯度(生の値)
 		/// </summary>
-		[JsonProperty("latitude")]
+		[JsonPropertyName("latitude")]
 		public string LatitudeString { get; set; }
 		/// <summary>
 		/// 緯度(変換済み)
@@ -130,13 +130,13 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 発生時刻
 		/// </summary>
-		[JsonProperty("originTime")]
+		[JsonPropertyName("originTime")]
 		public DateTime OriginTime { get; set; }
 
 		/// <summary>
 		/// マグニチュード(生の値)
 		/// </summary>
-		[JsonProperty("magnitude")]
+		[JsonPropertyName("magnitude")]
 		public string MagnitudeString { get; set; }
 		/// <summary>
 		/// マグニチュード(変換済み)
@@ -147,7 +147,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 発報番号(生の値)
 		/// </summary>
-		[JsonProperty("reportNum")]
+		[JsonPropertyName("reportNum")]
 		public string ReportNumString { get; set; }
 		/// <summary>
 		/// 発報番号(変換済み)
@@ -158,7 +158,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// EEWID?
 		/// </summary>
-		[JsonProperty("reportId")]
+		[JsonPropertyName("reportId")]
 		public string ReportId { get; set; }
 	}
 }

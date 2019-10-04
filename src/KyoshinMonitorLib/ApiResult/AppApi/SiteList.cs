@@ -1,20 +1,20 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 using System.Reflection;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
 	public class SiteList
 	{
-		[JsonProperty("items")]
+		[JsonPropertyName("items")]
 		public Site[] Sites { get; set; }
-		[JsonProperty("security")]
+		[JsonPropertyName("security")]
 		public Security Security { get; set; }
-		[JsonProperty("dataTime")]
+		[JsonPropertyName("dataTime")]
 		public string DataTime { get; set; }
-		[JsonProperty("result")]
+		[JsonPropertyName("result")]
 		public Result Result { get; set; }
-		[JsonProperty("serialNo")]
+		[JsonPropertyName("serialNo")]
 		public string SerialNo { get; set; }
 	}
 
@@ -23,17 +23,17 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// 不明(内部ID？)
 		/// </summary>
-		[JsonProperty("muni")]
+		[JsonPropertyName("muni")]
 		public int Muni { get; set; }
 		/// <summary>
 		/// RealTimeDataでのインデックスID
 		/// </summary>
-		[JsonProperty("siteidx")]
+		[JsonPropertyName("siteidx")]
 		public int Siteidx { get; set; }
 		/// <summary>
 		/// 都道府県ID
 		/// </summary>
-		[JsonProperty("pref")]
+		[JsonPropertyName("pref")]
 		public int PrefefectureId { get; set; }
 		/// <summary>
 		/// 都道府県
@@ -43,17 +43,17 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// <summary>
 		/// ID
 		/// </summary>
-		[JsonProperty("siteid")]
+		[JsonPropertyName("siteid")]
 		public string SiteId { get; set; }
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		[JsonProperty("lat")]
+		[JsonPropertyName("lat")]
 		public float Lat { get; set; }
 		/// <summary>
 		/// 経度
 		/// </summary>
-		[JsonProperty("lng")]
+		[JsonPropertyName("lng")]
 		public float Lng { get; set; }
 	}
 
