@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<Version>0.2.4.0</Version>
 		<Copyright>Copyright © ingenWorkS 2018</Copyright>
 		<Company>ingenWorkS</Company>
@@ -17,18 +17,6 @@
 		<PackageReference Include="MessagePack" Version="1.7.3.7" />
     <PackageReference Include="System.Text.Json" Version="4.6.0" />
   </ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
-		<Reference Include="System.Net.Http">
-			<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Net.Http.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-		<Reference Include="System.Net.Http">
-			<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7\System.Net.Http.dll</HintPath>
-		</Reference>
-	</ItemGroup>
 	<ItemGroup>
 	  <None Include="..\..\LICENSE">
 	    <Pack>True</Pack>
