@@ -9,12 +9,16 @@ using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib.Images
 {
+	/// <summary>
+	/// 拡張メソッドたち
+	/// </summary>
 	public static class Extensions
 	{
 		/// <summary>
 		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を取得します。
 		/// <para>asyncなのはStream取得部分のみなので注意してください。</para>
 		/// </summary>
+		/// <param name="webApi">WebApiインスタンス</param>
 		/// <param name="points">使用する観測点情報の配列</param>
 		/// <param name="datetime">参照する日付</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
@@ -26,6 +30,7 @@ namespace KyoshinMonitorLib.Images
 		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を取得します。
 		/// <para>asyncなのはStream取得部分のみなので注意してください。</para>
 		/// </summary>
+		/// <param name="webApi">WebApiインスタンス</param>
 		/// <param name="points">使用する観測点情報の配列</param>
 		/// <param name="datetime">参照する日付</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>

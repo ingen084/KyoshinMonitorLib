@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// スマホアプリAPI
+	/// </summary>
 	public class AppApi : Api
 	{
 		/// <summary>
@@ -17,6 +20,10 @@ namespace KyoshinMonitorLib
 		private static IDictionary<string, LinkedObservationPoint[]> SiteListCache { get; set; } = new ConcurrentDictionary<string, LinkedObservationPoint[]>();
 
 		private ObservationPoint[] ObservationPoints { get; }
+		/// <summary>
+		/// スマホアプリAPIを初期化します。
+		/// </summary>
+		/// <param name="observationPoints">結合時に使用する観測点情報</param>
 		public AppApi(ObservationPoint[] observationPoints = null)
 		{
 			ObservationPoints = observationPoints;

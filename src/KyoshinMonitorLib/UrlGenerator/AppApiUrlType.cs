@@ -13,22 +13,22 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// </summary>
 		RealTimeData,
 
-		[Obsolete("このAPIは現在利用できなくなっています。")]
 		/// <summary>
 		/// 緊急地震速報の到達予想震度
 		/// </summary>
+		[Obsolete("このAPIは現在利用できなくなっています。")]
 		HypoInfoJson,
 
-		[Obsolete("このAPIは現在利用できなくなっています。")]
 		/// <summary>
 		/// 緊急地震速報のP波、S波到達予想円
 		/// </summary>
+		[Obsolete("このAPIは現在利用できなくなっています。")]
 		PSWaveJson,
 
-		[Obsolete("このAPIは現在利用できなくなっています。")]
 		/// <summary>
 		/// 緊急地震速報の予想震度
 		/// </summary>
+		[Obsolete("このAPIは現在利用できなくなっています。")]
 		EstShindoJson,
 	}
 }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
-    <Version>0.2.3.0</Version>
+    <Version>0.2.4.0</Version>
     <Copyright>Copyright © ingenWorkS 2018</Copyright>
     <Company>ingenWorkS</Company>
     <Authors>ingen084</Authors>
@@ -11,6 +11,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/ingen084/KyoshinMonitorLib</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0-preview9.19421.4" />
+    <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE">

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// APIのベースクラス
+	/// </summary>
 	public abstract class Api : IDisposable
 	{
 		private HttpClient HttpClient { get; } = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
@@ -17,6 +20,12 @@ namespace KyoshinMonitorLib
 			set => HttpClient.Timeout = value;
 		}
 
+		/// <summary>
+		/// GETリクエストを送信し、Jsonをデシリアライズした結果を取得します。
+		/// </summary>
+		/// <typeparam name="T">デシリアライズする型</typeparam>
+		/// <param name="url">使用するURL</param>
+		/// <returns></returns>
 		protected async Task<ApiResult<T>> GetJsonObject<T>(string url)
 		{
 			try
@@ -35,6 +44,11 @@ namespace KyoshinMonitorLib
 				throw new KyoshinMonitorException("Request Timeout: " + url);
 			}
 		}
+		/// <summary>
+		/// GETリクエストを送信し、生のbyte配列を取得します。
+		/// </summary>
+		/// <param name="url">使用するURL</param>
+		/// <returns></returns>
 		protected async Task<ApiResult<byte[]>> GetBytes(string url)
 		{
 			try
@@ -53,6 +67,9 @@ namespace KyoshinMonitorLib
 			}
 		}
 
+		/// <summary>
+		/// オブジェクトの破棄を行います。
+		/// </summary>
 		public void Dispose()
 		{
 			HttpClient?.Dispose();

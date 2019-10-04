@@ -5,9 +5,14 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// APIの実行結果を表します。
 	/// </summary>
-	/// <typeparam name="TResult"></typeparam>
+	/// <typeparam name="TResult">実行結果の型</typeparam>
 	public class ApiResult<TResult>
 	{
+		/// <summary>
+		/// APIの実行結果を初期化します。
+		/// </summary>
+		/// <param name="statusCode">HTTPステータスコード</param>
+		/// <param name="data">実行結果の値</param>
 		public ApiResult(HttpStatusCode statusCode, TResult data)
 		{
 			StatusCode = statusCode;

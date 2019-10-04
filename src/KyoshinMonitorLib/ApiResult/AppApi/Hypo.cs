@@ -3,19 +3,37 @@ using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.AppApi
 {
+	/// <summary>
+	/// 複数の緊急地震速報の情報
+	/// </summary>
 	[Obsolete("このAPIは現在利用できなくなっています。")]
 	public class Hypo
 	{
+		/// <summary>
+		/// 時間
+		/// </summary>
 		[JsonPropertyName("dataTime")]
 		public DateTime DataTime { get; set; }
+		/// <summary>
+		/// 緊急地震速報
+		/// </summary>
 		[JsonPropertyName("items")]
 		public EewInfo[] Eews { get; set; }
+		/// <summary>
+		/// リザルト
+		/// </summary>
 		[JsonPropertyName("result")]
 		public Result Result { get; set; }
+		/// <summary>
+		/// セキュリティ情報
+		/// </summary>
 		[JsonPropertyName("security")]
 		public Security Security { get; set; }
 	}
 
+	/// <summary>
+	/// 緊急地震速報の情報
+	/// </summary>
 	public class EewInfo
 	{
 		/// <summary>

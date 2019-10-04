@@ -6,17 +6,29 @@ using MessagePack;
 
 namespace KyoshinMonitorLib
 {
+	/// <summary>
+	/// 5kmメッシュ情報
+	/// </summary>
 	public class Mesh
 	{
+		/// <summary>
+		/// 初期化
+		/// </summary>
 		public Mesh()
 		{
 		}
+		/// <summary>
+		/// 初期化
+		/// </summary>
 		public Mesh(string code, Location location1, Location location2)
 		{
 			Code = code ?? throw new ArgumentNullException(nameof(code));
 			LocationLeftTop = location1 ?? throw new ArgumentNullException(nameof(location1));
 			LocationRightBottom = location2 ?? throw new ArgumentNullException(nameof(location2));
 		}
+		/// <summary>
+		/// 初期化
+		/// </summary>
 		public Mesh(string code, double x, double y)
 		{
 			Code = code ?? throw new ArgumentNullException(nameof(code));

@@ -59,6 +59,11 @@ namespace KyoshinMonitorLib.UrlGenerator
 			}
 			return null;
 		}
+		/// <summary>
+		/// 観測点一覧のURLを生成します。
+		/// </summary>
+		/// <param name="baseSerialNo">シリアル番号</param>
+		/// <returns></returns>
 		public static string Generate(string baseSerialNo)
 			=> string.Format(SiteListBase, baseSerialNo);
 	}
