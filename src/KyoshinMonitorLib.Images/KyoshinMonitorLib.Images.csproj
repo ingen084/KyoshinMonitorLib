@@ -14,8 +14,10 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
     <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\KyoshinMonitorLib\KyoshinMonitorLib.csproj" />
   </ItemGroup>
   <ItemGroup>
