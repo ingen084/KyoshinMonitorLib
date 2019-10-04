@@ -1,0 +1,34 @@
+name: Publish NuGet
+
+on:
+  push:
+    branches:
+    - nuget-publish
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet: [ '3.0.0', '2.1.13', '4.7', '4.6.1' ]
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.dotnet }}
+    - run: dotnet build src/KyoshinMonitorLib/KyoshinMonitorLib.csproj -c Release
+    - run: dotnet nuget push src/KyoshinMonitorLib/bin/Release/KyoshinMonitorLib.*.nupkg -k $NUGET_OLG_API_KEY -s https://api.nuget.org/v3/index.json
+      env:
+        NUGET_OLG_API_KEY: ${{ secrets.NUGET_OLG_API_KEY }}
+    - run: dotnet build src/KyoshinMonitorLib.Images/KyoshinMonitorLib.Images.csproj -c Release
+    - run: dotnet nuget push src/KyoshinMonitorLib.Images/bin/Release/KyoshinMonitorLib.Images.*.nupkg -k $NUGET_OLG_API_KEY -s https://api.nuget.org/v3/index.json
+      env:
+        NUGET_OLG_API_KEY: ${{ secrets.NUGET_OLG_API_KEY }}
+    - run: dotnet build src/KyoshinMonitorLib.Timers/KyoshinMonitorLib.Timers.csproj -c Release
+    - run: dotnet nuget push src/KyoshinMonitorLib.Timers/bin/Release/KyoshinMonitorLib.Timers.*.nupkg -k $NUGET_OLG_API_KEY -s https://api.nuget.org/v3/index.json
+      env:
+        NUGET_OLG_API_KEY: ${{ secrets.NUGET_OLG_API_KEY }}
+    - run: dotnet build src/KyoshinMonitorLib.Training/KyoshinMonitorLib.Training.csproj -c Release
+    - run: dotnet nuget push src/KyoshinMonitorLib.Training/bin/Release/KyoshinMonitorLib.Training.*.nupkg -k $NUGET_OLG_API_KEY -s https://api.nuget.org/v3/index.json
+      env:
+        NUGET_OLG_API_KEY: ${{ secrets.NUGET_OLG_API_KEY }}
