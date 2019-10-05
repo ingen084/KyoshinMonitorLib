@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 
 namespace KyoshinMonitorLib
 {
@@ -31,5 +32,21 @@ namespace KyoshinMonitorLib
 		/// <param name="points">書き込む観測点情報の配列</param>
 		public static void SaveToJson(this IEnumerable<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToJson(path, points);
+
+		/// <summary>
+		/// nullの際何故か空白の文字列になってしまうJson要素の解析
+		/// </summary>
+		public static bool? ToBoolFromStringableBool(this JsonElement element)
+		{
+			switch (element.ValueKind)
+			{
+				case JsonValueKind.True:
+					return true;
+				case JsonValueKind.False:
+					return false;
+				default:
+					return null;
+			}
+		}
 	}
 }

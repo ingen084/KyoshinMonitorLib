@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib.ApiResult.WebApi
@@ -51,10 +52,15 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		[JsonIgnore]
 		public float? Longitude => LongitudeString != null && float.TryParse(LongitudeString, out var lon) ? lon : null as float?;
 		/// <summary>
-		/// キャンセル報か
+		/// キャンセル報か(デシリアライズ用)
 		/// </summary>
 		[JsonPropertyName("is_cancel")]
-		public bool? IsCancel { get; set; }
+		public JsonElement IsCancelRaw { get; set; }
+		/// <summary>
+		/// キャンセル報か
+		/// </summary>
+		[JsonIgnore]
+		public bool? IsCancel => IsCancelRaw.ToBoolFromStringableBool();
 		/// <summary>
 		/// 震源の深さ(デシリアライズ用)
 		/// </summary>
@@ -76,15 +82,24 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		[JsonIgnore]
 		public JmaIntensity Calcintensity => CalcintensityString?.ToJmaIntensity() ?? JmaIntensity.Unknown;
 		/// <summary>
-		/// 最終報か
+		/// 最終報か(デシリアライズ用)
 		/// </summary>
 		[JsonPropertyName("is_final")]
-		public bool? IsFinal { get; set; }
+		public JsonElement IsFinalRaw { get; set; }
+		/// <summary>
+		/// 最終報か
+		/// </summary>
+		[JsonIgnore]
+		public bool? IsFinal => IsFinalRaw.ToBoolFromStringableBool();
+		/// <summary>
+		/// 訓練報か(デシリアライズ用)
+		/// </summary>
+		[JsonPropertyName("isTraining")]
+		public JsonElement IsTrainingRaw { get; set; }
 		/// <summary>
 		/// 訓練報か
 		/// </summary>
-		[JsonPropertyName("isTraining")]
-		public bool? IsTraining { get; set; }
+		public bool? IsTraining => IsTrainingRaw.ToBoolFromStringableBool();
 		/// <summary>
 		/// 緯度(デシリアライズ用)
 		/// </summary>
