@@ -9,7 +9,9 @@
 ### 変更
 
 - 使用ライブラリを更新しました。
-- `MessagePack` の `Lz4BlockArray` 対応は互換性維持のため一旦見送ります。
+  - `MessagePack` の `Lz4BlockArray` 対応は互換性維持のため一旦見送ります。
+- `NtpAssistance` の `GetNetworkTimeWithNtp` の処理をを変更しました。
+  - IPアドレスでそのままリクエストを送れるようになりました。
 
 ## 0.2.4.1
 ### バグ修正
