@@ -56,23 +56,26 @@ namespace KyoshinMonitorLib
 			DateTime sendedTime, recivedTime;
 			sendedTime = recivedTime = DateTime.Now;
 
-			await Task.Run(async () =>
+			await Task.Run(() =>
 			{
-				var addresses = (await Dns.GetHostEntryAsync(hostName)).AddressList;
-				var ipEndPoint = new IPEndPoint(addresses[0], port);
-				using (var socket = new Socket(ipEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp))
+				IPAddress addr = IPAddress.Any;
+
+				if (!IPAddress.TryParse(hostName, out addr))
 				{
-					socket.Connect(ipEndPoint);
-
-					//Stops code hang if NTP is blocked
-					socket.ReceiveTimeout = timeout;
-
-					socket.Send(ntpData);
-					sendedTime = DateTime.Now;
-
-					socket.Receive(ntpData);
-					recivedTime = DateTime.Now;
+					var addresses = Dns.GetHostEntry(hostName).AddressList;
+					addr = addresses[new Random().Next(addresses.Length)];
 				}
+
+				var endPoint = new IPEndPoint(addr, port);
+				using var socket = new Socket(endPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+				socket.Connect(endPoint);
+				socket.ReceiveTimeout = timeout;
+
+				socket.Send(ntpData);
+				sendedTime = DateTime.Now;
+
+				socket.Receive(ntpData);
+				recivedTime = DateTime.Now;
 			});
 
 			//受信時刻=32 送信時刻=40

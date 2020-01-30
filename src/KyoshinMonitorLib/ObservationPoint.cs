@@ -15,6 +15,7 @@ namespace KyoshinMonitorLib
 	[MessagePackObject, DataContract]
 	public class ObservationPoint : IComparable
 	{
+		private static readonly MessagePackSerializerOptions Lz4Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
 		/// <summary>
 		/// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -23,10 +24,8 @@ namespace KyoshinMonitorLib
 		/// <returns>読み込まれた観測点情報</returns>
 		public static ObservationPoint[] LoadFromMpk(string path, bool useLz4 = false)
 		{
-			using (var stream = new FileStream(path, FileMode.Open))
-				return useLz4
-					? LZ4MessagePackSerializer.Deserialize<ObservationPoint[]>(stream)
-					: MessagePackSerializer.Deserialize<ObservationPoint[]>(stream);
+			using var stream = new FileStream(path, FileMode.Open);
+			return MessagePackSerializer.Deserialize<ObservationPoint[]>(stream, options: useLz4 ? Lz4Options : null);
 		}
 
 		/// <summary>
@@ -37,11 +36,8 @@ namespace KyoshinMonitorLib
 		/// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
 		public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool useLz4 = false)
 		{
-			using (var stream = new FileStream(path, FileMode.Create))
-				if (useLz4)
-					LZ4MessagePackSerializer.Serialize(stream, points.ToArray());
-				else
-					MessagePackSerializer.Serialize(stream, points.ToArray());
+			using var stream = new FileStream(path, FileMode.Create);
+			MessagePackSerializer.Serialize(stream, points.ToArray(), options: useLz4 ? Lz4Options : null);
 		}
 
 		/// <summary>
@@ -59,11 +55,9 @@ namespace KyoshinMonitorLib
 		/// <param name="points">書き込む観測点情報の配列</param>
 		public static void SaveToJson(string path, IEnumerable<ObservationPoint> points)
 		{
-			using (var stream = new FileStream(path, FileMode.Create))
-			{
-				var data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(points.ToArray()));
-				stream.Write(data, 0, data.Length);
-			}
+			using var stream = new FileStream(path, FileMode.Create);
+			var data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(points.ToArray()));
+			stream.Write(data, 0, data.Length);
 		}
 
 		/// <summary>
@@ -124,10 +118,10 @@ namespace KyoshinMonitorLib
 		/// <param name="points">書き込む観測点情報の配列</param>
 		public static void SaveToCsv(string path, IEnumerable<ObservationPoint> points)
 		{
-			using (var stream = File.OpenWrite(path))
-			using (var writer = new StreamWriter(stream))
-				foreach (var point in points)
-					writer.WriteLine($"{(int)point.Type},{point.Code},{point.IsSuspended},{point.Name},{point.Region},{point.Location.Latitude},{point.Location.Longitude},{point.Point?.X.ToString() ?? ""},{point.Point?.Y.ToString() ?? ""},{point.ClassificationId?.ToString() ?? ""},{point.PrefectureClassificationId?.ToString() ?? ""},{point.OldLocation.Latitude},{point.OldLocation.Longitude}");
+			using var stream = File.OpenWrite(path);
+			using var writer = new StreamWriter(stream);
+			foreach (var point in points)
+				writer.WriteLine($"{(int)point.Type},{point.Code},{point.IsSuspended},{point.Name},{point.Region},{point.Location.Latitude},{point.Location.Longitude},{point.Point?.X.ToString() ?? ""},{point.Point?.Y.ToString() ?? ""},{point.ClassificationId?.ToString() ?? ""},{point.PrefectureClassificationId?.ToString() ?? ""},{point.OldLocation.Latitude},{point.OldLocation.Longitude}");
 		}
 
 		/// <summary>
