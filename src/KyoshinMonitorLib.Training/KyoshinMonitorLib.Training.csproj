@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <Version>0.2.4.2</Version>
-		<Copyright>Copyright © ingenWorkS 2018</Copyright>
+		<Copyright>Copyright © ingenWorkS 2020</Copyright>
 		<Company>ingenWorkS</Company>
 		<Authors>ingen084</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
