@@ -37,8 +37,6 @@ namespace KyoshinMonitorLib
 			LocationRightBottom = Location.FromMeters(x - 5334, y + 5334); //5kmメッシュ ちょっと大きめに設定する
 		}
 
-		private static readonly MessagePackSerializerOptions Lz4Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
-
 		/// <summary>
 		/// メッシュ情報をmpkから読み込みます。失敗した場合は例外がスローされます。
 		/// </summary>
@@ -48,7 +46,7 @@ namespace KyoshinMonitorLib
 		public static ObservationPoint[] LoadFromMpk(string path, bool useLz4 = false)
 		{
 			using var stream = new FileStream(path, FileMode.Open);
-			return MessagePackSerializer.Deserialize<ObservationPoint[]>(stream, options: useLz4 ? Lz4Options : null);
+			return MessagePackSerializer.Deserialize<ObservationPoint[]>(stream, options: useLz4 ? MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block) : null);
 		}
 		/// <summary>
 		/// メッシュ情報をmpk形式で保存します。失敗した場合は例外がスローされます。
@@ -59,7 +57,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToMpk(string path, IEnumerable<Mesh> points, bool useLz4 = false)
 		{
 			using var stream = new FileStream(path, FileMode.Create);
-			MessagePackSerializer.Serialize(stream, points.ToArray(), options: useLz4 ? Lz4Options : null);
+			MessagePackSerializer.Serialize(stream, points.ToArray(), options: useLz4 ? MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block) : null);
 		}
 
 
