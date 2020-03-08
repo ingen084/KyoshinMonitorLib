@@ -91,7 +91,7 @@ namespace KyoshinMonitorLib
 				for (int j = 0; j< ObservationPoints.Length; j++)
 				{
 					var p = ObservationPoints[j];
-					if (p.IsSuspended || p.Location == null) continue;
+					if (/*p.IsSuspended || */p.Location == null) continue;
 					if (CheckNearLocation(p.Location, site))
 					{
 						point = p;
