@@ -6,7 +6,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 	/// <summary>
 	/// リアルタイムデータ
 	/// </summary>
-	public class RealTimeData
+	public class RealtimeData
 	{
 		/// <summary>
 		/// 時間

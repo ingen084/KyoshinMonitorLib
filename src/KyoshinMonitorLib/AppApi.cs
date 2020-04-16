@@ -38,28 +38,28 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// リアルタイムなデータを取得します。
 		/// </summary>
-		public virtual Task<ApiResult<RealTimeData>> GetRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
-			=> GetJsonObject<RealTimeData>(AppApiUrlGenerator.Generate(AppApiUrlType.RealTimeData, time, dataType, isBehore));
+		public virtual Task<ApiResult<RealtimeData>> GetRealtimeData(DateTime time, RealtimeDataType dataType, bool isBehore = false)
+			=> GetJsonObject<RealtimeData>(AppApiUrlGenerator.Generate(AppApiUrlType.RealtimeData, time, dataType, isBehore));
 
 		/// <summary>
 		/// 観測点情報と結合済みのリアルタイムなデータを取得します。
 		/// </summary>
-		public async Task<ApiResult<LinkedRealTimeData[]>> GetLinkedRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
+		public async Task<ApiResult<LinkedRealtimeData[]>> GetLinkedRealtimeData(DateTime time, RealtimeDataType dataType, bool isBehore = false)
 		{
-			var dataResult = await GetRealTimeData(time, dataType, isBehore);
+			var dataResult = await GetRealtimeData(time, dataType, isBehore);
 			if (dataResult.Data == null)
-				return new ApiResult<LinkedRealTimeData[]>(dataResult.StatusCode, null);
+				return new ApiResult<LinkedRealtimeData[]>(dataResult.StatusCode, null);
 			var data = dataResult.Data;
 
 			var pair = await GetOrLinkObservationPoint(data.BaseSerialNo);
-			var result = new List<LinkedRealTimeData>();
+			var result = new List<LinkedRealtimeData>();
 			for (var i = 0; i < data.Items.Length; i++)
 			{
 				if (pair.Length <= i)
 					throw new KyoshinMonitorException("リアルタイムデータの結合に失敗しました。 SiteListの観測点が少なすぎます。");
-				result.Add(new LinkedRealTimeData(pair[i], data.Items[i]));
+				result.Add(new LinkedRealtimeData(pair[i], data.Items[i]));
 			}
-			return new ApiResult<LinkedRealTimeData[]>(dataResult.StatusCode, result.ToArray());
+			return new ApiResult<LinkedRealtimeData[]>(dataResult.StatusCode, result.ToArray());
 		}
 		/// <summary>
 		/// 観測点情報を結合もしくはキャッシュから取得します。

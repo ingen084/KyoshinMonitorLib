@@ -14,7 +14,7 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// <para>2: yyyyMMdd</para>
 		/// <para>3: yyyyMMddHHmmss</para>
 		/// </summary>
-		public const string RealTimeDataBase = "http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/RealTimeData/kyoshin_cnt/{0}_{1}/{2}/{3}_{0}_{1}.json";
+		public const string RealtimeDataBase = "http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/RealTimeData/kyoshin_cnt/{0}_{1}/{2}/{3}_{0}_{1}.json";
 
 		/// <summary>
 		/// EEW関係のJsonのベースURL
@@ -41,15 +41,15 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// </summary>
 		/// <param name="urlType">生成するURLのタイプ</param>
 		/// <param name="datetime">生成するURLの時間</param>
-		/// <param name="realTimeShindoType">(UrlType=RealTimeDataの際に使用)取得するリアルタイム情報の種類</param>
-		/// <param name="isBerehole">(UrlType=RealTimeDataの際に使用)地中の情報を取得するかどうか</param>
+		/// <param name="realtimeShindoType">(UrlType=RealtimeDataの際に使用)取得するリアルタイム情報の種類</param>
+		/// <param name="isBerehole">(UrlType=RealtimeDataの際に使用)地中の情報を取得するかどうか</param>
 		/// <returns></returns>
-		public static string Generate(AppApiUrlType urlType, DateTime datetime, RealTimeDataType realTimeShindoType = RealTimeDataType.Shindo, bool isBerehole = false)
+		public static string Generate(AppApiUrlType urlType, DateTime datetime, RealtimeDataType realtimeShindoType = RealtimeDataType.Shindo, bool isBerehole = false)
 		{
 			switch (urlType)
 			{
-				case AppApiUrlType.RealTimeData:
-					return string.Format(RealTimeDataBase, realTimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
+				case AppApiUrlType.RealtimeData:
+					return string.Format(RealtimeDataBase, realtimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
 				//case AppApiUrlType.EstShindoJson:
 				//	return string.Format(EewJsonBase, "EstShindoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "est");
 				//case AppApiUrlType.PSWaveJson:

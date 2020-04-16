@@ -3,7 +3,7 @@
 	/// <summary>
 	/// リアルタイム画像の種類
 	/// </summary>
-	public enum RealTimeDataType
+	public enum RealtimeDataType
 	{
 		/// <summary>
 		/// 震度
@@ -57,47 +57,47 @@
 	}
 
 	/// <summary>
-	/// RealTimeImgTypeの拡張メソッド
+	/// RealtimeImgTypeの拡張メソッド
 	/// </summary>
-	public static class RealTimeDataExtensions
+	public static class RealtimeDataExtensions
 	{
 		/// <summary>
 		/// URLに使用する文字列に変換する
 		/// </summary>
-		/// <param name="type">変換するRealTimeImgTypy</param>
+		/// <param name="type">変換するRealtimeImgTypy</param>
 		/// <returns>変換された文字列</returns>
-		public static string ToUrlString(this RealTimeDataType type)
+		public static string ToUrlString(this RealtimeDataType type)
 		{
 			switch (type)
 			{
-				case RealTimeDataType.Shindo:
+				case RealtimeDataType.Shindo:
 					return "jma";
 
-				case RealTimeDataType.Pga:
+				case RealtimeDataType.Pga:
 					return "acmap";
 
-				case RealTimeDataType.Pgv:
+				case RealtimeDataType.Pgv:
 					return "vcmap";
 
-				case RealTimeDataType.Pgd:
+				case RealtimeDataType.Pgd:
 					return "dcmap";
 
-				case RealTimeDataType.Response_0_125Hz:
+				case RealtimeDataType.Response_0_125Hz:
 					return "rsp0125";
 
-				case RealTimeDataType.Response_0_25Hz:
+				case RealtimeDataType.Response_0_25Hz:
 					return "rsp0250";
 
-				case RealTimeDataType.Response_0_5Hz:
+				case RealtimeDataType.Response_0_5Hz:
 					return "rsp0500";
 
-				case RealTimeDataType.Response_1Hz:
+				case RealtimeDataType.Response_1Hz:
 					return "rsp1000";
 
-				case RealTimeDataType.Response_2Hz:
+				case RealtimeDataType.Response_2Hz:
 					return "rsp2000";
 
-				case RealTimeDataType.Response_4Hz:
+				case RealtimeDataType.Response_4Hz:
 					return "rsp4000";
 			}
 			return null;

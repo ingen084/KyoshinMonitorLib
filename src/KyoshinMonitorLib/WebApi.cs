@@ -24,8 +24,8 @@ namespace KyoshinMonitorLib
 		/// <param name="dataType">取得する画像の種類</param>
 		/// <param name="isBehore">地下かどうか</param>
 		/// <returns></returns>
-		public Task<ApiResult<byte[]>> GetRealtimeImageData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
-			=> GetBytes(WebApiUrlGenerator.Generate(WebApiUrlType.RealTimeImg, time, dataType, isBehore));
+		public Task<ApiResult<byte[]>> GetRealtimeImageData(DateTime time, RealtimeDataType dataType, bool isBehore = false)
+			=> GetBytes(WebApiUrlGenerator.Generate(WebApiUrlType.RealtimeImg, time, dataType, isBehore));
 		/// <summary>
 		/// 予測震度の画像を取得します。
 		/// </summary>

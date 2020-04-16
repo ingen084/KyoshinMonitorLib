@@ -11,7 +11,7 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// リアルタイム情報
 		/// <para>震度、加速度など</para>
 		/// </summary>
-		RealTimeData,
+		RealtimeData,
 
 		/// <summary>
 		/// 緊急地震速報の到達予想震度

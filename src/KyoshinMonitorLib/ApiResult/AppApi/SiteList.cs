@@ -47,7 +47,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		[JsonPropertyName("muni")]
 		public int Muni { get; set; }
 		/// <summary>
-		/// RealTimeDataでのインデックスID
+		/// RealtimeDataでのインデックス
 		/// </summary>
 		[JsonPropertyName("siteidx")]
 		public int Siteidx { get; set; }
@@ -82,7 +82,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 	/// 都道府県の名前
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field)]
-	public class PrefectureNameAttribute : Attribute
+	public sealed class PrefectureNameAttribute : Attribute
 	{
 		/// <summary>
 		/// 初期化

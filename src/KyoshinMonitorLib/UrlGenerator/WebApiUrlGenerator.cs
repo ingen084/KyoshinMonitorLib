@@ -21,13 +21,13 @@ namespace KyoshinMonitorLib.UrlGenerator
 		public const string PsWaveBase = "http://www.kmoni.bosai.go.jp/data/map_img/PSWaveImg/eew/{0}/{1}.eew.gif";
 
 		/// <summary>
-		/// RealTimeImgのベースURL
+		/// RealtimeImgのベースURL
 		/// <para>0:タイプ</para>
 		/// <para>1:地上(s)/地下(b)</para>
 		/// <para>2:日付</para>
 		/// <para>3:時間</para>
 		/// </summary>
-		public const string RealTimeBase = "http://www.kmoni.bosai.go.jp/data/map_img/RealTimeImg/{0}_{1}/{2}/{3}.{0}_{1}.gif";
+		public const string RealtimeBase = "http://www.kmoni.bosai.go.jp/data/map_img/RealTimeImg/{0}_{1}/{2}/{3}.{0}_{1}.gif";
 
 		/// <summary>
 		/// 予想震度のベースURL
@@ -41,15 +41,15 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// </summary>
 		/// <param name="urlType">生成するURLのタイプ</param>
 		/// <param name="datetime">生成するURLの時間</param>
-		/// <param name="realTimeShindoType">(UrlType=RealTimeImgの際に使用)取得するリアルタイム情報の種類</param>
-		/// <param name="isBerehole">(UrlType=RealTimeImgの際に使用)地中の情報を取得するかどうか</param>
+		/// <param name="realtimeShindoType">(UrlType=RealtimeImgの際に使用)取得するリアルタイム情報の種類</param>
+		/// <param name="isBerehole">(UrlType=RealtimeImgの際に使用)地中の情報を取得するかどうか</param>
 		/// <returns></returns>
-		public static string Generate(WebApiUrlType urlType, DateTime datetime, RealTimeDataType realTimeShindoType = RealTimeDataType.Shindo, bool isBerehole = false)
+		public static string Generate(WebApiUrlType urlType, DateTime datetime, RealtimeDataType realtimeShindoType = RealtimeDataType.Shindo, bool isBerehole = false)
 		{
 			switch (urlType)
 			{
-				case WebApiUrlType.RealTimeImg:
-					return string.Format(RealTimeBase, realTimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
+				case WebApiUrlType.RealtimeImg:
+					return string.Format(RealtimeBase, realtimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
 
 				case WebApiUrlType.EstShindo:
 					return string.Format(EstShindoBase, datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));

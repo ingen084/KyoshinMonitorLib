@@ -160,7 +160,7 @@ Webで見ることができる強震モニタのAPIを使用してEEWなどの�
 | 返り値の型 | 名前(引数) | 解説 |
 |---|---|---|
 |`Task<ApiResult<Eew>>`|GetEewInfo(`DateTime` time)|緊急地震速報のJsonを取得します。  EewクラスはJsonをそのままパースしたものです。 |
-|`Task<ApiResult<byte[]>>`|GetRealtimeImageData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムな情報(リアルタイム･震度･加速度など)の画像のbyte配列を取得します。  画像解析まで行いたい場合は下記の拡張メソッドをご利用ください。|
+|`Task<ApiResult<byte[]>>`|GetRealtimeImageData(`DateTime` time, `RealtimeDataType` dataType, `bool` isBehore = false)|リアルタイムな情報(リアルタイム･震度･加速度など)の画像のbyte配列を取得します。  画像解析まで行いたい場合は下記の拡張メソッドをご利用ください。|
 |`Task<ApiResult<byte[]>>`|GetEstShindoImageData(`DateTime` time)|緊急地震速報の予想震度の画像のbyte配列を取得します。|
 |`Task<ApiResult<byte[]>>`|GetPSWaveImageData(`DateTime` time)|緊急地震速報のP波とS波の広がりを示す円の画像のbyte配列を取得します。|
 
@@ -183,9 +183,9 @@ Webで見ることができる強震モニタのAPIを使用してEEWなどの�
 ### メソッド
 | 返り値の型 | 名前(引数) | 解説 |
 |---|---|---|
-|`Task<ApiResult<LinkedRealTimeData[]>>`|GetLinkedRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  自動で観測点情報などと結びつけ、インスタンスを返します。|
-|`Task<ApiResult<RealTimeData>>`|GetRealTimeData(`DateTime` time, `RealTimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
-|`Task<ApiResult<SiteList>>`|GetSiteList(`string` baseSerialNo)|APIから参照できる観測点情報の一覧を取得します。  特に理由がない限り`GetLinkedRealTimeData`を使用することを推奨します。|
+|`Task<ApiResult<LinkedRealtimeData[]>>`|GetLinkedRealtimeData(`DateTime` time, `RealtimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  自動で観測点情報などと結びつけ、インスタンスを返します。|
+|`Task<ApiResult<RealtimeData>>`|GetRealtimeData(`DateTime` time, `RealtimeDataType` dataType, `bool` isBehore = false)|リアルタイムデータを取得します。  特に理由がない限り`GetLinkedRealtimeData`を使用することを推奨します。|
+|`Task<ApiResult<SiteList>>`|GetSiteList(`string` baseSerialNo)|APIから参照できる観測点情報の一覧を取得します。  特に理由がない限り`GetLinkedRealtimeData`を使用することを推奨します。|
 |`Task<ApiResult<Hypo>>`|GetEewHypoInfo(`DateTime` time)|**[利用不可]** APIから緊急地震速報の情報を取得します。  **ちなみに、複数のEEWに対応してそうです…(要検証)**|
 |`Task<ApiResult<PSWave>>`|GetPSWave(`DateTime` time)|**[利用不可]** 緊急地震速報から算出された揺れの広がりを取得します。  **こちらも複数のEEWに対応してそうです。**|
 |`Task<ApiResult<EstShindo>>`|GetEstShindo(`DateTime` time)|**[利用不可]** 緊急地震速報から算出された予想震度の5kmメッシュ情報を取得します。|

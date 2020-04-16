@@ -30,7 +30,7 @@ namespace Tests
 					try
 					{
 						// APIから結果を計算 (良い子のみんなはawaitを使おうね！)
-						var result = await appApi.GetLinkedRealTimeData(time, RealTimeDataType.Shindo, false).ConfigureAwait(false);
+						var result = await appApi.GetLinkedRealtimeData(time, RealtimeDataType.Shindo, false).ConfigureAwait(false);
 						if (result.Data != null)
 						{
 							var data = result.Data;
@@ -59,8 +59,8 @@ namespace Tests
 						}
 						else if (result.StatusCode == HttpStatusCode.NotFound)
 						{
-							// timer.Offset += TimeSpan.FromMilliseconds(100);
-							// Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
+							timer.Offset += TimeSpan.FromMilliseconds(100);
+							Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
 							Console.WriteLine($"404");
 						}
 						else

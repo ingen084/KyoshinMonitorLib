@@ -3,12 +3,12 @@
 	/// <summary>
 	/// 結合済みの観測情報
 	/// </summary>
-	public struct LinkedRealTimeData
+	public struct LinkedRealtimeData
 	{
 		/// <summary>
 		/// 結合済みの観測情報の初期化
 		/// </summary>
-		public LinkedRealTimeData(LinkedObservationPoint point, float? value)
+		public LinkedRealtimeData(LinkedObservationPoint point, float? value)
 		{
 			ObservationPoint = point;
 			Value = value;

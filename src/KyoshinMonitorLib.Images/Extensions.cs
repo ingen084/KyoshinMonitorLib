@@ -37,7 +37,7 @@ namespace KyoshinMonitorLib.Images
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
 		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ImageAnalysisResult> points, DateTime datetime, bool isBehole = false)
 		{
-			var imageResult = await webApi.GetRealtimeImageData(datetime, RealTimeDataType.Shindo, isBehole);
+			var imageResult = await webApi.GetRealtimeImageData(datetime, RealtimeDataType.Shindo, isBehole);
 			if (imageResult.Data == null)
 				return new ApiResult<IEnumerable<ImageAnalysisResult>>(imageResult.StatusCode, null);
 

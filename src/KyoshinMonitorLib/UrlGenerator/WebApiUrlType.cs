@@ -9,7 +9,7 @@
 		/// リアルタイム情報
 		/// <para>震度、加速度など</para>
 		/// </summary>
-		RealTimeImg = 0,
+		RealtimeImg = 0,
 
 		/// <summary>
 		/// 到達予想震度

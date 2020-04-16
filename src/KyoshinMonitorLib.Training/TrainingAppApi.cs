@@ -41,12 +41,12 @@ namespace KyoshinMonitorLib.Training
 		/// <summary>
 		/// 観測データ
 		/// </summary>
-		public override Task<ApiResult<RealTimeData>> GetRealTimeData(DateTime time, RealTimeDataType dataType, bool isBehore = false)
+		public override Task<ApiResult<RealtimeData>> GetRealtimeData(DateTime time, RealtimeDataType dataType, bool isBehore = false)
 		{ 
-			var path = AppApiUrlGenerator.Generate(AppApiUrlType.RealTimeData, time, dataType, isBehore).Replace("http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/", BasePath);
+			var path = AppApiUrlGenerator.Generate(AppApiUrlType.RealtimeData, time, dataType, isBehore).Replace("http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/", BasePath);
 			if (!File.Exists(path))
-				return Task.FromResult(new ApiResult<RealTimeData>(HttpStatusCode.NotFound, null));
-			return Task.FromResult(new ApiResult<RealTimeData>(HttpStatusCode.OK, JsonSerializer.Deserialize<RealTimeData>(File.ReadAllText(path))));
+				return Task.FromResult(new ApiResult<RealtimeData>(HttpStatusCode.NotFound, null));
+			return Task.FromResult(new ApiResult<RealtimeData>(HttpStatusCode.OK, JsonSerializer.Deserialize<RealtimeData>(File.ReadAllText(path))));
 		}
 
 		/// <summary>
