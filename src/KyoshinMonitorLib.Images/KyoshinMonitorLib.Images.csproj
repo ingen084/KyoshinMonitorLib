@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <Version>0.2.4.2</Version>
+    <Version>0.3.0.0</Version>
     <Copyright>Copyright © ingenWorkS 2020</Copyright>
     <Company>ingenWorkS</Company>
     <Authors>ingen084</Authors>
@@ -13,10 +13,12 @@
     <RepositoryUrl>https://github.com/ingen084/KyoshinMonitorLib</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KyoshinMonitorLib\KyoshinMonitorLib.csproj" />

@@ -2,7 +2,7 @@
 	<PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <Version>0.2.4.5</Version>
+    <Version>0.3.0.0</Version>
 		<Copyright>Copyright © ingenWorkS 2020</Copyright>
 		<Company>ingenWorkS</Company>
 		<Authors>ingen084</Authors>
@@ -15,7 +15,7 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="MessagePack" Version="2.1.90" />
+		<PackageReference Include="MessagePack" Version="2.1.115" />
     <PackageReference Include="System.Text.Json" Version="4.7.1" />
   </ItemGroup>
 	<ItemGroup>

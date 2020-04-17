@@ -119,7 +119,7 @@
 			switch (shindo)
 			{
 				case JmaIntensity.Error:
-					return "異常";
+					return "*";
 
 				case JmaIntensity.Int0:
 					return "0";
@@ -152,7 +152,7 @@
 					return "7";
 
 				default:
-					return "不明";
+					return "-";
 			}
 		}
 

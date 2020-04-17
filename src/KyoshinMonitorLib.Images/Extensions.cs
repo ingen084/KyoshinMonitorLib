@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,25 +55,39 @@ namespace KyoshinMonitorLib.Images
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
 		public static IEnumerable<ImageAnalysisResult> ParseIntensityFromImage(this IEnumerable<ImageAnalysisResult> points, Bitmap bitmap)
 		{
-			foreach (var point in points)
+			var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
+			Span<byte> pixelData;
+			unsafe
 			{
-				if (point.ObservationPoint.Point == null || point.ObservationPoint.IsSuspended)
+				pixelData = new Span<byte>(data.Scan0.ToPointer(), bitmap.Width * bitmap.Height);
+			}
+			try
+			{
+				foreach (var point in points)
 				{
-					point.AnalysisResult = null;
-					continue;
-				}
+					if (point.ObservationPoint.Point == null || point.ObservationPoint.IsSuspended)
+					{
+						point.AnalysisResult = null;
+						continue;
+					}
 
-				try
-				{
-					var color = bitmap.GetPixel(point.ObservationPoint.Point.Value.X, point.ObservationPoint.Point.Value.Y);
-					point.Color = color;
-					point.AnalysisResult = ColorToIntensityConverter.Convert(color);
+					try
+					{
+						var color = bitmap.Palette.Entries[pixelData[bitmap.Width * point.ObservationPoint.Point.Value.Y + point.ObservationPoint.Point.Value.X]];
+						point.Color = color;
+						point.AnalysisResult = ColorToIntensityConverter.Convert(color);
+
+					}
+					catch (Exception ex)
+					{
+						point.AnalysisResult = null;
+						Debug.WriteLine("parseEx: " + ex.ToString());
+					}
 				}
-				catch (Exception ex)
-				{
-					point.AnalysisResult = null;
-					Debug.WriteLine("parseEx: " + ex.ToString());
-				}
+			}
+			finally
+			{
+				bitmap.UnlockBits(data);
 			}
 			return points;
 		}

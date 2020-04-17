@@ -9,7 +9,7 @@ namespace KyoshinMonitorLib.Images
 	public static class ColorToIntensityConverter
 	{
 		//memo せっかくなのでコード内に定義
-		private static Dictionary<Color, float> _table = new Dictionary<Color, float>()
+		private static readonly Dictionary<Color, float> _table = new Dictionary<Color, float>()
 		{
 			{Color.FromArgb(255, 0, 0, 205), -3f},
 			{Color.FromArgb(255, 0, 7, 209), -2.9f},

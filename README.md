@@ -5,6 +5,22 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
+## 0.3.0.0
+### 変更
+
+- 使用ライブラリを更新しました。
+- `ParseIntensityFromImage` での解析方法を最適化しました。
+
+### 破壊的変更
+
+- 各種 `RealTime` を `Realtime` に変更しました。
+  - 実際に組んでてストレスマッハだったためです。
+- [削除] `LinkedRealtimeData.Intensity`
+  - `float?` の拡張メソッドをご利用ください。
+- `JmaIntensity.ToShortString` の `Error` `Unknown` 時の表記をそれぞれ `*` `-` に変更しました。
+- `ColorToIntensityConverter` のKeyを `int` に変更しました。
+  - それに伴い、 `ImageAnalysisResult` の `Color` も `int` に変更されています。
+
 ## 0.2.4.5
 ### 変更
 

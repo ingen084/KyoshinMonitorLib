@@ -22,9 +22,5 @@
 		/// 観測値
 		/// </summary>
 		public float? Value { get; }
-		/// <summary>
-		/// 気象庁震度階級に変換した値
-		/// </summary>
-		public JmaIntensity Intensity => Value.ToJmaIntensity();
 	}
 }
