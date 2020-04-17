@@ -47,7 +47,7 @@ namespace KyoshinMonitorLib.Timers
 		/// <para>この値より短い単位でイベントが発行されることはありません。</para>
 		/// <para>Intervalよりも大きな値を指定した際、誤差が蓄積されない特性が消滅することに気をつけてください。</para>
 		/// </summary>
-		private TimeSpan Accuracy => TimeSpan.FromMilliseconds(1);
+		public TimeSpan Accuracy { get; set; } = TimeSpan.FromMilliseconds(1);
 
 		/// <summary>
 		/// falseにするとタイマーのイベントを1度しか発行しません

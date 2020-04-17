@@ -10,6 +10,7 @@
 
 - 使用ライブラリを更新しました。
 - `ParseIntensityFromImage` での解析方法を最適化しました。
+- `SecondBasedTimer` の `Accuracy` プロパティを公開しました。
 
 ### 破壊的変更
 
