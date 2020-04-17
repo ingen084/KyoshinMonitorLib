@@ -19,8 +19,6 @@
 - [削除] `LinkedRealtimeData.Intensity`
   - `float?` の拡張メソッドをご利用ください。
 - `JmaIntensity.ToShortString` の `Error` `Unknown` 時の表記をそれぞれ `*` `-` に変更しました。
-- `ColorToIntensityConverter` のKeyを `int` に変更しました。
-  - それに伴い、 `ImageAnalysisResult` の `Color` も `int` に変更されています。
 
 ## 0.2.4.5
 ### 変更
