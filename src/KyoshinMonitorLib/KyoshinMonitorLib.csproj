@@ -15,8 +15,8 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="MessagePack" Version="2.1.115" />
-    <PackageReference Include="System.Text.Json" Version="4.7.1" />
+		<PackageReference Include="MessagePack" Version="2.2.60" />
+    <PackageReference Include="System.Text.Json" Version="5.0.0" />
   </ItemGroup>
 	<ItemGroup>
 	  <None Include="..\..\LICENSE">
