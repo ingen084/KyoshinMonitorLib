@@ -112,27 +112,27 @@ namespace KyoshinMonitorLib
 			return pair;
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private bool CheckNearLocation(Location l, Site s)
+		private static bool CheckNearLocation(Location l, Site s)
 			=> Math.Abs(Math.Floor(l.Latitude * 1000) / 1000 - s.Lat) <= 0.01 && Math.Abs(Math.Floor(l.Longitude * 1000) / 1000 - s.Lng) <= 0.01;
 
 		/// <summary>
 		/// 緊急地震速報の情報を取得します。
 		/// </summary>
-		[Obsolete]
+		[Obsolete("現在このAPIは利用できません。")]
 		public virtual Task<ApiResult<Hypo>> GetEewHypoInfo(DateTime time)
 			=> GetJsonObject<Hypo>(AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time));
 
 		/// <summary>
 		/// 緊急地震速報から算出された揺れの広がりを取得します。
 		/// </summary>
-		[Obsolete]
+		[Obsolete("現在このAPIは利用できません。")]
 		public virtual Task<ApiResult<PSWave>> GetPSWave(DateTime time)
 			=> GetJsonObject<PSWave>(AppApiUrlGenerator.Generate(AppApiUrlType.PSWaveJson, time));
 
 		/// <summary>
 		/// 緊急地震速報から算出された予想震度のメッシュ情報を取得します。
 		/// </summary>
-		[Obsolete]
+		[Obsolete("現在このAPIは利用できません。")]
 		public virtual Task<ApiResult<EstShindo>> GetEstShindo(DateTime time)
 			=> GetJsonObject<EstShindo>(AppApiUrlGenerator.Generate(AppApiUrlType.EstShindoJson, time));
 
@@ -140,7 +140,7 @@ namespace KyoshinMonitorLib
 		/// メッシュ一覧を取得します。
 		/// 非常に時間がかかるため、キャッシュしておくことを推奨します。
 		/// </summary>
-		[Obsolete]
+		[Obsolete("現在このAPIは利用できません。")]
 		public virtual async Task<ApiResult<Mesh[]>> GetMeshes()
 		{
 			var mechesResult = await GetJsonObject<MeshList>(AppApiUrlGenerator.Meches);

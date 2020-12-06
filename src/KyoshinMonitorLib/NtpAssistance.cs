@@ -25,11 +25,9 @@ namespace KyoshinMonitorLib
 		{
 			try
 			{
-				using (var client = new HttpClient() { Timeout = TimeSpan.FromMilliseconds(timeout) })
-				{
-					var match = TimeRegex.Match(await client.GetStringAsync(url));
-					return new DateTime(1970, 1, 1, 9, 0, 0).AddSeconds(double.Parse(match.Groups[1].Value));
-				}
+				using var client = new HttpClient() { Timeout = TimeSpan.FromMilliseconds(timeout) };
+				var match = TimeRegex.Match(await client.GetStringAsync(url));
+				return new DateTime(1970, 1, 1, 9, 0, 0).AddSeconds(double.Parse(match.Groups[1].Value));
 			}
 			catch (Exception ex)
 			{

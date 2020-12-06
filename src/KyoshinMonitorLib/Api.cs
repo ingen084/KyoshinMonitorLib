@@ -10,7 +10,7 @@ namespace KyoshinMonitorLib
 	/// </summary>
 	public abstract class Api : IDisposable
 	{
-		private HttpClient HttpClient { get; } = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+		private HttpClient HttpClient { get; } = new() { Timeout = TimeSpan.FromSeconds(10) };
 		/// <summary>
 		/// APIを呼ぶのにあたってのタイムアウト時間
 		/// </summary>
@@ -30,14 +30,11 @@ namespace KyoshinMonitorLib
 		{
 			try
 			{
-				using (var response = await HttpClient.GetAsync(url))
-				{
+				using var response = await HttpClient.GetAsync(url);
+				if (!response.IsSuccessStatusCode)
+					return new(response.StatusCode, default);
 
-					if (!response.IsSuccessStatusCode)
-						return new ApiResult<T>(response.StatusCode, default);
-
-					return new ApiResult<T>(response.StatusCode, JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync()));
-				}
+				return new(response.StatusCode, JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync()));
 			}
 			catch (TaskCanceledException)
 			{
@@ -53,13 +50,11 @@ namespace KyoshinMonitorLib
 		{
 			try
 			{
-				using (var response = await HttpClient.GetAsync(url))
-				{
-					if (!response.IsSuccessStatusCode)
-						return new ApiResult<byte[]>(response.StatusCode, default);
+				using var response = await HttpClient.GetAsync(url);
+				if (!response.IsSuccessStatusCode)
+					return new(response.StatusCode, default);
 
-					return new ApiResult<byte[]>(response.StatusCode, await response.Content.ReadAsByteArrayAsync());
-				}
+				return new(response.StatusCode, await response.Content.ReadAsByteArrayAsync());
 			}
 			catch (TaskCanceledException)
 			{
@@ -73,6 +68,7 @@ namespace KyoshinMonitorLib
 		public void Dispose()
 		{
 			HttpClient?.Dispose();
+			GC.SuppressFinalize(this);
 		}
 	}
 }

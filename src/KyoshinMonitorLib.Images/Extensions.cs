@@ -42,9 +42,9 @@ namespace KyoshinMonitorLib.Images
 			if (imageResult.Data == null)
 				return new ApiResult<IEnumerable<ImageAnalysisResult>>(imageResult.StatusCode, null);
 
-			using (var stream = new MemoryStream(imageResult.Data))
-			using (var bitmap = new Bitmap(stream))
-				return new ApiResult<IEnumerable<ImageAnalysisResult>>(imageResult.StatusCode, points.ParseIntensityFromImage(bitmap));
+			using var stream = new MemoryStream(imageResult.Data);
+			using var bitmap = new Bitmap(stream);
+			return new ApiResult<IEnumerable<ImageAnalysisResult>>(imageResult.StatusCode, points.ParseIntensityFromImage(bitmap));
 		}
 
 		/// <summary>

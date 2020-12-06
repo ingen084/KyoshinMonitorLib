@@ -11,79 +11,77 @@ namespace Tests
 {
 	internal class Program
 	{
-		public static async Task Main(string[] args)
+		public static async Task Main()
 		{
 			var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
-			using (var appApi = new AppApi(points))
-			using (var webApi = new WebApi())
+			using var appApi = new AppApi(points);
+			using var webApi = new WebApi();
+			// タイマーのインスタンスを作成
+			var timer = new SecondBasedTimer()
 			{
-				// タイマーのインスタンスを作成
-				var timer = new SecondBasedTimer()
-				{
-					Offset = TimeSpan.FromSeconds(1.1),//1.1
-				};
-				// 適当にイベント設定
-				timer.Elapsed += async time =>
-				{
-					Console.WriteLine($"\nsys: {DateTime.Now:HH:mm:ss.fff} ntp:{time:HH:mm:ss.fff}");
+				Offset = TimeSpan.FromSeconds(1.1),//1.1
+			};
+			// 適当にイベント設定
+			timer.Elapsed += async time =>
+			{
+				Console.WriteLine($"\nsys: {DateTime.Now:HH:mm:ss.fff} ntp:{time:HH:mm:ss.fff}");
 
-					try
-					{
+				try
+				{
 						// APIから結果を計算 (良い子のみんなはawaitを使おうね！)
 						var result = await appApi.GetLinkedRealtimeData(time, RealtimeDataType.Shindo, false).ConfigureAwait(false);
-						if (result.Data != null)
-						{
-							var data = result.Data;
+					if (result.Data != null)
+					{
+						var data = result.Data;
 							// 現在の最大震度
 							Console.WriteLine($"*API* 最大震度: 生:{data.Max(r => r.Value)} jma:{data.Max(r => r.Value).ToJmaIntensity().ToLongString()} 数:{data.Length}");
 							// 最大震度観測点(の1つ)
 							var maxPoint = result.Data.OrderByDescending(r => r.Value).First();
-							Console.WriteLine($"最大観測点 {maxPoint.ObservationPoint.Point.Region} {maxPoint.ObservationPoint.Point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
-						}
-						else
-							Console.WriteLine($"*API* 取得失敗 " + result.StatusCode);
+						Console.WriteLine($"最大観測点 {maxPoint.ObservationPoint.Point.Region} {maxPoint.ObservationPoint.Point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
 					}
-					catch (KyoshinMonitorException ex)
-					{
-						Console.WriteLine($"API エラー発生 {ex}");
-					}
-					try
-					{
+					else
+						Console.WriteLine($"*API* 取得失敗 " + result.StatusCode);
+				}
+				catch (KyoshinMonitorException ex)
+				{
+					Console.WriteLine($"API エラー発生 {ex}");
+				}
+				try
+				{
 						// WebAPIから結果を計算 (良い子のみんなはawaitを使おうね！)
 						var result = await webApi.ParseIntensityFromParameterAsync(points, time).ConfigureAwait(false);
-						if (result.Data != null)
-						{
-							var data = result.Data.ToArray();
+					if (result.Data != null)
+					{
+						var data = result.Data.ToArray();
 							// 現在の最大震度
 							Console.WriteLine($"*WEB* 最大震度: 生:{data.Max(r => r.AnalysisResult)} jma:{data.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()} 数:{data.Count(d => d.AnalysisResult != null)}");
-						}
-						else if (result.StatusCode == HttpStatusCode.NotFound)
-						{
-							timer.Offset += TimeSpan.FromMilliseconds(100);
-							Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
-							Console.WriteLine($"404");
-						}
-						else
-							Console.WriteLine($"*WEB* 取得失敗 " + result.StatusCode);
 					}
-					catch (Exception ex)
+					else if (result.StatusCode == HttpStatusCode.NotFound)
 					{
-						Console.WriteLine($"*WEB* 取得失敗 " + ex);
+						timer.Offset += TimeSpan.FromMilliseconds(100);
+						Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
+						Console.WriteLine($"404");
 					}
-				};
+					else
+						Console.WriteLine($"*WEB* 取得失敗 " + result.StatusCode);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"*WEB* 取得失敗 " + ex);
+				}
+			};
 
-				var ntp = await NtpAssistance.GetNetworkTimeWithNtp().ConfigureAwait(false);
-				// タイマー開始
-				timer.Start(ntp ?? throw new Exception());
+			var ntp = await NtpAssistance.GetNetworkTimeWithNtp().ConfigureAwait(false);
+			// タイマー開始
+			timer.Start(ntp ?? throw new Exception());
 
-				Console.WriteLine("Enterキー入力で終了");
+			Console.WriteLine("Enterキー入力で終了");
 
-				// 改行入力待ち
-				Console.ReadLine();
+			// 改行入力待ち
+			Console.ReadLine();
 
-				// タイマー終了
-				timer.Stop();
-			}
+			// タイマー終了
+			timer.Stop();
 		}
 	}
 }
