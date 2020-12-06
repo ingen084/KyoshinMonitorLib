@@ -18,7 +18,7 @@ namespace KyoshinMonitorLib.Timers
 
 		private long startCounter;
 		private long frequency = 0;
-		private Stopwatch sw;
+		private Stopwatch? sw;
 
 		/// <summary>
 		/// ストップウォッチの値を初期化し、計測を開始します。
@@ -32,7 +32,7 @@ namespace KyoshinMonitorLib.Timers
 				QueryPerformanceFrequency(ref frequency);
 				return;
 			}
-			sw = sw ?? new Stopwatch();
+			sw ??= new Stopwatch();
 			if (sw.IsRunning)
 				sw.Stop();
 			sw.Stop();

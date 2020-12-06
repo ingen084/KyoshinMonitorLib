@@ -13,28 +13,28 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// 時間
 		/// </summary>
 		[JsonPropertyName("dataTime")]
-		public DateTime DataTime { get; set; }
+		public DateTime? DataTime { get; set; }
 		/// <summary>
 		/// 地震の種類?
 		/// </summary>
 		[JsonPropertyName("hypoType")]
-		public string HypoType { get; set; }
+		public string? HypoType { get; set; }
 		/// <summary>
 		/// 揺れの広がり
 		/// </summary>
 		[JsonPropertyName("items")]
-		public PSWaveItem[] Items { get; set; }
+		public PSWaveItem[]? Items { get; set; }
 		/// <summary>
 		/// リザルト
 		/// </summary>
 
 		[JsonPropertyName("result")]
-		public Result Result { get; set; }
+		public Result? Result { get; set; }
 		/// <summary>
 		/// セキュリティ情報
 		/// </summary>
 		[JsonPropertyName("security")]
-		public Security Security { get; set; }
+		public Security? Security { get; set; }
 	}
 
 	/// <summary>
@@ -47,7 +47,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// 緯度(string)
 		/// </summary>
 		[JsonPropertyName("latitude")]
-		public string LatitudeString { get; set; }
+		public string? LatitudeString { get; set; }
 		/// <summary>
 		/// 緯度
 		/// </summary>
@@ -56,7 +56,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		{
 			get
 			{
-				if (!float.TryParse(LatitudeString.Replace("E", "+").Replace("W", "-"), out var val))
+				if (!float.TryParse(LatitudeString?.Replace("E", "+").Replace("W", "-"), out var val))
 					return null;
 				return val;
 			}
@@ -65,7 +65,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// 経度(string)
 		/// </summary>
 		[JsonPropertyName("longitude")]
-		public string LongitudeString { get; set; }
+		public string? LongitudeString { get; set; }
 		/// <summary>
 		/// 経度
 		/// </summary>
@@ -74,7 +74,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		{
 			get
 			{
-				if (!float.TryParse(LongitudeString.Replace("N", "+").Replace("S", "-"), out var val))
+				if (!float.TryParse(LongitudeString?.Replace("N", "+").Replace("S", "-"), out var val))
 					return null;
 				return val;
 			}
@@ -83,11 +83,11 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// P波の範囲
 		/// </summary>
 		[JsonPropertyName("p_radius")]
-		public string PWaveRadiusString { get; set; }
+		public string? PWaveRadiusString { get; set; }
 		/// <summary>
 		/// S波の範囲
 		/// </summary>
 		[JsonPropertyName("s_radius")]
-		public string SWaveRadiusString { get; set; }
+		public string? SWaveRadiusString { get; set; }
 	}
 }

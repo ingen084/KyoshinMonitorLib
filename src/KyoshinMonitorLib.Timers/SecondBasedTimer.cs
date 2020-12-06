@@ -12,7 +12,7 @@ namespace KyoshinMonitorLib.Timers
 		private readonly TimeSpan Interval = TimeSpan.FromSeconds(1);
 		private Timer InnerTimer { get; }
 		private TimeSpan LastTime { get; set; }
-		private HighPerformanceStopwatch StopWatch { get; }
+		private HighPerformanceStopwatch Stopwatch { get; }
 
 		/// <summary>
 		/// 現在のタイマー内の時間
@@ -62,16 +62,17 @@ namespace KyoshinMonitorLib.Timers
 		/// <summary>
 		/// タイマーイベント
 		/// </summary>
-		public event Func<DateTime, Task> Elapsed;
+		public event Func<DateTime, Task>? Elapsed;
 
 		/// <summary>
 		/// NtpTimerを初期化します。
 		/// </summary>
 		public SecondBasedTimer()
 		{
+			Stopwatch = new HighPerformanceStopwatch();
 			InnerTimer = new Timer(s =>
 			{
-				if (StopWatch.Elapsed - LastTime >= Interval)
+				if (Stopwatch.Elapsed - LastTime >= Interval)
 				{
 					if (!BlockingMode || !IsEventRunning)
 						ThreadPool.QueueUserWorkItem(s2 =>
@@ -81,9 +82,9 @@ namespace KyoshinMonitorLib.Timers
 							IsEventRunning = false;
 						});
 					//かなり時間のズレが大きければその分修正する
-					if (StopWatch.Elapsed.Ticks - LastTime.Ticks >= Interval.Ticks * 2)
+					if (Stopwatch.Elapsed.Ticks - LastTime.Ticks >= Interval.Ticks * 2)
 					{
-						var skipCount = (StopWatch.Elapsed.Ticks - LastTime.Ticks) / Interval.Ticks;
+						var skipCount = (Stopwatch.Elapsed.Ticks - LastTime.Ticks) / Interval.Ticks;
 						LastTime += TimeSpan.FromTicks(Interval.Ticks * skipCount);
 						CurrentTime = CurrentTime.AddSeconds(skipCount);
 					}
@@ -93,10 +94,9 @@ namespace KyoshinMonitorLib.Timers
 						CurrentTime = CurrentTime.AddSeconds(1);
 					}
 					if (!AutoReset)
-						InnerTimer.Change(Timeout.Infinite, Timeout.Infinite);
+						InnerTimer?.Change(Timeout.Infinite, Timeout.Infinite);
 				}
 			}, null, Timeout.Infinite, Timeout.Infinite);
-			StopWatch = new HighPerformanceStopwatch();
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace KyoshinMonitorLib.Timers
 		{
 			LastUpdatedTime = time;
 			CurrentTime = LastUpdatedTime.AddMilliseconds(-LastUpdatedTime.Millisecond).AddSeconds(-Math.Floor(Offset.TotalSeconds));
-			LastTime = StopWatch.Elapsed - TimeSpan.FromMilliseconds(LastUpdatedTime.Millisecond);
+			LastTime = Stopwatch.Elapsed - TimeSpan.FromMilliseconds(LastUpdatedTime.Millisecond);
 			LastTime += Offset - TimeSpan.FromSeconds(Offset.Seconds);
 		}
 
@@ -118,7 +118,7 @@ namespace KyoshinMonitorLib.Timers
 		public void Start(DateTime currentTime)
 		{
 			IsEventRunning = false;
-			StopWatch.Start();
+			Stopwatch.Start();
 			UpdateTime(currentTime);
 			InnerTimer.Change(Accuracy, Accuracy);
 		}

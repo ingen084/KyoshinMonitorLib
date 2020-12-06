@@ -11,11 +11,11 @@ namespace KyoshinMonitorLib.ApiResult
 		/// realm
 		/// </summary>
 		[JsonPropertyName("realm")]
-		public string Realm { get; set; }
+		public string? Realm { get; set; }
 		/// <summary>
 		/// ハッシュ
 		/// </summary>
 		[JsonPropertyName("hash")]
-		public string Hash { get; set; }
+		public string? Hash { get; set; }
 	}
 }

@@ -13,27 +13,27 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// 観測点一覧
 		/// </summary>
 		[JsonPropertyName("items")]
-		public Site[] Sites { get; set; }
+		public Site[]? Sites { get; set; }
 		/// <summary>
 		/// セキュリティ情報
 		/// </summary>
 		[JsonPropertyName("security")]
-		public Security Security { get; set; }
+		public Security? Security { get; set; }
 		/// <summary>
 		/// 時間
 		/// </summary>
 		[JsonPropertyName("dataTime")]
-		public string DataTime { get; set; }
+		public string? DataTime { get; set; }
 		/// <summary>
 		/// リザルト
 		/// </summary>
 		[JsonPropertyName("result")]
-		public Result Result { get; set; }
+		public Result? Result { get; set; }
 		/// <summary>
 		/// シリアル番号
 		/// </summary>
 		[JsonPropertyName("serialNo")]
-		public string SerialNo { get; set; }
+		public string? SerialNo { get; set; }
 	}
 
 	/// <summary>
@@ -45,37 +45,37 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// 不明(内部ID？)
 		/// </summary>
 		[JsonPropertyName("muni")]
-		public int Muni { get; set; }
+		public int? Muni { get; set; }
 		/// <summary>
 		/// RealtimeDataでのインデックス
 		/// </summary>
 		[JsonPropertyName("siteidx")]
-		public int Siteidx { get; set; }
+		public int? Siteidx { get; set; }
 		/// <summary>
 		/// 都道府県ID
 		/// </summary>
 		[JsonPropertyName("pref")]
-		public int PrefefectureId { get; set; }
+		public int? PrefefectureId { get; set; }
 		/// <summary>
 		/// 都道府県
 		/// </summary>
 		[JsonIgnore]
-		public Prefecture Prefefecture => (Prefecture)(Enum.ToObject(typeof(Prefecture), PrefefectureId) ?? Prefecture.Unknown);
+		public Prefecture? Prefefecture => PrefefectureId is null ? Prefecture.Unknown : (Prefecture)(Enum.ToObject(typeof(Prefecture), PrefefectureId) ?? Prefecture.Unknown);
 		/// <summary>
 		/// ID
 		/// </summary>
 		[JsonPropertyName("siteid")]
-		public string SiteId { get; set; }
+		public string? SiteId { get; set; }
 		/// <summary>
 		/// 緯度
 		/// </summary>
 		[JsonPropertyName("lat")]
-		public float Lat { get; set; }
+		public float? Lat { get; set; }
 		/// <summary>
 		/// 経度
 		/// </summary>
 		[JsonPropertyName("lng")]
-		public float Lng { get; set; }
+		public float? Lng { get; set; }
 	}
 
 	/// <summary>
@@ -366,7 +366,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// </summary>
 		public static string GetLongName(this Prefecture pref)
 		{
-			var attr = pref.GetType().GetField(pref.ToString()).GetCustomAttribute<PrefectureNameAttribute>();
+			var attr = pref.GetType().GetField(pref.ToString())?.GetCustomAttribute<PrefectureNameAttribute>();
 			if (attr == null)
 				return "不明";
 			return attr.LongName;
@@ -376,7 +376,7 @@ namespace KyoshinMonitorLib.ApiResult.AppApi
 		/// </summary>
 		public static string GetShortName(this Prefecture pref)
 		{
-			var attr = pref.GetType().GetField(pref.ToString()).GetCustomAttribute<PrefectureNameAttribute>();
+			var attr = pref.GetType().GetField(pref.ToString())?.GetCustomAttribute<PrefectureNameAttribute>();
 			if (attr == null)
 				return "不明";
 			return attr.ShortName;

@@ -56,7 +56,7 @@ namespace KyoshinMonitorLib
 
 			await Task.Run(() =>
 			{
-				IPAddress addr = IPAddress.Any;
+				IPAddress? addr = IPAddress.Any;
 
 				if (!IPAddress.TryParse(hostName, out addr))
 				{

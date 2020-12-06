@@ -14,12 +14,6 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 初期化
 		/// </summary>
-		public Mesh()
-		{
-		}
-		/// <summary>
-		/// 初期化
-		/// </summary>
 		public Mesh(string code, Location location1, Location location2)
 		{
 			Code = code ?? throw new ArgumentNullException(nameof(code));
@@ -34,7 +28,7 @@ namespace KyoshinMonitorLib
 			Code = code ?? throw new ArgumentNullException(nameof(code));
 
 			LocationLeftTop = Location.FromMeters(x, y);
-			LocationRightBottom = Location.FromMeters(x - 5334, y + 5334); //5kmメッシュ ちょっと大きめに設定する
+			LocationRightBottom = Location.FromMeters(x - 5000, y + 5000); //5kmメッシュ
 		}
 
 		/// <summary>

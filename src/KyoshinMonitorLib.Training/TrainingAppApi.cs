@@ -30,35 +30,35 @@ namespace KyoshinMonitorLib.Training
 		/// <summary>
 		/// 観測点一覧
 		/// </summary>
-		public override Task<ApiResult<SiteList>> GetSiteList(string baseSerialNo)
+		public override async Task<ApiResult<SiteList?>> GetSiteList(string baseSerialNo)
 		{
 			var path = AppApiUrlGenerator.Generate(baseSerialNo).Replace("http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/", BasePath);
 			if (!File.Exists(path))
-				return Task.FromResult(new ApiResult<SiteList>(HttpStatusCode.NotFound, null));
-			return Task.FromResult(new ApiResult<SiteList>(HttpStatusCode.OK, JsonSerializer.Deserialize<SiteList>(File.ReadAllText(path))));
+				return new(HttpStatusCode.NotFound, null);
+			return new(HttpStatusCode.OK, JsonSerializer.Deserialize<SiteList>(await File.ReadAllTextAsync(path)));
 		}
 
 		/// <summary>
 		/// 観測データ
 		/// </summary>
-		public override Task<ApiResult<RealtimeData>> GetRealtimeData(DateTime time, RealtimeDataType dataType, bool isBehore = false)
+		public override async Task<ApiResult<RealtimeData?>> GetRealtimeData(DateTime time, RealtimeDataType dataType, bool isBehore = false)
 		{ 
 			var path = AppApiUrlGenerator.Generate(AppApiUrlType.RealtimeData, time, dataType, isBehore).Replace("http://ts.qtmoni.bosai.go.jp/qt/tsapp/kyoshin_monitor/static/sip_data/", BasePath);
 			if (!File.Exists(path))
-				return Task.FromResult(new ApiResult<RealtimeData>(HttpStatusCode.NotFound, null));
-			return Task.FromResult(new ApiResult<RealtimeData>(HttpStatusCode.OK, JsonSerializer.Deserialize<RealtimeData>(File.ReadAllText(path))));
+				return new(HttpStatusCode.NotFound, null);
+			return new(HttpStatusCode.OK, JsonSerializer.Deserialize<RealtimeData>(await File.ReadAllTextAsync(path)));
 		}
 
 		/// <summary>
 		/// 緊急地震速報データ
 		/// </summary>
-		[Obsolete]
-		public override Task<ApiResult<Hypo>> GetEewHypoInfo(DateTime time)
+		[Obsolete("現在このAPIは利用できません")]
+		public override async Task<ApiResult<Hypo?>> GetEewHypoInfo(DateTime time)
 		{
 			var path = AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time).Replace("http://kv.kmoni.bosai.go.jp/kyoshin_monitor/static/jsondata/", BasePath);
 			if (!File.Exists(path))
-				return Task.FromResult(new ApiResult<Hypo>(HttpStatusCode.NotFound, null));
-			return Task.FromResult(new ApiResult<Hypo>(HttpStatusCode.OK, JsonSerializer.Deserialize<Hypo>(File.ReadAllText(path))));
+				return new(HttpStatusCode.NotFound, null);
+			return new(HttpStatusCode.OK, JsonSerializer.Deserialize<Hypo>(await File.ReadAllTextAsync(path)));
 		}
 	}
 }

@@ -26,7 +26,7 @@ namespace KyoshinMonitorLib
 		/// <typeparam name="T">デシリアライズする型</typeparam>
 		/// <param name="url">使用するURL</param>
 		/// <returns></returns>
-		protected async Task<ApiResult<T>> GetJsonObject<T>(string url)
+		protected async Task<ApiResult<T?>> GetJsonObject<T>(string url)
 		{
 			try
 			{
@@ -46,7 +46,7 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <param name="url">使用するURL</param>
 		/// <returns></returns>
-		protected async Task<ApiResult<byte[]>> GetBytes(string url)
+		protected async Task<ApiResult<byte[]?>> GetBytes(string url)
 		{
 			try
 			{

@@ -44,7 +44,7 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <param name="path">読み込むJsonファイルのパス</param>
 		/// <returns>読み込まれた観測点情報</returns>
-		public static ObservationPoint[] LoadFromJson(string path)
+		public static ObservationPoint[]? LoadFromJson(string path)
 			=> JsonSerializer.Deserialize<ObservationPoint[]>(File.ReadAllText(path));
 
 		/// <summary>
@@ -65,47 +65,52 @@ namespace KyoshinMonitorLib
 		/// <param name="path">読み込むcsvファイルのパス</param>
 		/// <param name="encoding">読み込むファイル文字コード 何も指定していない場合はUTF8が使用されます。</param>
 		/// <returns>list:読み込まれた観測点情報 success:読み込みに成功した項目のカウント error:読み込みに失敗した項目のカウント</returns>
-		public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(string path, Encoding encoding = null)
+		public static (ObservationPoint[] points, uint success, uint error) LoadFromCsv(string path, Encoding? encoding = null)
 		{
 			var addedCount = 0u;
 			var errorCount = 0u;
 
 			var points = new List<ObservationPoint>();
 
-			using (var stream = File.OpenRead(path))
-			using (var reader = new StreamReader(stream))
-				while (reader.Peek() >= 0)
-					try
-					{
-						var strings = reader.ReadLine().Split(',');
-
-						var point = new ObservationPoint()
-						{
-							Type = (ObservationPointType)int.Parse(strings[0]),
-							Code = strings[1],
-							IsSuspended = bool.Parse(strings[2]),
-							Name = strings[3],
-							Region = strings[4],
-							Location = new Location(float.Parse(strings[5]), float.Parse(strings[6])),
-							Point = null
-						};
-						if (!string.IsNullOrWhiteSpace(strings[7]) && !string.IsNullOrWhiteSpace(strings[8]))
-							point.Point = new Point2(int.Parse(strings[7]), int.Parse(strings[8]));
-						if (strings.Length >= 11)
-						{
-							point.ClassificationId = int.Parse(strings[9]);
-							point.PrefectureClassificationId = int.Parse(strings[10]);
-						}
-						if (strings.Length >= 13)
-							point.OldLocation = new Location(float.Parse(strings[11]), float.Parse(strings[12]));
-
-						points.Add(point);
-						addedCount++;
-					}
-					catch
+			using var stream = File.OpenRead(path);
+			using var reader = new StreamReader(stream, encoding ?? Encoding.UTF8);
+			while (reader.Peek() >= 0)
+				try
+				{
+					if (reader.ReadLine()?.Split(',') is not string[] strings ||
+						strings.Length < 7)
 					{
 						errorCount++;
+						continue;
 					}
+
+					var point = new ObservationPoint()
+					{
+						Type = (ObservationPointType)int.Parse(strings[0]),
+						Code = strings[1],
+						IsSuspended = bool.Parse(strings[2]),
+						Name = strings[3],
+						Region = strings[4],
+						Location = new Location(float.Parse(strings[5]), float.Parse(strings[6])),
+						Point = null
+					};
+					if (!string.IsNullOrWhiteSpace(strings[7]) && !string.IsNullOrWhiteSpace(strings[8]))
+						point.Point = new Point2(int.Parse(strings[7]), int.Parse(strings[8]));
+					if (strings.Length >= 11)
+					{
+						point.ClassificationId = int.Parse(strings[9]);
+						point.PrefectureClassificationId = int.Parse(strings[10]);
+					}
+					if (strings.Length >= 13)
+						point.OldLocation = new Location(float.Parse(strings[11]), float.Parse(strings[12]));
+
+					points.Add(point);
+					addedCount++;
+				}
+				catch
+				{
+					errorCount++;
+				}
 
 			return (points.ToArray(), addedCount, errorCount);
 		}
@@ -123,12 +128,15 @@ namespace KyoshinMonitorLib
 				writer.WriteLine($"{(int)point.Type},{point.Code},{point.IsSuspended},{point.Name},{point.Region},{point.Location.Latitude},{point.Location.Longitude},{point.Point?.X.ToString() ?? ""},{point.Point?.Y.ToString() ?? ""},{point.ClassificationId?.ToString() ?? ""},{point.PrefectureClassificationId?.ToString() ?? ""},{point.OldLocation.Latitude},{point.OldLocation.Longitude}");
 		}
 
+		// シリアライザ用コンストラクタのため警告を無効化する
+#nullable disable
 		/// <summary>
 		/// ObservationPointを初期化します。
 		/// </summary>
 		public ObservationPoint()
 		{
 		}
+#nullable restore
 
 		/// <summary>
 		/// 観測地点のネットワークの種類
@@ -195,9 +203,9 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <param name="obj">比較対象のObservationPoint</param>
 		/// <returns></returns>
-		public int CompareTo(object obj)
+		public int CompareTo(object? obj)
 		{
-			if (!(obj is ObservationPoint ins))
+			if (obj is not ObservationPoint ins)
 				throw new ArgumentException("比較対象はObservationPointにキャストできる型でなければなりません。");
 			return Code.CompareTo(ins.Code);
 		}
