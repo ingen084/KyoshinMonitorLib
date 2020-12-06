@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net5.0;netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Version>0.3.0.1</Version>
+    <Version>0.3.0.2</Version>
     <Copyright>Copyright © ingenWorkS 2020</Copyright>
     <Company>ingenWorkS</Company>
     <Authors>ingen084</Authors>
@@ -13,6 +12,9 @@
     <RepositoryUrl>https://github.com/ingen084/KyoshinMonitorLib</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE">
