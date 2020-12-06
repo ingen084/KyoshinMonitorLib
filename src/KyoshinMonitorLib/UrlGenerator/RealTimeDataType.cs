@@ -1,4 +1,6 @@
-﻿namespace KyoshinMonitorLib.UrlGenerator
+﻿using System;
+
+namespace KyoshinMonitorLib.UrlGenerator
 {
 	/// <summary>
 	/// リアルタイム画像の種類
@@ -66,41 +68,19 @@
 		/// </summary>
 		/// <param name="type">変換するRealtimeImgTypy</param>
 		/// <returns>変換された文字列</returns>
-		public static string ToUrlString(this RealtimeDataType type)
+		public static string ToUrlString(this RealtimeDataType type) => type switch
 		{
-			switch (type)
-			{
-				case RealtimeDataType.Shindo:
-					return "jma";
-
-				case RealtimeDataType.Pga:
-					return "acmap";
-
-				case RealtimeDataType.Pgv:
-					return "vcmap";
-
-				case RealtimeDataType.Pgd:
-					return "dcmap";
-
-				case RealtimeDataType.Response_0_125Hz:
-					return "rsp0125";
-
-				case RealtimeDataType.Response_0_25Hz:
-					return "rsp0250";
-
-				case RealtimeDataType.Response_0_5Hz:
-					return "rsp0500";
-
-				case RealtimeDataType.Response_1Hz:
-					return "rsp1000";
-
-				case RealtimeDataType.Response_2Hz:
-					return "rsp2000";
-
-				case RealtimeDataType.Response_4Hz:
-					return "rsp4000";
-			}
-			return null;
-		}
+			RealtimeDataType.Shindo => "jma",
+			RealtimeDataType.Pga => "acmap",
+			RealtimeDataType.Pgv => "vcmap",
+			RealtimeDataType.Pgd => "dcmap",
+			RealtimeDataType.Response_0_125Hz => "rsp0125",
+			RealtimeDataType.Response_0_25Hz => "rsp0250",
+			RealtimeDataType.Response_0_5Hz => "rsp0500",
+			RealtimeDataType.Response_1Hz => "rsp1000",
+			RealtimeDataType.Response_2Hz => "rsp2000",
+			RealtimeDataType.Response_4Hz => "rsp4000",
+			_ => throw new ArgumentException($"URLを生成できない{nameof(RealtimeDataType)}が指定されています", nameof(type)),
+		};
 	}
 }

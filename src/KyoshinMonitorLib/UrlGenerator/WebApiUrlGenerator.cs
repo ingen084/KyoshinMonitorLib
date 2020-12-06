@@ -44,23 +44,13 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// <param name="realtimeShindoType">(UrlType=RealtimeImgの際に使用)取得するリアルタイム情報の種類</param>
 		/// <param name="isBerehole">(UrlType=RealtimeImgの際に使用)地中の情報を取得するかどうか</param>
 		/// <returns></returns>
-		public static string Generate(WebApiUrlType urlType, DateTime datetime, RealtimeDataType realtimeShindoType = RealtimeDataType.Shindo, bool isBerehole = false)
+		public static string Generate(WebApiUrlType urlType, DateTime datetime, RealtimeDataType realtimeShindoType = RealtimeDataType.Shindo, bool isBerehole = false) => urlType switch
 		{
-			switch (urlType)
-			{
-				case WebApiUrlType.RealtimeImg:
-					return string.Format(RealtimeBase, realtimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
-
-				case WebApiUrlType.EstShindo:
-					return string.Format(EstShindoBase, datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
-
-				case WebApiUrlType.PSWave:
-					return string.Format(PsWaveBase, datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
-
-				case WebApiUrlType.EewJson:
-					return string.Format(JsonEewBase, datetime.ToString("yyyyMMddHHmmss"));
-			}
-			return null;
-		}
+			WebApiUrlType.RealtimeImg => string.Format(RealtimeBase, realtimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss")),
+			WebApiUrlType.EstShindo => string.Format(EstShindoBase, datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss")),
+			WebApiUrlType.PSWave => string.Format(PsWaveBase, datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss")),
+			WebApiUrlType.EewJson => string.Format(JsonEewBase, datetime.ToString("yyyyMMddHHmmss")),
+			_ => throw new ArgumentException($"URLを生成できない{nameof(WebApiUrlType)}が指定されています", nameof(urlType)),
+		};
 	}
 }

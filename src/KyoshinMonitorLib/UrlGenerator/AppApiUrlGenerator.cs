@@ -36,6 +36,7 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// </summary>
 		public const string Meches = "http://kv.kmoni.bosai.go.jp/webservice/est/mesh_v2/list.json";
 
+#pragma warning disable CS0618 // 型またはメンバーが旧型式です
 		/// <summary>
 		/// 与えられた値を使用してURLを生成します。
 		/// </summary>
@@ -44,21 +45,15 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// <param name="realtimeShindoType">(UrlType=RealtimeDataの際に使用)取得するリアルタイム情報の種類</param>
 		/// <param name="isBerehole">(UrlType=RealtimeDataの際に使用)地中の情報を取得するかどうか</param>
 		/// <returns></returns>
-		public static string Generate(AppApiUrlType urlType, DateTime datetime, RealtimeDataType realtimeShindoType = RealtimeDataType.Shindo, bool isBerehole = false)
+		public static string Generate(AppApiUrlType urlType, DateTime datetime, RealtimeDataType realtimeShindoType = RealtimeDataType.Shindo, bool isBerehole = false) => urlType switch
 		{
-			switch (urlType)
-			{
-				case AppApiUrlType.RealtimeData:
-					return string.Format(RealtimeDataBase, realtimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"));
-				//case AppApiUrlType.EstShindoJson:
-				//	return string.Format(EewJsonBase, "EstShindoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "est");
-				//case AppApiUrlType.PSWaveJson:
-				//	return string.Format(EewJsonBase, "PSWaveJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "psw");
-				//case AppApiUrlType.HypoInfoJson:
-				//	return string.Format(EewJsonBase, "HypoInfoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "hypo");
-			}
-			return null;
-		}
+			AppApiUrlType.RealtimeData => string.Format(RealtimeDataBase, realtimeShindoType.ToUrlString(), isBerehole ? "b" : "s", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss")),
+			AppApiUrlType.EstShindoJson => string.Format(EewJsonBase, "EstShindoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "est"),
+			AppApiUrlType.PSWaveJson => string.Format(EewJsonBase, "PSWaveJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "psw"),
+			AppApiUrlType.HypoInfoJson => string.Format(EewJsonBase, "HypoInfoJsonV2", datetime.ToString("yyyyMMdd"), datetime.ToString("yyyyMMddHHmmss"), "hypo"),
+			_ => throw new ArgumentException($"URLを生成できない{nameof(AppApiUrlType)}が指定されています", nameof(urlType)),
+		};
+#pragma warning restore CS0618 // 型またはメンバーが旧型式です
 		/// <summary>
 		/// 観測点一覧のURLを生成します。
 		/// </summary>
