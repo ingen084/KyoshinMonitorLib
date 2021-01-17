@@ -25,7 +25,7 @@ namespace KyoshinMonitorLib.Images
 		/// <param name="dataType">取得する情報の種類</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列 取得に失敗した場合null</returns>
-		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>?>> ParseScaleFromParameterAsync(this WebApi webApi, IEnumerable<ObservationPoint> points, DateTime datetime, RealTimeDataType dataType = RealTimeDataType.Shindo, bool isBehole = false)
+		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>?>> ParseScaleFromParameterAsync(this WebApi webApi, IEnumerable<ObservationPoint> points, DateTime datetime, RealtimeDataType dataType = RealtimeDataType.Shindo, bool isBehole = false)
 			=> await webApi.ParseScaleFromParameterAsync(points.Select(p => new ImageAnalysisResult(p)).ToArray(), datetime, dataType, isBehole);
 
 		/// <summary>
@@ -38,7 +38,7 @@ namespace KyoshinMonitorLib.Images
 		/// <param name="dataType">取得する情報の種類</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列 取得に失敗した場合null</returns>
-		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>?>> ParseScaleFromParameterAsync(this WebApi webApi, IEnumerable<ImageAnalysisResult> points, DateTime datetime, RealTimeDataType dataType = RealTimeDataType.Shindo, bool isBehole = false)
+		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>?>> ParseScaleFromParameterAsync(this WebApi webApi, IEnumerable<ImageAnalysisResult> points, DateTime datetime, RealtimeDataType dataType = RealtimeDataType.Shindo, bool isBehole = false)
 		{
 			var imageResult = await webApi.GetRealtimeImageData(datetime, dataType, isBehole);
 			if (imageResult.Data == null)
@@ -46,7 +46,7 @@ namespace KyoshinMonitorLib.Images
 
 			using var stream = new MemoryStream(imageResult.Data);
 			using var bitmap = new Bitmap(stream);
-			return new(imageResult.StatusCode, points.ParseIntensityFromImage(bitmap));
+			return new(imageResult.StatusCode, points.ParseScaleFromImage(bitmap));
 		}
 
 		/// <summary>
@@ -63,20 +63,18 @@ namespace KyoshinMonitorLib.Images
 			{
 				pixelData = new Span<byte>(data.Scan0.ToPointer(), bitmap.Width * bitmap.Height);
 			}
-			try
+			foreach (var point in points)
 			{
-				foreach (var point in points)
+				if (point.ObservationPoint.Point == null || point.ObservationPoint.IsSuspended)
 				{
-					if (point.ObservationPoint.Point == null || point.ObservationPoint.IsSuspended)
-					{
-						point.AnalysisResult = null;
-						continue;
-					}
+					point.AnalysisResult = null;
+					continue;
+				}
 
 				try
 				{
 					var color = bitmap.Palette.Entries[pixelData[bitmap.Width * point.ObservationPoint.Point.Value.Y + point.ObservationPoint.Point.Value.X]];
-						point.Color = color;
+					point.Color = color;
 					if (color.A != 255)
 						continue;
 

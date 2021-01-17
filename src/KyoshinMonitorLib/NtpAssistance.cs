@@ -69,12 +69,11 @@ namespace KyoshinMonitorLib
 				socket.Connect(endPoint);
 				socket.ReceiveTimeout = timeout;
 
-					socket.Send(ntpData);
-					sendedTime = DateTime.Now;
+				socket.Send(ntpData);
+				sendedTime = DateTime.Now;
 
-					socket.Receive(ntpData);
-					recivedTime = DateTime.Now;
-				}
+				socket.Receive(ntpData);
+				recivedTime = DateTime.Now;
 			});
 
 			//受信時刻=32 送信時刻=40

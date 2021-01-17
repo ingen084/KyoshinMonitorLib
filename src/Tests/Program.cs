@@ -72,7 +72,7 @@ namespace Tests
 				try
 				{
 					// WebAPIから結果を計算 (良い子のみんなはawaitを使おうね！)
-					var result = await webApi.ParseScaleFromParameterAsync(points, time, RealTimeDataType.Pga).ConfigureAwait(false);
+					var result = await webApi.ParseScaleFromParameterAsync(points, time, RealtimeDataType.Pga).ConfigureAwait(false);
 					if (result.Data != null)
 					{
 						var data = result.Data.ToArray();
