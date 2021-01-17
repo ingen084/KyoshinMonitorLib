@@ -5,129 +5,19 @@
 強震モニタを使用したソフトを開発する際に毎回クラスや処理をコピーするのが面倒なので作成しました。
 
 # 更新情報
-## 0.3.0.2
+## 0.4.0.0
 ### 変更
 
-- Nullableに対応しました。
-- 結果として一部APIにマイナーな変更が加えられている可能性があります。
-
-## 0.3.0.1
-### 追加
-
-- .NET 5に対応しました。
-
-### 変更
-
-- 使用ライブラリを更新しました。
-
-## 0.3.0.0
-### 変更
-
-- 使用ライブラリを更新しました。
-- `ParseIntensityFromImage` での解析方法を最適化しました。
-- `SecondBasedTimer` の `Accuracy` プロパティを公開しました。
-
-### 破壊的変更
-
-- 各種 `RealTime` を `Realtime` に変更しました。
-  - 実際に組んでてストレスマッハだったためです。
-- [削除] `LinkedRealtimeData.Intensity`
-  - `float?` の拡張メソッドをご利用ください。
-- `JmaIntensity.ToShortString` の `Error` `Unknown` 時の表記をそれぞれ `*` `-` に変更しました。
-
-## 0.2.4.5
-### 変更
-
-- `AppApi` において休止中の観測点にもマッチングを行うように改善を行いました。
-
-## 0.2.4.4
-### 変更
-
-- 依存ライブラリの更新を行いました。
-- `MessagePack` の `Lz4BlockArray` に互換があったため、変更しました。
-
-## 0.2.4.3
-### 変更
-
-- 依存ライブラリの脆弱性対応を行いました。
-
-## 0.2.4.2
-### 変更
-
-- 使用ライブラリを更新しました。
-  - `MessagePack` の `Lz4BlockArray` 対応は互換性維持のため一旦見送ります。
-- `NtpAssistance` の `GetNetworkTimeWithNtp` の処理をを変更しました。
-  - IPアドレスでそのままリクエストを送れるようになりました。
-
-## 0.2.4.1
-### バグ修正
-
-- WebAPIのEEWの解析が出来なかったのを修正しました。
-
-## 0.2.4.0
-### 変更
-
-- XMLドキュメントを書きました。
-- `System.Text.Json` を使用するようにしました。
-
-## 0.2.3.0
-### 追加
-
-- nuget.org に公開しました。
-
-## 0.2.2.0
-### 変更
-
-- 強震モニタWeb版のURL変更に対応しました。
-
-## 0.2.1.0
-### 変更
-
-- .NET Standard2.1(.NET Core3.0)に対応しました。
-
-### 修正
-
-- `WebApi` の `Eew` の `report_time`が正常に解析できていなかった点を修正しました。
-- `LinkedObservationPoint` の初期化時に `site` がnullだった場合に例外を投げていた問題を修正しました。
-
-## 0.2.0.2
-### 変更
-
-- nugetパッケージを更新しました。
-
-### 削除
-
-- 現在利用できないAPIに `Obsolate` をつけて利用できなくしました。
-
-## 0.2.0.1
-### バグ修正
-
-- `GetNetworkTimeWithNtp` の処理を間違えていたのを修正しました。
-  - なんで今まで気づかなかったんでしょうかね！
-
-
-## 0.2.0.0
-### 変更
-
-- `SecondBasedTimer`で使用できるプロパティを増やしました。
-- AppApiの観測地点のマッチング処理を高速化しました。
-  - メモリの消費量もマシになったと思います(ちゃんとはかってない)
-- 404などの際に従来の例外を発生させる方式ではなく、`ApiResult`を使用するようにしました。
-  - 引き続きタイムアウトでは例外が発生します。
-- `LinkedObservationPoint` を追加しました。
-  - `ValueTuple`を置き換えただけです。
-- `.NET4.6`から`.NET4.6.1`に変更しました。
-
-### 削除
-
-- `FixedTimer` を削除しました。
+- 画像解析周りの機能を一新しました！
+- 解析アルゴリズムは [こちらの記事(JQuake)](https://qiita.com/NoneType1/items/a4d2cf932e20b56ca444) のものを使用しています。
 
 ## 過去の更新情報
 
-- [0.1.x台](https://github.com/ingen084/KyoshinMonitorLib/blob/e581e49192417d9b65a5403681b8507073c66349/README.md#%E6%9B%B4%E6%96%B0%E6%83%85%E5%A0%B1)
+- [0.3.x台](https://github.com/ingen084/KyoshinMonitorLib/blob/f635df256afc1a8b772f932818ab6276fe884202/README.md)
+- [0.1.x台](https://github.com/ingen084/KyoshinMonitorLib/blob/e581e49192417d9b65a5403681b8507073c66349/README.md)
 
 # リファレンス
-バージョン:`0.2.0.0`  
+バージョン:`0.4.0.0`  
 主要なクラスのみ解説します。詳細な解説はソースなどを参照してください。  
 また、気象庁震度階級や地球の緯度経度など、小学生レベルの前提知識が必要なものがあります。
 
@@ -197,15 +87,14 @@ Webで見ることができる強震モニタのAPIを使用してEEWなどの�
 ### KyoshinMonitorLib.Imagesによる拡張メソッド
 | 返り値の型 | 名前(引数) | 解説 |
 |---|---|---|
-|`Task<ApiResult<IEnumerable<ImageAnalysisResult>>>`|ParseIntensityFromParameterAsync(this `WebApi` webApi, `IEnumerable<ObservationPoint>` points, `DateTime` datetime, `bool` isBehole = false)|ObservationPointのコレクションを使用して新強震モニタリアルタイム震度の画像を取得し、解析します。|
+|`Task<ApiResult<IEnumerable<ImageAnalysisResult>>>`|ParseScaleFromParameterAsync(this `WebApi` webApi, `IEnumerable<ObservationPoint>` points, `DateTime` datetime, `RealtimeDataType` dataType = RealtimeDataType.Shindo, `bool` isBehole = false)|ObservationPointのコレクションを使用して新強震モニタの画像を取得し、解析します。|
 
 他にもありますが割愛させていただきます。
 
 #### 画像から震度を解析するにあたってのメモ
 
-(生の)震度7.0以上が観測された場合、必ず7.0が帰ってくるようです。  
-`7.0+` のような表記を採用してあげるとユーザーに優しいかもしれません。  
-尚、AppApiで取得した値は7.0以上でも正確に表示されます。
+`ImageAnalysisResult.AnalysisResult` は強震モニタ上のスケール(0～1)が返されます。  
+解析する画像の種類に応じて `GetResultToIntensity` `GetResultToPga` `GetResultToPgv` `GetResultToPgd` を使い分けてください。
 
 ## AppApiクラス
 スマートフォンアプリケーションのAPIを使用してリアルタイム震度などのデータを取得します。  

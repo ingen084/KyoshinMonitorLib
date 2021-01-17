@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
     <TargetFrameworks>net5.0;netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
-    <Version>0.3.1.0</Version>
+    <Version>0.4.0.0</Version>
 		<Copyright>Copyright © ingenWorkS 2021</Copyright>
 		<Company>ingenWorkS</Company>
 		<Authors>ingen084</Authors>
