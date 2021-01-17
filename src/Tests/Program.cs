@@ -26,40 +26,63 @@ namespace Tests
 			{
 				Console.WriteLine($"\nsys: {DateTime.Now:HH:mm:ss.fff} ntp:{time:HH:mm:ss.fff}");
 
+				//try
+				//{
+				//	// APIから結果を計算 (良い子のみんなはawaitを使おうね！)
+				//	var result = await appApi.GetLinkedRealTimeData(time, RealTimeDataType.Shindo, false).ConfigureAwait(false);
+				//	if (result.Data != null)
+				//	{
+				//		var data = result.Data;
+				//		// 現在の最大震度
+				//		Console.WriteLine($"*API* 最大震度: 生:{data.Max(r => r.Value)} jma:{data.Max(r => r.Value).ToJmaIntensity().ToLongString()} 数:{data.Length}");
+				//		// 最大震度観測点(の1つ)
+				//		var maxPoint = result.Data.OrderByDescending(r => r.Value).First();
+				//		Console.WriteLine($"最大観測点 {maxPoint.ObservationPoint.Point.Region} {maxPoint.ObservationPoint.Point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
+				//	}
+				//	else
+				//		Console.WriteLine($"*API* 取得失敗 " + result.StatusCode);
+				//}
+				//catch (KyoshinMonitorException ex)
+				//{
+				//	Console.WriteLine($"API エラー発生 {ex}");
+				//}
 				try
 				{
-						// APIから結果を計算 (良い子のみんなはawaitを使おうね！)
-						var result = await appApi.GetLinkedRealtimeData(time, RealtimeDataType.Shindo, false).ConfigureAwait(false);
-					if (result.Data != null)
-					{
-						var data = result.Data;
-							// 現在の最大震度
-							Console.WriteLine($"*API* 最大震度: 生:{data.Max(r => r.Value)} jma:{data.Max(r => r.Value).ToJmaIntensity().ToLongString()} 数:{data.Length}");
-							// 最大震度観測点(の1つ)
-							var maxPoint = result.Data.OrderByDescending(r => r.Value).First();
-						Console.WriteLine($"最大観測点 {maxPoint.ObservationPoint.Point?.Region} {maxPoint.ObservationPoint.Point?.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
-					}
-					else
-						Console.WriteLine($"*API* 取得失敗 " + result.StatusCode);
-				}
-				catch (KyoshinMonitorException ex)
-				{
-					Console.WriteLine($"API エラー発生 {ex}");
-				}
-				try
-				{
-						// WebAPIから結果を計算 (良い子のみんなはawaitを使おうね！)
-						var result = await webApi.ParseIntensityFromParameterAsync(points, time).ConfigureAwait(false);
+					// WebAPIから結果を計算 (良い子のみんなはawaitを使おうね！)
+					var result = await webApi.ParseScaleFromParameterAsync(points, time).ConfigureAwait(false);
 					if (result.Data != null)
 					{
 						var data = result.Data.ToArray();
-							// 現在の最大震度
-							Console.WriteLine($"*WEB* 最大震度: 生:{data.Max(r => r.AnalysisResult)} jma:{data.Max(r => r.AnalysisResult).ToJmaIntensity().ToLongString()} 数:{data.Count(d => d.AnalysisResult != null)}");
+						// 現在の最大震度
+						Console.WriteLine($"*WEB* 最大震度: 生:{data.Max(r => r.GetResultToIntensity()):0.0} jma:{data.Max(r => r.GetResultToIntensity()).ToJmaIntensity().ToLongString()} 数:{data.Count(d => d.AnalysisResult != null)}");
 					}
 					else if (result.StatusCode == HttpStatusCode.NotFound)
 					{
-						timer.Offset += TimeSpan.FromMilliseconds(100);
-						Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
+						// timer.Offset += TimeSpan.FromMilliseconds(100);
+						// Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
+						Console.WriteLine($"404");
+					}
+					else
+						Console.WriteLine($"*WEB* 取得失敗 " + result.StatusCode);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"*WEB* 取得失敗 " + ex);
+				}
+				try
+				{
+					// WebAPIから結果を計算 (良い子のみんなはawaitを使おうね！)
+					var result = await webApi.ParseScaleFromParameterAsync(points, time, RealTimeDataType.Pga).ConfigureAwait(false);
+					if (result.Data != null)
+					{
+						var data = result.Data.ToArray();
+						// 現在の最大震度
+						Console.WriteLine($"*WEB* 最大PGA: 生:{data.Max(r => r.GetResultToPga()):0.0} 数:{data.Count(d => d.AnalysisResult != null)}");
+					}
+					else if (result.StatusCode == HttpStatusCode.NotFound)
+					{
+						// timer.Offset += TimeSpan.FromMilliseconds(100);
+						// Console.WriteLine($"404のためオフセット調整 to:{timer.Offset.TotalSeconds}s");
 						Console.WriteLine($"404");
 					}
 					else

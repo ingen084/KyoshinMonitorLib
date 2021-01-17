@@ -16,29 +16,31 @@ namespace KyoshinMonitorLib.Images
 	public static class Extensions
 	{
 		/// <summary>
-		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を取得します。
+		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用しスケールを取得します。
 		/// <para>asyncなのはStream取得部分のみなので注意してください。</para>
 		/// </summary>
 		/// <param name="webApi">WebApiインスタンス</param>
 		/// <param name="points">使用する観測点情報の配列</param>
 		/// <param name="datetime">参照する日付</param>
+		/// <param name="dataType">取得する情報の種類</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列 取得に失敗した場合null</returns>
-		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>?>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ObservationPoint> points, DateTime datetime, bool isBehole = false)
-			=> await webApi.ParseIntensityFromParameterAsync(points.Select(p => new ImageAnalysisResult(p)).ToArray(), datetime, isBehole);
+		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>?>> ParseScaleFromParameterAsync(this WebApi webApi, IEnumerable<ObservationPoint> points, DateTime datetime, RealTimeDataType dataType = RealTimeDataType.Shindo, bool isBehole = false)
+			=> await webApi.ParseScaleFromParameterAsync(points.Select(p => new ImageAnalysisResult(p)).ToArray(), datetime, dataType, isBehole);
 
 		/// <summary>
-		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用し震度を取得します。
+		/// 与えられた情報から強震モニタの画像を取得し、そこから観測点情報を使用しスケールを取得します。
 		/// <para>asyncなのはStream取得部分のみなので注意してください。</para>
 		/// </summary>
 		/// <param name="webApi">WebApiインスタンス</param>
 		/// <param name="points">使用する観測点情報の配列</param>
 		/// <param name="datetime">参照する日付</param>
+		/// <param name="dataType">取得する情報の種類</param>
 		/// <param name="isBehole">地中の情報を取得するかどうか</param>
 		/// <returns>震度情報が追加された観測点情報の配列 取得に失敗した場合null</returns>
-		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>?>> ParseIntensityFromParameterAsync(this WebApi webApi, IEnumerable<ImageAnalysisResult> points, DateTime datetime, bool isBehole = false)
+		public static async Task<ApiResult<IEnumerable<ImageAnalysisResult>?>> ParseScaleFromParameterAsync(this WebApi webApi, IEnumerable<ImageAnalysisResult> points, DateTime datetime, RealTimeDataType dataType = RealTimeDataType.Shindo, bool isBehole = false)
 		{
-			var imageResult = await webApi.GetRealtimeImageData(datetime, RealtimeDataType.Shindo, isBehole);
+			var imageResult = await webApi.GetRealtimeImageData(datetime, dataType, isBehole);
 			if (imageResult.Data == null)
 				return new(imageResult.StatusCode, null);
 
@@ -48,12 +50,12 @@ namespace KyoshinMonitorLib.Images
 		}
 
 		/// <summary>
-		/// 与えられた画像から観測点情報を使用し震度を取得します。
+		/// 与えられた画像から観測点情報を使用しスケールを取得します。
 		/// </summary>
 		/// <param name="points">使用する観測点情報の配列</param>
 		/// <param name="bitmap">参照する画像</param>
 		/// <returns>震度情報が追加された観測点情報の配列</returns>
-		public static IEnumerable<ImageAnalysisResult> ParseIntensityFromImage(this IEnumerable<ImageAnalysisResult> points, Bitmap bitmap)
+		public static IEnumerable<ImageAnalysisResult> ParseScaleFromImage(this IEnumerable<ImageAnalysisResult> points, Bitmap bitmap)
 		{
 			var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
 			Span<byte> pixelData;
@@ -71,23 +73,20 @@ namespace KyoshinMonitorLib.Images
 						continue;
 					}
 
-					try
-					{
-						var color = bitmap.Palette.Entries[pixelData[bitmap.Width * point.ObservationPoint.Point.Value.Y + point.ObservationPoint.Point.Value.X]];
+				try
+				{
+					var color = bitmap.Palette.Entries[pixelData[bitmap.Width * point.ObservationPoint.Point.Value.Y + point.ObservationPoint.Point.Value.X]];
 						point.Color = color;
-						point.AnalysisResult = ColorToIntensityConverter.Convert(color);
+					if (color.A != 255)
+						continue;
 
-					}
-					catch (Exception ex)
-					{
-						point.AnalysisResult = null;
-						Debug.WriteLine("parseEx: " + ex.ToString());
-					}
+					point.AnalysisResult = ColorConverter.ConvertToScaleAtPolynomialInterpolation(color);
 				}
-			}
-			finally
-			{
-				bitmap.UnlockBits(data);
+				catch (Exception ex)
+				{
+					point.AnalysisResult = null;
+					Debug.WriteLine("parseEx: " + ex.ToString());
+				}
 			}
 			return points;
 		}

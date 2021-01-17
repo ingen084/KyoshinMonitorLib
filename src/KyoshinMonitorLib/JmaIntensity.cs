@@ -80,15 +80,27 @@
 		{
 			if (intensity == null)
 				return JmaIntensity.Unknown;
-			return intensity.Value.ToJmaIntensity();
+			return ((double)intensity.Value).ToJmaIntensity();
 		}
 
 		/// <summary>
-		/// 生の震度の値を気象庁震度階級に変換します。
+		/// 生の震度の値を気象庁震度階級に変換します。(double?版)
 		/// </summary>
 		/// <param name="intensity">変換対象の震度</param>
 		/// <returns>変換されたShindo</returns>
-		public static JmaIntensity ToJmaIntensity(this float intensity)
+		public static JmaIntensity ToJmaIntensity(this double? intensity)
+		{
+			if (intensity == null)
+				return JmaIntensity.Unknown;
+			return ((double)intensity.Value).ToJmaIntensity();
+		}
+
+		/// <summary>
+		/// 生の震度の値を気象庁震度階級に変換します。(double版)
+		/// </summary>
+		/// <param name="intensity">変換対象の震度</param>
+		/// <returns>変換されたShindo</returns>
+		public static JmaIntensity ToJmaIntensity(this double intensity)
 		{
 			if (intensity < 0.5)
 				return JmaIntensity.Int0;

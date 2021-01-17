@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net5.0;netstandard2.1</TargetFrameworks>
-    <Version>0.3.0.2</Version>
-		<Copyright>Copyright © ingenWorkS 2020</Copyright>
+    <Version>0.3.1.0</Version>
+		<Copyright>Copyright © ingenWorkS 2021</Copyright>
 		<Company>ingenWorkS</Company>
 		<Authors>ingen084</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
