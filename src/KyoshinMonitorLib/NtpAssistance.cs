@@ -25,11 +25,9 @@ namespace KyoshinMonitorLib
 		{
 			try
 			{
-				using (var client = new HttpClient() { Timeout = TimeSpan.FromMilliseconds(timeout) })
-				{
-					var match = TimeRegex.Match(await client.GetStringAsync(url));
-					return new DateTime(1970, 1, 1, 9, 0, 0).AddSeconds(double.Parse(match.Groups[1].Value));
-				}
+				using var client = new HttpClient() { Timeout = TimeSpan.FromMilliseconds(timeout) };
+				var match = TimeRegex.Match(await client.GetStringAsync(url));
+				return new DateTime(1970, 1, 1, 9, 0, 0).AddSeconds(double.Parse(match.Groups[1].Value));
 			}
 			catch (Exception ex)
 			{
@@ -60,19 +58,17 @@ namespace KyoshinMonitorLib
 			{
 				var addresses = (await Dns.GetHostEntryAsync(hostName)).AddressList;
 				var ipEndPoint = new IPEndPoint(addresses[0], port);
-				using (var socket = new Socket(ipEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp))
-				{
-					socket.Connect(ipEndPoint);
+				using var socket = new Socket(ipEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+				socket.Connect(ipEndPoint);
 
-					//Stops code hang if NTP is blocked
-					socket.ReceiveTimeout = timeout;
+				//Stops code hang if NTP is blocked
+				socket.ReceiveTimeout = timeout;
 
-					socket.Send(ntpData);
-					sendedTime = DateTime.Now;
+				socket.Send(ntpData);
+				sendedTime = DateTime.Now;
 
-					socket.Receive(ntpData);
-					recivedTime = DateTime.Now;
-				}
+				socket.Receive(ntpData);
+				recivedTime = DateTime.Now;
 			});
 
 			//受信時刻=32 送信時刻=40

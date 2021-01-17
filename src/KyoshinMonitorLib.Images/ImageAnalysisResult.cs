@@ -13,9 +13,9 @@ namespace KyoshinMonitorLib.Images
 		public ObservationPoint ObservationPoint { get; }
 
 		/// <summary>
-		/// 解析された値
+		/// 解析されたスケール
 		/// </summary>
-		public float? AnalysisResult { get; set; }
+		public double? AnalysisResult { get; set; }
 
 		/// <summary>
 		/// 解析に使用した色
@@ -29,6 +29,47 @@ namespace KyoshinMonitorLib.Images
 		public ImageAnalysisResult(ObservationPoint point)
 		{
 			ObservationPoint = point;
+		}
+
+		/// <summary>
+		/// 結果を震度として返します
+		/// </summary>
+		/// <returns></returns>
+		public double? GetResultToIntensity()
+		{
+			if (AnalysisResult is not double result)
+				return null;
+			return ColorConverter.ConvertToIntensityFromScale(result);
+		}
+		/// <summary>
+		/// 結果を最大加速度(PGA)として返します
+		/// </summary>
+		/// <returns></returns>
+		public double? GetResultToPga()
+		{
+			if (AnalysisResult is not double result)
+				return null;
+			return ColorConverter.ConvertToPgaFromScale(result);
+		}
+		/// <summary>
+		/// 結果を最大速度(PGV)として返します
+		/// </summary>
+		/// <returns></returns>
+		public double? GetResultToPgv()
+		{
+			if (AnalysisResult is not double result)
+				return null;
+			return ColorConverter.ConvertToPgvFromScale(result);
+		}
+		/// <summary>
+		/// 結果を最大変位(PGD)として返します
+		/// </summary>
+		/// <returns></returns>
+		public double? GetResultToPgd()
+		{
+			if (AnalysisResult is not double result)
+				return null;
+			return ColorConverter.ConvertToPgdFromScale(result);
 		}
 	}
 }

@@ -45,10 +45,10 @@ namespace KyoshinMonitorLib
 		/// <returns>読み込まれたメッシュ情報</returns>
 		public static ObservationPoint[] LoadFromMpk(string path, bool useLz4 = false)
 		{
-			using (var stream = new FileStream(path, FileMode.Open))
-				return useLz4
-					? LZ4MessagePackSerializer.Deserialize<ObservationPoint[]>(stream)
-					: MessagePackSerializer.Deserialize<ObservationPoint[]>(stream);
+			using var stream = new FileStream(path, FileMode.Open);
+			return useLz4
+				? LZ4MessagePackSerializer.Deserialize<ObservationPoint[]>(stream)
+				: MessagePackSerializer.Deserialize<ObservationPoint[]>(stream);
 		}
 		/// <summary>
 		/// メッシュ情報をmpk形式で保存します。失敗した場合は例外がスローされます。
@@ -58,11 +58,11 @@ namespace KyoshinMonitorLib
 		/// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
 		public static void SaveToMpk(string path, IEnumerable<Mesh> points, bool useLz4 = false)
 		{
-			using (var stream = new FileStream(path, FileMode.Create))
-				if (useLz4)
-					LZ4MessagePackSerializer.Serialize(stream, points.ToArray());
-				else
-					MessagePackSerializer.Serialize(stream, points.ToArray());
+			using var stream = new FileStream(path, FileMode.Create);
+			if (useLz4)
+				LZ4MessagePackSerializer.Serialize(stream, points.ToArray());
+			else
+				MessagePackSerializer.Serialize(stream, points.ToArray());
 		}
 
 

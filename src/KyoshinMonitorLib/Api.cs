@@ -30,14 +30,11 @@ namespace KyoshinMonitorLib
 		{
 			try
 			{
-				using (var response = await HttpClient.GetAsync(url))
-				{
+				using var response = await HttpClient.GetAsync(url);
+				if (!response.IsSuccessStatusCode)
+					return new ApiResult<T>(response.StatusCode, default);
 
-					if (!response.IsSuccessStatusCode)
-						return new ApiResult<T>(response.StatusCode, default);
-
-					return new ApiResult<T>(response.StatusCode, JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync()));
-				}
+				return new ApiResult<T>(response.StatusCode, JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync()));
 			}
 			catch (TaskCanceledException)
 			{
@@ -53,13 +50,11 @@ namespace KyoshinMonitorLib
 		{
 			try
 			{
-				using (var response = await HttpClient.GetAsync(url))
-				{
-					if (!response.IsSuccessStatusCode)
-						return new ApiResult<byte[]>(response.StatusCode, default);
+				using var response = await HttpClient.GetAsync(url);
+				if (!response.IsSuccessStatusCode)
+					return new ApiResult<byte[]>(response.StatusCode, default);
 
-					return new ApiResult<byte[]>(response.StatusCode, await response.Content.ReadAsByteArrayAsync());
-				}
+				return new ApiResult<byte[]>(response.StatusCode, await response.Content.ReadAsByteArrayAsync());
 			}
 			catch (TaskCanceledException)
 			{
