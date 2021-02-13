@@ -190,6 +190,6 @@ namespace KyoshinMonitorLib.Images
 		}
 
 		private static double GetHsvBrightness(Color rgb)
-			=> Math.Max(rgb.R / 255d, Math.Max(rgb.G / 255d, rgb.B / 255d));
+			=> Math.Max(rgb.R, Math.Max(rgb.G, rgb.B)) / 255d;
 	}
 }
