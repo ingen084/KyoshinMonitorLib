@@ -172,9 +172,9 @@ namespace KyoshinMonitorLib.Images
 		{
 			// Input : color in hsv space, float values between 0 and 1
 
-			float h = color.GetHue() / 360;
-			float s = color.GetSaturation();
-			float v = color.GetBrightness();
+			var h = color.GetHue() / 360;
+			var s = color.GetSaturation();
+			var v = GetHsvBrightness(color);
 
 			// Check if the color belongs to the scale
 
@@ -188,5 +188,8 @@ namespace KyoshinMonitorLib.Images
 			else
 				return -0.005171 * Math.Pow(v, 2) - 0.3282 * v + 1.2236;
 		}
+
+		private static double GetHsvBrightness(Color rgb)
+			=> Math.Max(rgb.R / 255d, Math.Max(rgb.G / 255d, rgb.B / 255d));
 	}
 }

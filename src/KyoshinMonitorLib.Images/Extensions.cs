@@ -76,7 +76,10 @@ namespace KyoshinMonitorLib.Images
 					var color = bitmap.Palette.Entries[pixelData[bitmap.Width * point.ObservationPoint.Point.Value.Y + point.ObservationPoint.Point.Value.X]];
 					point.Color = color;
 					if (color.A != 255)
+					{
+						point.AnalysisResult = null;
 						continue;
+					}
 
 					point.AnalysisResult = ColorConverter.ConvertToScaleAtPolynomialInterpolation(color);
 				}
