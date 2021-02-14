@@ -170,14 +170,11 @@ namespace KyoshinMonitorLib.Images
 			=> Math.Max(0, ConvertToScaleAtPolynomialInterpolationInternal(color));
 		private static double ConvertToScaleAtPolynomialInterpolationInternal(Color color)
 		{
-			// Input : color in hsv space, float values between 0 and 1
-
-			var h = color.GetHue() / 360;
-			var s = color.GetSaturation();
-			var v = GetHsvBrightness(color);
+			// Input : color in hsv space
+			(var h, var s, var v) = GetHsv(color);
+			h /= 360;
 
 			// Check if the color belongs to the scale
-
 			if (v <= 0.1 || s <= 0.75)
 				return 0;
 
@@ -189,7 +186,29 @@ namespace KyoshinMonitorLib.Images
 				return -0.005171 * Math.Pow(v, 2) - 0.3282 * v + 1.2236;
 		}
 
-		private static double GetHsvBrightness(Color rgb)
-			=> Math.Max(rgb.R, Math.Max(rgb.G, rgb.B)) / 255d;
+		/// <summary>
+		/// 指定した色をHSVで返す
+		/// </summary>
+		/// <param name="rgb">変換する色</param>
+		/// <returns>変換した色</returns>
+		private static (double h, double s, double v) GetHsv(Color rgb)
+		{
+			var max = Math.Max(rgb.R, Math.Max(rgb.G, rgb.B));
+			var min = Math.Min(rgb.R, Math.Min(rgb.G, rgb.B));
+
+			if (min == max)
+				return (0, 0, max / 255d);
+			double w = max - min;
+			var h = 0d;
+			if (rgb.R == max)
+				h = (rgb.G - rgb.B) / w;
+			if (rgb.G == max)
+				h = ((rgb.B - rgb.R) / w) + 2;
+			if (rgb.B == max)
+				h = ((rgb.R - rgb.G) / w) + 4;
+			if ((h *= 60) < 0)
+				h += 360;
+			return (h, (double)(max - min) / max, max / 255d);
+		}
 	}
 }
