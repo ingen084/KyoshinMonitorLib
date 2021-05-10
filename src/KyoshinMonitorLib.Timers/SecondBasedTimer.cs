@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace KyoshinMonitorLib.Timers
 		private readonly TimeSpan Interval = TimeSpan.FromSeconds(1);
 		private Timer InnerTimer { get; }
 		private TimeSpan LastTime { get; set; }
-		private HighPerformanceStopwatch Stopwatch { get; }
+		private Stopwatch Stopwatch { get; }
 
 		/// <summary>
 		/// 現在のタイマー内の時間
@@ -69,7 +70,7 @@ namespace KyoshinMonitorLib.Timers
 		/// </summary>
 		public SecondBasedTimer()
 		{
-			Stopwatch = new HighPerformanceStopwatch();
+			Stopwatch = new Stopwatch();
 			InnerTimer = new Timer(s =>
 			{
 				if (Stopwatch.Elapsed - LastTime >= Interval)
