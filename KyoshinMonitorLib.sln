@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0725ADC2-85A0-4F75-97F2-475756E5362F}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib.Timers", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib.Images", "src\KyoshinMonitorLib.Images\KyoshinMonitorLib.Images.csproj", "{0A7BD896-197C-4777-80E2-1F51D8F031E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KyoshinMonitorLib.Training", "src\KyoshinMonitorLib.Training\KyoshinMonitorLib.Training.csproj", "{500AAAD5-C29E-49C4-A4B2-480820B551B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib.Training", "src\KyoshinMonitorLib.Training\KyoshinMonitorLib.Training.csproj", "{500AAAD5-C29E-49C4-A4B2-480820B551B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KyoshinMonitorLib.SkiaImages", "src\KyoshinMonitorLib.SkiaImages\KyoshinMonitorLib.SkiaImages.csproj", "{25100A14-A241-4480-8747-CF5E8676A140}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{500AAAD5-C29E-49C4-A4B2-480820B551B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{500AAAD5-C29E-49C4-A4B2-480820B551B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{500AAAD5-C29E-49C4-A4B2-480820B551B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25100A14-A241-4480-8747-CF5E8676A140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25100A14-A241-4480-8747-CF5E8676A140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25100A14-A241-4480-8747-CF5E8676A140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25100A14-A241-4480-8747-CF5E8676A140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

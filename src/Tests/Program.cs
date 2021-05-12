@@ -1,5 +1,5 @@
 ﻿using KyoshinMonitorLib;
-using KyoshinMonitorLib.Images;
+using KyoshinMonitorLib.SkiaImages;
 using KyoshinMonitorLib.Timers;
 using KyoshinMonitorLib.UrlGenerator;
 using System;
