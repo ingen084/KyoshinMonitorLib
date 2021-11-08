@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netstandard2.1;netstandard2.0;net47;net461</TargetFrameworks>
-    <Version>0.4.2.0</Version>
+    <TargetFrameworks>net6.0;net5.0;netstandard2.1;netstandard2.0;net47</TargetFrameworks>
+    <Version>0.4.2.1</Version>
     <Copyright>Copyright © ingenWorkS 2021</Copyright>
     <Company>ingenWorkS</Company>
     <Authors>ingen084</Authors>
@@ -16,11 +16,14 @@
 
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+	  
+	<PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\KyoshinMonitorLib\KyoshinMonitorLib.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
@@ -28,7 +31,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="2.80.2" />
+    <PackageReference Include="SkiaSharp" Version="2.80.3" />
   </ItemGroup>
 
 </Project>
