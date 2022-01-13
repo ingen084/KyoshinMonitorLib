@@ -11,14 +11,14 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// JsonEewのベースURL
 		/// <para>0:時間</para>
 		/// </summary>
-		public const string JsonEewBase = "http://www.kmoni.bosai.go.jp/webservice/hypo/eew/{0}.json";
+		public const string JsonEewBase = "https://www.lmoni.bosai.go.jp/monitor/webservice/hypo/eew/{0}.json";
 
 		/// <summary>
 		/// PsWaveImgのベースURL
 		/// <para>0:日付</para>
 		/// <para>1:時間</para>
 		/// </summary>
-		public const string PsWaveBase = "http://www.kmoni.bosai.go.jp/data/map_img/PSWaveImg/eew/{0}/{1}.eew.gif";
+		public const string PsWaveBase = "https://www.lmoni.bosai.go.jp/monitor/data/data/map_img/PSWaveImg/eew/{0}/{1}.eew.gif";
 
 		/// <summary>
 		/// RealtimeImgのベースURL
@@ -27,14 +27,14 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// <para>2:日付</para>
 		/// <para>3:時間</para>
 		/// </summary>
-		public const string RealtimeBase = "http://www.kmoni.bosai.go.jp/data/map_img/RealTimeImg/{0}_{1}/{2}/{3}.{0}_{1}.gif";
+		public const string RealtimeBase = "https://www.lmoni.bosai.go.jp/monitor/data/data/map_img/RealTimeImg/{0}_{1}/{2}/{3}.{0}_{1}.gif";
 
 		/// <summary>
 		/// 予想震度のベースURL
 		/// <para>0:日付</para>
 		/// <para>1:時間</para>
 		/// </summary>
-		public const string EstShindoBase = "http://www.kmoni.bosai.go.jp/data/map_img/EstShindoImg/eew/{0}/{1}.eew.gif";
+		public const string EstShindoBase = "https://www.lmoni.bosai.go.jp/monitor/data/data/map_img/EstShindoImg/eew/{0}/{1}.eew.gif";
 
 		/// <summary>
 		/// 与えられた値を使用してURLを生成します。
