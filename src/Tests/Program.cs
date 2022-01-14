@@ -14,8 +14,7 @@ namespace Tests
 		public static async Task Main()
 		{
 			var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
-			using var appApi = new AppApi(points);
-			using var webApi = new WebApi();
+			using var webApi = new LpgmWebApi();
 			// タイマーのインスタンスを作成
 			var timer = new SecondBasedTimer()
 			{
@@ -26,26 +25,6 @@ namespace Tests
 			{
 				Console.WriteLine($"\nsys: {DateTime.Now:HH:mm:ss.fff} ntp:{time:HH:mm:ss.fff}");
 
-				//try
-				//{
-				//	// APIから結果を計算 (良い子のみんなはawaitを使おうね！)
-				//	var result = await appApi.GetLinkedRealTimeData(time, RealTimeDataType.Shindo, false).ConfigureAwait(false);
-				//	if (result.Data != null)
-				//	{
-				//		var data = result.Data;
-				//		// 現在の最大震度
-				//		Console.WriteLine($"*API* 最大震度: 生:{data.Max(r => r.Value)} jma:{data.Max(r => r.Value).ToJmaIntensity().ToLongString()} 数:{data.Length}");
-				//		// 最大震度観測点(の1つ)
-				//		var maxPoint = result.Data.OrderByDescending(r => r.Value).First();
-				//		Console.WriteLine($"最大観測点 {maxPoint.ObservationPoint.Point.Region} {maxPoint.ObservationPoint.Point.Name} 震度:{maxPoint.Value}({maxPoint.Value.ToJmaIntensity().ToLongString()})");
-				//	}
-				//	else
-				//		Console.WriteLine($"*API* 取得失敗 " + result.StatusCode);
-				//}
-				//catch (KyoshinMonitorException ex)
-				//{
-				//	Console.WriteLine($"API エラー発生 {ex}");
-				//}
 				try
 				{
 					// WebAPIから結果を計算 (良い子のみんなはawaitを使おうね！)

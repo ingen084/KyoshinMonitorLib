@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;net5.0;netstandard2.1;netstandard2.0;net47</TargetFrameworks>
-    <Version>0.4.2.1</Version>
-    <Copyright>Copyright © ingenWorkS 2021</Copyright>
+	<Version>0.4.3.0</Version>
+	<Copyright>Copyright © ingenWorkS 2021</Copyright>
     <Company>ingenWorkS</Company>
     <Authors>ingen084</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

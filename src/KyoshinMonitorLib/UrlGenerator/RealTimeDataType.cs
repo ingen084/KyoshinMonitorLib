@@ -56,6 +56,54 @@ namespace KyoshinMonitorLib.UrlGenerator
 		/// 速度応答4Hz
 		/// </summary>
 		Response_4Hz,
+
+		/// <summary>
+		/// 長周期地震動階級
+		/// Lpgm系列でのみ利用可
+		/// </summary>
+		Abrspmx,
+
+		/// <summary>
+		/// 階級データ(周期1秒台)
+		/// Lpgm系列でのみ利用可
+		/// </summary>
+		Abrsp_1s,
+
+		/// <summary>
+		/// 階級データ(周期2秒台)
+		/// Lpgm系列でのみ利用可
+		/// </summary>
+		Abrsp_2s,
+
+		/// <summary>
+		/// 階級データ(周期3秒台)
+		/// Lpgm系列でのみ利用可
+		/// </summary>
+		Abrsp_3s,
+
+		/// <summary>
+		/// 階級データ(周期4秒台)
+		/// Lpgm系列でのみ利用可
+		/// </summary>
+		Abrsp_4s,
+
+		/// <summary>
+		/// 階級データ(周期5秒台)
+		/// Lpgm系列でのみ利用可
+		/// </summary>
+		Abrsp_5s,
+
+		/// <summary>
+		/// 階級データ(周期6秒台)
+		/// Lpgm系列でのみ利用可
+		/// </summary>
+		Abrsp_6s,
+
+		/// <summary>
+		/// 階級データ(周期7秒台)
+		/// Lpgm系列でのみ利用可
+		/// </summary>
+		Abrsp_7s,
 	}
 
 	/// <summary>
@@ -80,6 +128,14 @@ namespace KyoshinMonitorLib.UrlGenerator
 			RealtimeDataType.Response_1Hz => "rsp1000",
 			RealtimeDataType.Response_2Hz => "rsp2000",
 			RealtimeDataType.Response_4Hz => "rsp4000",
+			RealtimeDataType.Abrspmx => "abrspmx",
+			RealtimeDataType.Abrsp_1s => "abrsp1s",
+			RealtimeDataType.Abrsp_2s => "abrsp2s",
+			RealtimeDataType.Abrsp_3s => "abrsp3s",
+			RealtimeDataType.Abrsp_4s => "abrsp4s",
+			RealtimeDataType.Abrsp_5s => "abrsp5s",
+			RealtimeDataType.Abrsp_6s => "abrsp6s",
+			RealtimeDataType.Abrsp_7s => "abrsp7s",
 			_ => throw new ArgumentException($"URLを生成できない{nameof(RealtimeDataType)}が指定されています", nameof(type)),
 		};
 	}
