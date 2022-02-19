@@ -73,7 +73,7 @@ namespace Tests
 				}
 			};
 
-			var ntp = await NtpAssistance.GetNetworkTimeWithNtp().ConfigureAwait(false);
+			var ntp = await NtpAssistance.GetNetworkTimeWithHttp().ConfigureAwait(false);
 			// タイマー開始
 			timer.Start(ntp ?? throw new Exception());
 

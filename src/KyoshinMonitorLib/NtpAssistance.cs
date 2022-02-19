@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -11,21 +12,26 @@ namespace KyoshinMonitorLib
 	/// <summary>
 	/// Ntpによる時刻取得を補助するクラス
 	/// </summary>
-	public class NtpAssistance
+	public static class NtpAssistance
 	{
-		static readonly Regex TimeRegex = new Regex("[^0-9]*(\\d+\\.\\d+)+.*", RegexOptions.Compiled);
+		static readonly Regex TimeRegex = new("[^0-9]*(\\d+\\.\\d+)+.*", RegexOptions.Compiled);
 
 		/// <summary>
-		/// Http通信を使用してネットワーク上から時刻を取得します。
+		/// HTTPを使用してネットワーク上から時刻を取得します。
+		/// <para>このAPIは起動したアセンブリ名･バージョンをUserAgentにセットしてリクエストを送信します。</para>
+		/// <para>送信されたくない場合、HttpClientを指定するメソッドを使用してください。</para>
 		/// </summary>
 		/// <param name="url">要求するURL POSIX Timeが生で返されるURLである必要があります。</param>
 		/// <param name="timeout">タイムアウト時間(ミリ秒)</param>
 		/// <returns>取得された時刻 取得に失敗した場合はnullが返されます。</returns>
-		public static async Task<DateTime?> GetNetworkTimeWithHttp(string url = "https://ntp-a1.nict.go.jp/cgi-bin/jst", double timeout = 1000)
+		public static async Task<DateTime?> GetNetworkTimeWithHttp(string url = "https://svs.ingen084.net/time/", double timeout = 1000)
 		{
 			try
 			{
 				using var client = new HttpClient() { Timeout = TimeSpan.FromMilliseconds(timeout) };
+				var execAsm = Assembly.GetEntryAssembly() ?? typeof(NtpAssistance).Assembly;
+				var asmName = execAsm.GetName();
+				client.DefaultRequestHeaders.TryAddWithoutValidation("UserAgent", $"{asmName.Name ?? "unknown"}-{asmName.Version?.ToString() ?? "unknown"}");
 				var match = TimeRegex.Match(await client.GetStringAsync(url));
 				return new DateTime(1970, 1, 1, 9, 0, 0).AddSeconds(double.Parse(match.Groups[1].Value));
 			}
@@ -37,7 +43,27 @@ namespace KyoshinMonitorLib
 		}
 
 		/// <summary>
-		/// Ntp通信を使用してネットワーク上から時刻を取得します。
+		/// HTTP通信を使用してネットワーク上から時刻を取得します。
+		/// </summary>
+		/// <param name="client">リクエストに使用するHttpClient</param>
+		/// <param name="url">要求するURL POSIX Timeが生で返されるURLである必要があります。</param>
+		/// <returns>取得された時刻 取得に失敗した場合はnullが返されます。</returns>
+		public static async Task<DateTime?> GetNetworkTimeWithHttp(HttpClient client, string url = "https://svs.ingen084.net/time/")
+		{
+			try
+			{
+				var match = TimeRegex.Match(await client.GetStringAsync(url));
+				return new DateTime(1970, 1, 1, 9, 0, 0).AddSeconds(double.Parse(match.Groups[1].Value));
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("GetNetworkTimeWithHttpAsync Error: " + ex);
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// NTPを使用してネットワーク上から時刻を取得します。
 		/// </summary>
 		/// <param name="hostName">ホスト名</param>
 		/// <param name="port">ポート番号 通常はデフォルトのままで構いません。</param>
