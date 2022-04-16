@@ -16,7 +16,7 @@ namespace KyoshinMonitorLib
 		/// <param name="time">取得する時間</param>
 		/// <returns></returns>
 		public Task<ApiResult<Eew?>> GetEewInfo(DateTime time)
-			=> GetJsonObject<Eew>(WebApiUrlGenerator.Generate(WebApiUrlType.EewJson, time));
+			=> GetJsonObject(WebApiUrlGenerator.Generate(WebApiUrlType.EewJson, time), ApiResult.ApiResultJsonContext.Default.Eew);
 
 		/// <summary>
 		/// リアルタイム画像の生データを取得します。

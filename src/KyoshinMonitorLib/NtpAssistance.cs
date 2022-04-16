@@ -82,9 +82,7 @@ namespace KyoshinMonitorLib
 
 			await Task.Run(() =>
 			{
-				IPAddress? addr = IPAddress.Any;
-
-				if (!IPAddress.TryParse(hostName, out addr))
+				if (!IPAddress.TryParse(hostName, out var addr))
 				{
 					var addresses = Dns.GetHostEntry(hostName).AddressList;
 					addr = addresses[new Random().Next(addresses.Length)];

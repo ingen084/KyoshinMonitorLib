@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 
 namespace KyoshinMonitorLib
@@ -25,8 +26,9 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <typeparam name="T">デシリアライズする型</typeparam>
 		/// <param name="url">使用するURL</param>
+		/// <param name="jsonTypeInfo">使用するTypeInfo</param>
 		/// <returns></returns>
-		protected async Task<ApiResult<T?>> GetJsonObject<T>(string url)
+		protected async Task<ApiResult<T?>> GetJsonObject<T>(string url, JsonTypeInfo<T> jsonTypeInfo)
 		{
 			try
 			{
@@ -34,7 +36,7 @@ namespace KyoshinMonitorLib
 				if (!response.IsSuccessStatusCode)
 					return new(response.StatusCode, default);
 
-				return new(response.StatusCode, JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync()));
+				return new(response.StatusCode, JsonSerializer.Deserialize(await response.Content.ReadAsStringAsync(), jsonTypeInfo));
 			}
 			catch (TaskCanceledException)
 			{

@@ -24,7 +24,7 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		/// 発報時間
 		/// </summary>
 		[JsonIgnore]
-		public DateTime? ReportTime => DateTime.TryParse(ReportTimeString, out var time) ? time : null as DateTime?;
+		public DateTime? ReportTime => DateTime.TryParse(ReportTimeString, out var time) ? time : null;
 		/// <summary>
 		/// 地域コード
 		/// </summary>
@@ -50,7 +50,7 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		/// 経度
 		/// </summary>
 		[JsonIgnore]
-		public float? Longitude => LongitudeString != null && float.TryParse(LongitudeString, out var lon) ? lon : null as float?;
+		public float? Longitude => LongitudeString != null && float.TryParse(LongitudeString, out var lon) ? lon : null;
 		/// <summary>
 		/// キャンセル報か(デシリアライズ用)
 		/// </summary>
@@ -70,7 +70,7 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		/// 震源の深さ
 		/// </summary>
 		[JsonIgnore]
-		public int? Depth => int.TryParse(DepthString?.Replace("km", ""), out var depth) ? depth : null as int?;
+		public int? Depth => int.TryParse(DepthString?.Replace("km", ""), out var depth) ? depth : null;
 		/// <summary>
 		/// 予想最大震度(デシリアライズ用)
 		/// </summary>
@@ -109,7 +109,7 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		/// 緯度
 		/// </summary>
 		[JsonIgnore]
-		public float? Latitude => LatitudeString != null && float.TryParse(LatitudeString, out var lat) ? lat : null as float?;
+		public float? Latitude => LatitudeString != null && float.TryParse(LatitudeString, out var lat) ? lat : null;
 		/// <summary>
 		/// 震源の座標
 		/// </summary>
@@ -124,7 +124,7 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		/// 発生時間
 		/// </summary>
 		[JsonIgnore]
-		public DateTime? OriginTime => DateTime.TryParseExact(OriginTimeString, "yyyyMMddHHmmss", null, DateTimeStyles.None, out var time) ? time : null as DateTime?;
+		public DateTime? OriginTime => DateTime.TryParseExact(OriginTimeString, "yyyyMMddHHmmss", null, DateTimeStyles.None, out var time) ? time : null;
 		/// <summary>
 		/// セキュリティ情報
 		/// </summary>
@@ -139,7 +139,7 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		/// マグニチュード
 		/// </summary>
 		[JsonIgnore]
-		public float? Magunitude => float.TryParse(MagunitudeString, out var val) ? val : null as float?;
+		public float? Magunitude => float.TryParse(MagunitudeString, out var val) ? val : null;
 		/// <summary>
 		/// 発報番号(デシリアライズ用)
 		/// </summary>
@@ -149,7 +149,7 @@ namespace KyoshinMonitorLib.ApiResult.WebApi
 		/// 発報番号
 		/// </summary>
 		[JsonIgnore]
-		public int? ReportNum => int.TryParse(ReportNumString, out var val) ? val : null as int?;
+		public int? ReportNum => int.TryParse(ReportNumString, out var val) ? val : null;
 		/// <summary>
 		/// なにこれ?
 		/// </summary>

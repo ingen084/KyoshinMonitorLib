@@ -33,13 +33,13 @@ namespace KyoshinMonitorLib
 		/// 観測点一覧を取得します。
 		/// </summary>
 		public virtual Task<ApiResult<SiteList?>> GetSiteList(string baseSerialNo)
-			=> GetJsonObject<SiteList>(AppApiUrlGenerator.Generate(baseSerialNo));
+			=> GetJsonObject(AppApiUrlGenerator.Generate(baseSerialNo), ApiResult.ApiResultJsonContext.Default.SiteList);
 
 		/// <summary>
 		/// リアルタイムなデータを取得します。
 		/// </summary>
 		public virtual Task<ApiResult<RealtimeData?>> GetRealtimeData(DateTime time, RealtimeDataType dataType, bool isBehore = false)
-			=> GetJsonObject<RealtimeData>(AppApiUrlGenerator.Generate(AppApiUrlType.RealtimeData, time, dataType, isBehore));
+			=> GetJsonObject(AppApiUrlGenerator.Generate(AppApiUrlType.RealtimeData, time, dataType, isBehore), ApiResult.ApiResultJsonContext.Default.RealtimeData);
 
 		/// <summary>
 		/// 観測点情報と結合済みのリアルタイムなデータを取得します。
@@ -48,8 +48,8 @@ namespace KyoshinMonitorLib
 		{
 			var dataResult = await GetRealtimeData(time, dataType, isBehore);
 			if (dataResult.Data is not RealtimeData data ||
-				data.BaseSerialNo is not string ||
-				data.Items is not float?[])
+				data.BaseSerialNo is null ||
+				data.Items is null)
 				return new(dataResult.StatusCode, null);
 
 
@@ -74,8 +74,8 @@ namespace KyoshinMonitorLib
 				return pair;
 
 			var siteListResult = await GetSiteList(serialNo);
-			if (siteListResult.Data is not SiteList
-			 || siteListResult.Data.Sites is not Site[])
+			if (siteListResult.Data is null
+			 || siteListResult.Data.Sites is null)
 				throw new KyoshinMonitorException("SiteListの取得に失敗しました。");
 
 			var pairList = new List<LinkedObservationPoint>();
@@ -120,49 +120,5 @@ namespace KyoshinMonitorLib
 		private static bool CheckNearLocation(Location l, Site s)
 			=> s.Lat is float lat && s.Lng is float lng &&
 				Math.Abs(Math.Floor(l.Latitude * 1000) / 1000 - lat) <= 0.01 && Math.Abs(Math.Floor(l.Longitude * 1000) / 1000 - lng) <= 0.01;
-
-		/// <summary>
-		/// 緊急地震速報の情報を取得します。
-		/// </summary>
-		[Obsolete("現在このAPIは利用できません。")]
-		public virtual Task<ApiResult<Hypo?>> GetEewHypoInfo(DateTime time)
-			=> GetJsonObject<Hypo>(AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time));
-
-		/// <summary>
-		/// 緊急地震速報から算出された揺れの広がりを取得します。
-		/// </summary>
-		[Obsolete("現在このAPIは利用できません。")]
-		public virtual Task<ApiResult<PSWave?>> GetPSWave(DateTime time)
-			=> GetJsonObject<PSWave>(AppApiUrlGenerator.Generate(AppApiUrlType.PSWaveJson, time));
-
-		/// <summary>
-		/// 緊急地震速報から算出された予想震度のメッシュ情報を取得します。
-		/// </summary>
-		[Obsolete("現在このAPIは利用できません。")]
-		public virtual Task<ApiResult<EstShindo?>> GetEstShindo(DateTime time)
-			=> GetJsonObject<EstShindo>(AppApiUrlGenerator.Generate(AppApiUrlType.EstShindoJson, time));
-
-		/// <summary>
-		/// メッシュ一覧を取得します。
-		/// 非常に時間がかかるため、キャッシュしておくことを推奨します。
-		/// </summary>
-		[Obsolete("現在このAPIは利用できません。")]
-		public virtual async Task<ApiResult<Mesh[]?>> GetMeshes()
-		{
-			var meshesResult = await GetJsonObject<MeshList>(AppApiUrlGenerator.Meches);
-			if (meshesResult.Data?.Items is not object[][] meshItems)
-				return new(meshesResult.StatusCode, null);
-			var result = new List<Mesh>();
-
-			await Task.Run(() =>
-			{
-				var length = meshItems.GetLength(0);
-				for (var i = 0; i < length; i++)
-					if (meshItems[i][0] is string code)
-						result.Add(new(code, (double)meshItems[i][1], (double)meshItems[i][2]));
-			});
-
-			return new(meshesResult.StatusCode, result.ToArray());
-		}
 	}
 }

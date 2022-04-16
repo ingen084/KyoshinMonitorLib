@@ -48,17 +48,5 @@ namespace KyoshinMonitorLib.Training
 				return new(HttpStatusCode.NotFound, null);
 			return new(HttpStatusCode.OK, JsonSerializer.Deserialize<RealtimeData>(await File.ReadAllTextAsync(path)));
 		}
-
-		/// <summary>
-		/// 緊急地震速報データ
-		/// </summary>
-		[Obsolete("現在このAPIは利用できません")]
-		public override async Task<ApiResult<Hypo?>> GetEewHypoInfo(DateTime time)
-		{
-			var path = AppApiUrlGenerator.Generate(AppApiUrlType.HypoInfoJson, time).Replace("http://kv.kmoni.bosai.go.jp/kyoshin_monitor/static/jsondata/", BasePath);
-			if (!File.Exists(path))
-				return new(HttpStatusCode.NotFound, null);
-			return new(HttpStatusCode.OK, JsonSerializer.Deserialize<Hypo>(await File.ReadAllTextAsync(path)));
-		}
 	}
 }
