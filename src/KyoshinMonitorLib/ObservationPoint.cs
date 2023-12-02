@@ -30,13 +30,25 @@ namespace KyoshinMonitorLib
             return MessagePackSerializer.Deserialize<ImmutableArray<ObservationPoint>>(stream, options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption);
 		}
 
-		/// <summary>
-		/// 観測点情報をmpk形式で保存します。失敗した場合は例外がスローされます。
-		/// </summary>
-		/// <param name="path">書き込むmpkファイルのパス</param>
-		/// <param name="points">書き込む観測点情報の配列</param>
-		/// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
-		public static void SaveToMpk(string path, ImmutableArray<ObservationPoint> points, bool useLz4 = false)
+        /// <summary>
+        /// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
+        /// </summary>
+        /// <param name="stream">読み込むmpkファイルのコンテンツ</param>
+        /// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
+        /// <returns>読み込まれた観測点情報</returns>
+        public static ImmutableArray<ObservationPoint> LoadFromMpk(Stream stream, bool useLz4 = false)
+			=> MessagePackSerializer.Deserialize<ImmutableArray<ObservationPoint>>(
+				stream,
+				options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption
+			);
+
+        /// <summary>
+        /// 観測点情報をmpk形式で保存します。失敗した場合は例外がスローされます。
+        /// </summary>
+        /// <param name="path">書き込むmpkファイルのパス</param>
+        /// <param name="points">書き込む観測点情報の配列</param>
+        /// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
+        public static void SaveToMpk(string path, ImmutableArray<ObservationPoint> points, bool useLz4 = false)
 		{
 			using var stream = new FileStream(path, FileMode.Create);
 			MessagePackSerializer.Serialize(stream, points, options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption);
