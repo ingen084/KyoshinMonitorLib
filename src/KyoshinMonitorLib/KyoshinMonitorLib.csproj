@@ -1,33 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;net47</TargetFrameworks>
-    <Version>0.4.5.1</Version>
-	<Copyright>Copyright © ingenWorkS 2021</Copyright>
-	<Company>ingenWorkS</Company>
-	<Authors>ingen084</Authors>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<Description>.NETから簡単に強震モニタを利用できるようにするライブラリ</Description>
-	<Configurations>Debug;Release</Configurations>
-	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<RepositoryUrl>https://github.com/ingen084/KyoshinMonitorLib</RepositoryUrl>
-	<RepositoryType>git</RepositoryType>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-	  
-	<PublishTrimmed>true</PublishTrimmed>
-  </PropertyGroup>
-	
-  <ItemGroup>
-	<PackageReference Include="MessagePack" Version="2.5.124" />
-	<PackageReference Include="System.Text.Json" Version="7.0.3" />
-  </ItemGroup>
-	
-  <ItemGroup>
-	<None Include="..\..\LICENSE">
-	  <Pack>True</Pack>
-	  <PackagePath></PackagePath>
-	</None>
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+		<Version>0.4.6.0-alpha</Version>
+		<Copyright>Copyright © ingenWorkS 2021</Copyright>
+		<Company>ingenWorkS</Company>
+		<Authors>ingen084</Authors>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Description>.NETから簡単に強震モニタを利用できるようにするライブラリ</Description>
+		<Configurations>Debug;Release</Configurations>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<RepositoryUrl>https://github.com/ingen084/KyoshinMonitorLib</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+
+		<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MessagePack" Version="2.6.100-alpha" />
+		<PackageReference Include="MessagePack.SourceGenerator" Version="2.6.100-alpha" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<PackageReference Include="System.Text.Json" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
 </Project>

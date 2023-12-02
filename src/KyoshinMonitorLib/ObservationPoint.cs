@@ -3,28 +3,30 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace KyoshinMonitorLib
 {
 	/// <summary>
 	/// NIEDの観測点情報
 	/// </summary>
-	[MessagePackObject, DataContract]
+	[MessagePackObject]
 	public class ObservationPoint : IComparable
 	{
-		/// <summary>
-		/// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
-		/// </summary>
-		/// <param name="path">読み込むmpkファイルのパス</param>
-		/// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
-		/// <returns>読み込まれた観測点情報</returns>
-		public static ObservationPoint[] LoadFromMpk(string path, bool useLz4 = false)
+		private static MessagePackSerializerOptions SerializerOption { get; } = MessagePackSerializerOptions.Standard.WithResolver(GeneratedMessagePackResolver.Instance);
+        
+        /// <summary>
+        /// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
+        /// </summary>
+        /// <param name="path">読み込むmpkファイルのパス</param>
+        /// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
+        /// <returns>読み込まれた観測点情報</returns>
+        public static ObservationPoint[] LoadFromMpk(string path, bool useLz4 = false)
 		{
 			using var stream = new FileStream(path, FileMode.Open);
-			return MessagePackSerializer.Deserialize<ObservationPoint[]>(stream, options: useLz4 ? MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block) : null);
+            return MessagePackSerializer.Deserialize<ObservationPoint[]>(stream, options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption);
 		}
 
 		/// <summary>
@@ -36,7 +38,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool useLz4 = false)
 		{
 			using var stream = new FileStream(path, FileMode.Create);
-			MessagePackSerializer.Serialize(stream, points.ToArray(), options: useLz4 ? MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block) : null);
+			MessagePackSerializer.Serialize(stream, points.ToArray(), options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption);
 		}
 
 		/// <summary>
@@ -45,7 +47,7 @@ namespace KyoshinMonitorLib
 		/// <param name="path">読み込むJsonファイルのパス</param>
 		/// <returns>読み込まれた観測点情報</returns>
 		public static ObservationPoint[]? LoadFromJson(string path)
-			=> JsonSerializer.Deserialize<ObservationPoint[]>(File.ReadAllText(path));
+            => JsonSerializer.Deserialize(File.ReadAllText(path), ObservationPointJsonContext.Default.ObservationPointArray);
 
 		/// <summary>
 		/// 観測点情報をJson形式で保存します。失敗した場合は例外がスローされます。
@@ -55,7 +57,7 @@ namespace KyoshinMonitorLib
 		public static void SaveToJson(string path, IEnumerable<ObservationPoint> points)
 		{
 			using var stream = new FileStream(path, FileMode.Create);
-			var data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(points.ToArray()));
+			var data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(points.ToArray(), ObservationPointJsonContext.Default.ObservationPointArray));
 			stream.Write(data, 0, data.Length);
 		}
 
@@ -141,61 +143,61 @@ namespace KyoshinMonitorLib
 		/// <summary>
 		/// 観測地点のネットワークの種類
 		/// </summary>
-		[Key(0), DataMember(Order = 0)]
+		[Key(0)]
 		public ObservationPointType Type { get; set; }
 
 		/// <summary>
 		/// 観測点コード
 		/// </summary>
-		[Key(1), DataMember(Order = 1)]
+		[Key(1)]
 		public string Code { get; set; }
 
 		/// <summary>
 		/// 観測点名
 		/// </summary>
-		[Key(2), DataMember(Order = 2)]
+		[Key(2)]
 		public string Name { get; set; }
 
 		/// <summary>
 		/// 観測点広域名
 		/// </summary>
-		[Key(3), DataMember(Order = 3)]
+		[Key(3)]
 		public string Region { get; set; }
 
 		/// <summary>
 		/// 観測地点が休止状態(無効)かどうか
 		/// </summary>
-		[Key(4), DataMember(Order = 4)]
+		[Key(4)]
 		public bool IsSuspended { get; set; }
 
 		/// <summary>
 		/// 地理座標
 		/// </summary>
-		[Key(5), DataMember(Order = 5)]
+		[Key(5)]
 		public Location Location { get; set; }
 
 		/// <summary>
 		/// 地理座標(日本座標系)
 		/// </summary>
-		[Key(9), DataMember(Order = 9)]
+		[Key(9)]
 		public Location OldLocation { get; set; }
 
 		/// <summary>
 		/// 強震モニタ画像上での座標
 		/// </summary>
-		[Key(6), DataMember(Order = 6)]
+		[Key(6)]
 		public Point2? Point { get; set; }
 
 		/// <summary>
 		/// 緊急地震速報や震度速報で用いる区域のID(EqWatchインポート用)
 		/// </summary>
-		[Key(7), DataMember(Order = 7)]
+		[Key(7)]
 		public int? ClassificationId { get; set; }
 
 		/// <summary>
 		/// 緊急地震速報で用いる府県予報区のID(EqWatchインポート用)
 		/// </summary>
-		[Key(8), DataMember(Order = 8)]
+		[Key(8)]
 		public int? PrefectureClassificationId { get; set; }
 
 		/// <summary>
@@ -210,4 +212,9 @@ namespace KyoshinMonitorLib
 			return Code.CompareTo(ins.Code);
 		}
 	}
+
+	[JsonSerializable(typeof(ObservationPoint[]))]
+	internal partial class ObservationPointJsonContext : JsonSerializerContext
+    {
+    }
 }
