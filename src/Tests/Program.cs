@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 
 var points = ObservationPoint.LoadFromMpk("ShindoObsPoints.mpk.lz4", true);
+
 using var webApi = new LpgmWebApi();
 // タイマーのインスタンスを作成
 var timer = new SecondBasedTimer()

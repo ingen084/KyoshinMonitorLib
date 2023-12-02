@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 using System.Text.Json;
 
 namespace KyoshinMonitorLib
@@ -13,7 +13,7 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <param name="points">書き込む観測点情報の配列</param>
 		/// <param name="path">書き込むpbfファイルのパス</param>
-		public static void SaveToCsv(this IEnumerable<ObservationPoint> points, string path)
+		public static void SaveToCsv(this ImmutableArray<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToCsv(path, points);
 
 		/// <summary>
@@ -22,7 +22,7 @@ namespace KyoshinMonitorLib
 		/// <param name="path">書き込むmpkファイルのパス</param>
 		/// <param name="points">書き込む観測点情報の配列</param>
 		/// <param name="usingLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
-		public static void SaveToMpk(this IEnumerable<ObservationPoint> points, string path, bool usingLz4 = false)
+		public static void SaveToMpk(this ImmutableArray<ObservationPoint> points, string path, bool usingLz4 = false)
 			=> ObservationPoint.SaveToMpk(path, points, usingLz4);
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace KyoshinMonitorLib
 		/// </summary>
 		/// <param name="path">書き込むJsonファイルのパス</param>
 		/// <param name="points">書き込む観測点情報の配列</param>
-		public static void SaveToJson(this IEnumerable<ObservationPoint> points, string path)
+		public static void SaveToJson(this ImmutableArray<ObservationPoint> points, string path)
 			=> ObservationPoint.SaveToJson(path, points);
 
 		/// <summary>

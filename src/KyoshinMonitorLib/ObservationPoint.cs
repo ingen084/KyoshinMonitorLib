@@ -1,6 +1,7 @@
 ﻿using MessagePack;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace KyoshinMonitorLib
 	[MessagePackObject]
 	public class ObservationPoint : IComparable
 	{
-		private static MessagePackSerializerOptions SerializerOption { get; } = MessagePackSerializerOptions.Standard.WithResolver(GeneratedMessagePackResolver.Instance);
+		private static MessagePackSerializerOptions SerializerOption { get; } = MessagePackSerializerOptions.Standard.WithResolver(GeneratedMessagePackResolver.InstanceWithStandardAotResolver);
         
         /// <summary>
         /// 観測点情報をmpkから読み込みます。失敗した場合は例外がスローされます。
@@ -23,10 +24,10 @@ namespace KyoshinMonitorLib
         /// <param name="path">読み込むmpkファイルのパス</param>
         /// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
         /// <returns>読み込まれた観測点情報</returns>
-        public static ObservationPoint[] LoadFromMpk(string path, bool useLz4 = false)
+        public static ImmutableArray<ObservationPoint> LoadFromMpk(string path, bool useLz4 = false)
 		{
 			using var stream = new FileStream(path, FileMode.Open);
-            return MessagePackSerializer.Deserialize<ObservationPoint[]>(stream, options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption);
+            return MessagePackSerializer.Deserialize<ImmutableArray<ObservationPoint>>(stream, options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption);
 		}
 
 		/// <summary>
@@ -35,10 +36,10 @@ namespace KyoshinMonitorLib
 		/// <param name="path">書き込むmpkファイルのパス</param>
 		/// <param name="points">書き込む観測点情報の配列</param>
 		/// <param name="useLz4">lz4で圧縮させるかどうか(させる場合は拡張子を.mpk.lz4にすることをおすすめします)</param>
-		public static void SaveToMpk(string path, IEnumerable<ObservationPoint> points, bool useLz4 = false)
+		public static void SaveToMpk(string path, ImmutableArray<ObservationPoint> points, bool useLz4 = false)
 		{
 			using var stream = new FileStream(path, FileMode.Create);
-			MessagePackSerializer.Serialize(stream, points.ToArray(), options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption);
+			MessagePackSerializer.Serialize(stream, points, options: useLz4 ? SerializerOption.WithCompression(MessagePackCompression.Lz4Block) : SerializerOption);
 		}
 
 		/// <summary>
