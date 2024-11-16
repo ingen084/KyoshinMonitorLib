@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;net47</TargetFrameworks>
+    <TargetFrameworks>net9.0;net6.0;netstandard2.1;netstandard2.0;net47</TargetFrameworks>
     <Version>0.4.5.1</Version>
     <Copyright>Copyright © ingenWorkS 2021</Copyright>
     <Company>ingenWorkS</Company>
@@ -17,11 +17,10 @@
     <Nullable>enable</Nullable>
     
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KyoshinMonitorLib\KyoshinMonitorLib.csproj" />

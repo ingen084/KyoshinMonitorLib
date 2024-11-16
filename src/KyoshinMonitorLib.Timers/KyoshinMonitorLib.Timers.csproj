@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net5.0;netstandard2.1;netstandard2.0;net47</TargetFrameworks>
+    <TargetFrameworks>net9.0;net5.0;netstandard2.1;netstandard2.0;net47</TargetFrameworks>
     <Version>0.4.2.1</Version>
     <Copyright>Copyright © ingenWorkS 2021</Copyright>
     <Company>ingenWorkS</Company>
@@ -15,8 +15,6 @@
     
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-	  
-	<PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
   <ItemGroup>
